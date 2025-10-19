@@ -1,0 +1,7 @@
+node_modules/
+dist/
+build/
+.env
+.env.local
+*.log
+.DS_Store (If you want, I can make this file for you.)

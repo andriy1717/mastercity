@@ -1,0 +1,18 @@
+AI Action Log for Room COCO — started 2025-10-18T04:23:02.304Z
+[2025-10-18T04:24:00.445Z] AI Bob is starting its turn in state: gathering
+[2025-10-18T04:24:00.446Z] AI Bob is gathering wood for Field.
+[2025-10-18T04:24:00.446Z] AI Bob action result (res: +5 wood | ap: 3->2 | progress: 0->3)
+[2025-10-18T04:24:00.446Z] AI Bob action result (res: +5 wood | ap: 2->1)
+[2025-10-18T04:24:00.447Z] AI Bob is building Sawmill.
+[2025-10-18T04:24:00.447Z] AI Bob action result (res: -20 wood, -8 rock | built: Sawmill | progress: 3->7)
+[2025-10-18T04:24:00.447Z] END_TURN Bob | age:Wood | ap:0 banked:0 | soldiers:3 | res: wood:0, rock:6, metal:10, food:10, coins:12 | progress:8
+[2025-10-18T04:24:00.447Z] AI Bob forced gather (res: +4 rock | ap: 1->0 | progress: 7->8)
+[2025-10-18T04:24:00.446Z] AI Bob is gathering wood for Field.
+[2025-10-18T04:24:48.031Z] AI Bob is gathering wood for Field.
+[2025-10-18T04:24:48.031Z] AI Bob action result (res: +8 wood | ap: 3->2)
+[2025-10-18T04:24:48.031Z] AI Bob is gathering wood for Field.
+[2025-10-18T04:24:48.031Z] AI Bob action result (res: +8 wood | ap: 2->1 | progress: 8->9)
+[2025-10-18T04:24:48.031Z] AI Bob is gathering wood for Field.
+[2025-10-18T04:24:48.031Z] END_TURN Bob | age:Wood | ap:0 banked:0 | soldiers:3 | res: wood:24, rock:6, metal:10, food:10, coins:14 | progress:9
+[2025-10-18T04:24:48.031Z] AI Bob action result (res: +8 wood | ap: 1->0)
+[2025-10-18T04:24:48.031Z] AI Bob is starting its turn in state: gathering

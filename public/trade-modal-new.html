@@ -1,0 +1,229 @@
+<!-- NEW TRADE MODAL - Replace the existing tradeModal div with this -->
+<div id="tradeModal" class="modal hidden">
+  <div class="modal-content dark-theme" style="max-width: 500px;">
+    <div class="modal-header">
+      <span id="tradeTitle">Trade</span>
+      <button id="tradeClose" class="iconBtn">✖</button>
+    </div>
+    <div class="modal-body" id="tradeBody" style="padding: 20px;">
+
+      <!-- Step 1: Choose Action (BUY/SELL/TRADE) -->
+      <div id="tradeStep1" class="trade-step">
+        <h3 style="text-align: center; margin-bottom: 20px; font-size: 20px;">Choose Action</h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px;">
+          <button class="trade-action-btn" data-action="buy">
+            <div style="font-size: 48px;">🏦</div>
+            <div style="font-weight: bold; margin-top: 8px;">BUY</div>
+            <div style="font-size: 11px; opacity: 0.7;">From Bank</div>
+          </button>
+          <button class="trade-action-btn" data-action="sell">
+            <div style="font-size: 48px;">💰</div>
+            <div style="font-weight: bold; margin-top: 8px;">SELL</div>
+            <div style="font-size: 11px; opacity: 0.7;">To Bank</div>
+          </button>
+          <button class="trade-action-btn" data-action="trade">
+            <div style="font-size: 48px;">🤝</div>
+            <div style="font-weight: bold; margin-top: 8px;">TRADE</div>
+            <div style="font-size: 11px; opacity: 0.7;">With Player</div>
+          </button>
+        </div>
+      </div>
+
+      <!-- Step 2: Select Resource (for BUY/SELL) -->
+      <div id="tradeStep2" class="trade-step hidden">
+        <h3 id="step2Title" style="text-align: center; margin-bottom: 20px; font-size: 20px;">Select Resource</h3>
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
+          <button class="resource-btn" data-resource="wood">
+            <div style="font-size: 40px;">🪵</div>
+            <div style="font-weight: bold; margin-top: 6px;">Wood</div>
+          </button>
+          <button class="resource-btn" data-resource="rock">
+            <div style="font-size: 40px;">🪨</div>
+            <div style="font-weight: bold; margin-top: 6px;">Rock</div>
+          </button>
+          <button class="resource-btn" data-resource="metal">
+            <div style="font-size: 40px;">⚙️</div>
+            <div style="font-weight: bold; margin-top: 6px;">Metal</div>
+          </button>
+          <button class="resource-btn" data-resource="food">
+            <div style="font-size: 40px;">🍞</div>
+            <div style="font-weight: bold; margin-top: 6px;">Food</div>
+          </button>
+        </div>
+        <button id="backToStep1" class="btn-back" style="margin-top: 15px; width: 100%;">← Back</button>
+      </div>
+
+      <!-- Step 3: Select Quantity (for BUY/SELL) -->
+      <div id="tradeStep3" class="trade-step hidden">
+        <h3 style="text-align: center; margin-bottom: 15px; font-size: 20px;">How much?</h3>
+        <div style="text-align: center; margin-bottom: 20px;">
+          <div id="selectedResourceIcon" style="font-size: 48px; margin-bottom: 10px;">🪵</div>
+          <div id="selectedResourceName" style="font-weight: bold; font-size: 18px;">Wood</div>
+        </div>
+        <div style="display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 20px;">
+          <button id="decreaseQty" class="qty-btn" style="font-size: 32px; width: 50px; height: 50px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); cursor: pointer;">−</button>
+          <div id="quantityDisplay" style="font-size: 36px; font-weight: bold; min-width: 80px; text-align: center;">1</div>
+          <button id="increaseQty" class="qty-btn" style="font-size: 32px; width: 50px; height: 50px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); cursor: pointer;">+</button>
+        </div>
+        <div id="costDisplay" style="text-align: center; font-size: 16px; margin-bottom: 20px; min-height: 24px; font-weight: bold;"></div>
+        <div style="display: flex; gap: 10px;">
+          <button id="backToStep2" class="btn-back" style="flex: 1; padding: 12px; border-radius: 6px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); cursor: pointer;">← Back</button>
+          <button id="confirmTrade" class="btn-primary" style="flex: 2; padding: 12px; border-radius: 6px; background: #d4a82e; color: #1a1a1a; font-weight: bold; border: none; cursor: pointer;">Send Offer</button>
+        </div>
+      </div>
+
+      <!-- Step 4: Select Player (for TRADE) -->
+      <div id="tradeStep4" class="trade-step hidden">
+        <h3 style="text-align: center; margin-bottom: 20px; font-size: 20px;">Trade With</h3>
+        <div id="playerGrid" style="display: grid; gap: 10px;"></div>
+        <button id="backToStep1FromPlayer" class="btn-back" style="margin-top: 15px; width: 100%; padding: 12px; border-radius: 6px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); cursor: pointer;">← Back</button>
+      </div>
+
+      <!-- Step 5: What to Give (for TRADE) -->
+      <div id="tradeStep5" class="trade-step hidden">
+        <h3 style="text-align: center; margin-bottom: 15px; font-size: 20px;">What do you want to trade?</h3>
+        <div style="text-align: center; margin-bottom: 15px; font-size: 14px; opacity: 0.8;">
+          Trading with: <strong id="selectedPlayerName"></strong>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
+          <button class="resource-btn give-resource" data-resource="wood">
+            <div style="font-size: 40px;">🪵</div>
+            <div style="font-weight: bold; margin-top: 6px;">Wood</div>
+          </button>
+          <button class="resource-btn give-resource" data-resource="rock">
+            <div style="font-size: 40px;">🪨</div>
+            <div style="font-weight: bold; margin-top: 6px;">Rock</div>
+          </button>
+          <button class="resource-btn give-resource" data-resource="metal">
+            <div style="font-size: 40px;">⚙️</div>
+            <div style="font-weight: bold; margin-top: 6px;">Metal</div>
+          </button>
+          <button class="resource-btn give-resource" data-resource="food">
+            <div style="font-size: 40px;">🍞</div>
+            <div style="font-weight: bold; margin-top: 6px;">Food</div>
+          </button>
+          <button class="resource-btn give-resource" data-resource="coins" style="grid-column: span 2;">
+            <div style="font-size: 40px;">💰</div>
+            <div style="font-weight: bold; margin-top: 6px;">Golden Coins</div>
+          </button>
+        </div>
+        <button id="backToStep4" class="btn-back" style="margin-top: 15px; width: 100%; padding: 12px; border-radius: 6px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); cursor: pointer;">← Back</button>
+      </div>
+
+      <!-- Step 6: How Much to Give (for TRADE) -->
+      <div id="tradeStep6" class="trade-step hidden">
+        <h3 style="text-align: center; margin-bottom: 15px; font-size: 20px;">How much to trade?</h3>
+        <div style="text-align: center; margin-bottom: 20px;">
+          <div id="giveResourceIcon" style="font-size: 48px; margin-bottom: 10px;">🪵</div>
+          <div id="giveResourceName" style="font-weight: bold; font-size: 18px;">Wood</div>
+        </div>
+        <div style="display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 20px;">
+          <button id="decreaseGiveQty" class="qty-btn" style="font-size: 32px; width: 50px; height: 50px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); cursor: pointer;">−</button>
+          <div id="giveQuantityDisplay" style="font-size: 36px; font-weight: bold; min-width: 80px; text-align: center;">1</div>
+          <button id="increaseGiveQty" class="qty-btn" style="font-size: 32px; width: 50px; height: 50px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); cursor: pointer;">+</button>
+        </div>
+        <button id="continueToWant" class="btn-primary" style="width: 100%; padding: 12px; border-radius: 6px; background: #d4a82e; color: #1a1a1a; font-weight: bold; border: none; cursor: pointer;">Next →</button>
+      </div>
+
+      <!-- Step 7: What to Get (for TRADE) -->
+      <div id="tradeStep7" class="trade-step hidden">
+        <h3 style="text-align: center; margin-bottom: 15px; font-size: 20px;">What do you want to get?</h3>
+        <div style="text-align: center; margin-bottom: 15px; font-size: 13px; opacity: 0.8;">
+          You're offering: <strong><span id="offerSummary"></span></strong>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
+          <button class="resource-btn want-resource" data-resource="wood">
+            <div style="font-size: 40px;">🪵</div>
+            <div style="font-weight: bold; margin-top: 6px;">Wood</div>
+          </button>
+          <button class="resource-btn want-resource" data-resource="rock">
+            <div style="font-size: 40px;">🪨</div>
+            <div style="font-weight: bold; margin-top: 6px;">Rock</div>
+          </button>
+          <button class="resource-btn want-resource" data-resource="metal">
+            <div style="font-size: 40px;">⚙️</div>
+            <div style="font-weight: bold; margin-top: 6px;">Metal</div>
+          </button>
+          <button class="resource-btn want-resource" data-resource="food">
+            <div style="font-size: 40px;">🍞</div>
+            <div style="font-weight: bold; margin-top: 6px;">Food</div>
+          </button>
+          <button class="resource-btn want-resource" data-resource="coins" style="grid-column: span 2;">
+            <div style="font-size: 40px;">💰</div>
+            <div style="font-weight: bold; margin-top: 6px;">Golden Coins</div>
+          </button>
+        </div>
+        <button id="backToStep6" class="btn-back" style="margin-top: 15px; width: 100%; padding: 12px; border-radius: 6px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); cursor: pointer;">← Back</button>
+      </div>
+
+      <!-- Step 8: How Much to Get (for TRADE) -->
+      <div id="tradeStep8" class="trade-step hidden">
+        <h3 style="text-align: center; margin-bottom: 15px; font-size: 20px;">How much to trade for?</h3>
+        <div style="text-align: center; margin-bottom: 20px;">
+          <div id="wantResourceIcon" style="font-size: 48px; margin-bottom: 10px;">🪵</div>
+          <div id="wantResourceName" style="font-weight: bold; font-size: 18px;">Wood</div>
+        </div>
+        <div style="display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 20px;">
+          <button id="decreaseWantQty" class="qty-btn" style="font-size: 32px; width: 50px; height: 50px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); cursor: pointer;">−</button>
+          <div id="wantQuantityDisplay" style="font-size: 36px; font-weight: bold; min-width: 80px; text-align: center;">1</div>
+          <button id="increaseWantQty" class="qty-btn" style="font-size: 32px; width: 50px; height: 50px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); cursor: pointer;">+</button>
+        </div>
+        <div style="text-align: center; margin-bottom: 20px; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 8px;">
+          <div style="font-size: 14px; opacity: 0.8; margin-bottom: 5px;">Trade Summary:</div>
+          <div style="font-size: 15px;"><strong id="finalTradeSummary"></strong></div>
+        </div>
+        <div style="display: flex; gap: 10px;">
+          <button id="backToStep7" class="btn-back" style="flex: 1; padding: 12px; border-radius: 6px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); cursor: pointer;">← Back</button>
+          <button id="sendPlayerOffer" class="btn-primary" style="flex: 2; padding: 12px; border-radius: 6px; background: #d4a82e; color: #1a1a1a; font-weight: bold; border: none; cursor: pointer;">Send Offer</button>
+        </div>
+      </div>
+
+      <!-- Result Screen -->
+      <div id="tradeResult" class="trade-step hidden">
+        <div style="text-align: center; padding: 20px;">
+          <div id="resultIcon" style="font-size: 64px; margin-bottom: 15px;">✅</div>
+          <h3 id="resultTitle" style="margin-bottom: 10px;">Success!</h3>
+          <div id="resultMessage" style="font-size: 15px; opacity: 0.9; margin-bottom: 25px; line-height: 1.6;"></div>
+          <button id="closeTradeModal" class="btn-primary" style="width: 100%; padding: 12px; border-radius: 6px; background: #d4a82e; color: #1a1a1a; font-weight: bold; border: none; cursor: pointer;">Close</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<style>
+/* Trade Modal Styles */
+.trade-action-btn, .resource-btn {
+  background: rgba(255,255,255,0.05);
+  border: 2px solid rgba(255,255,255,0.2);
+  border-radius: 10px;
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #fff;
+}
+
+.trade-action-btn:hover, .resource-btn:hover {
+  background: rgba(255,255,255,0.15);
+  border-color: rgba(255,255,255,0.4);
+  transform: scale(1.05);
+}
+
+.trade-step {
+  animation: fadeIn 0.3s;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.qty-btn:hover {
+  background: rgba(255,255,255,0.2) !important;
+}
+
+.btn-back:hover, .btn-primary:hover {
+  opacity: 0.9;
+}
+</style>

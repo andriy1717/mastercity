@@ -1,0 +1,124 @@
+=== SESSION LOG for Room FIELD ===
+Started: 2025-10-19T11:30:46.202Z
+Starting Month: 9
+
+[2025-10-19T11:30:46.203Z] PLAYER_JOINED: Andriy | Current order: [Andriy]
+[2025-10-19T11:30:46.203Z] PLAYER_JOINED: Bob | Current order: [Andriy, Bob]
+[2025-10-19T11:30:47.004Z] 
+========== GAME STARTED ==========
+[2025-10-19T11:30:47.005Z] Player Order: [Andriy, Bob]
+[2025-10-19T11:30:47.005Z] Starting Date: 146 AD, Oct 4
+[2025-10-19T11:30:47.005Z] Starting Month Index: 9
+[2025-10-19T11:30:47.005Z] Starting Season: Autumn
+[2025-10-19T11:30:47.005Z] First Turn: Andriy
+[2025-10-19T11:30:47.006Z] ==================================
+
+[2025-10-19T11:30:52.819Z] END_TURN: Andriy | AP remaining: 0 | Banked AP before: 0
+[2025-10-19T11:30:52.819Z]   → No AP to bank
+[2025-10-19T11:30:52.820Z] NEXT_TURN: Andriy(idx:0) → Bob | Order: [Andriy, Bob] | First player: Andriy | Cycling: false
+[2025-10-19T11:30:52.822Z] BUILDINGS_UNLOCKED: Bob built first building (Sawmill) in Wood age, all Wood buildings now visible
+[2025-10-19T11:30:52.823Z] END_TURN: Bob | AP remaining: 0 | Banked AP before: 0
+[2025-10-19T11:30:52.823Z]   → No AP to bank
+[2025-10-19T11:30:52.823Z] NEXT_TURN: Bob(idx:1) → Andriy | Order: [Andriy, Bob] | First player: Andriy | Cycling: true
+[2025-10-19T11:30:52.824Z] TRIGGERING MONTH ADVANCE (cycling back to first player)
+[2025-10-19T11:30:52.824Z] MONTH_ADVANCED: 9 → 10 | Day: 4 → 19 | Date: 146 AD, Nov 19 | Season: Autumn
+[2025-10-19T11:30:57.466Z] END_TURN: Andriy | AP remaining: 2 | Banked AP before: 0
+[2025-10-19T11:30:57.467Z]   → Banked 2 AP (total banked: 2)
+[2025-10-19T11:30:57.467Z] NEXT_TURN: Andriy(idx:0) → Bob | Order: [Andriy, Bob] | First player: Andriy | Cycling: false
+[2025-10-19T11:30:57.468Z] END_TURN: Bob | AP remaining: 0 | Banked AP before: 0
+[2025-10-19T11:30:57.469Z]   → No AP to bank
+[2025-10-19T11:30:57.469Z] NEXT_TURN: Bob(idx:1) → Andriy | Order: [Andriy, Bob] | First player: Andriy | Cycling: true
+[2025-10-19T11:30:57.469Z] TRIGGERING MONTH ADVANCE (cycling back to first player)
+[2025-10-19T11:30:57.469Z] MONTH_ADVANCED: 10 → 11 | Day: 19 → 15 | Date: 146 AD, Dec 15 | Season: Winter
+[2025-10-19T11:30:57.470Z] RAID_CHECK: Year 1, Season Winter, Chance: 25%, Roll: 21.2%, Result: RAID TRIGGERED
+[2025-10-19T11:30:57.470Z] RAID_EXECUTED: Target Andriy, Season: Winter
+[2025-10-19T11:31:01.061Z] END_TURN: Andriy | AP remaining: 5 | Banked AP before: 0
+[2025-10-19T11:31:01.062Z]   → Banked 5 AP (total banked: 5)
+[2025-10-19T11:31:01.062Z] NEXT_TURN: Andriy(idx:0) → Bob | Order: [Andriy, Bob] | First player: Andriy | Cycling: false
+[2025-10-19T11:31:01.064Z] END_TURN: Bob | AP remaining: 0 | Banked AP before: 0
+[2025-10-19T11:31:01.064Z]   → No AP to bank
+[2025-10-19T11:31:01.065Z] NEXT_TURN: Bob(idx:1) → Andriy | Order: [Andriy, Bob] | First player: Andriy | Cycling: true
+[2025-10-19T11:31:01.066Z] TRIGGERING MONTH ADVANCE (cycling back to first player)
+[2025-10-19T11:31:01.067Z] MONTH_ADVANCED: 11 → 12 | Day: 15 → 8 | Date: 147 AD, Jan 8 | Season: Winter
+[2025-10-19T11:31:02.319Z] END_TURN: Andriy | AP remaining: 8 | Banked AP before: 0
+[2025-10-19T11:31:02.319Z]   → Banked 6 AP (total banked: 6)
+[2025-10-19T11:31:02.320Z] NEXT_TURN: Andriy(idx:0) → Bob | Order: [Andriy, Bob] | First player: Andriy | Cycling: false
+[2025-10-19T11:31:02.321Z] END_TURN: Bob | AP remaining: 0 | Banked AP before: 0
+[2025-10-19T11:31:02.321Z]   → No AP to bank
+[2025-10-19T11:31:02.321Z] NEXT_TURN: Bob(idx:1) → Andriy | Order: [Andriy, Bob] | First player: Andriy | Cycling: true
+[2025-10-19T11:31:02.321Z] TRIGGERING MONTH ADVANCE (cycling back to first player)
+[2025-10-19T11:31:02.321Z] MONTH_ADVANCED: 12 → 13 | Day: 8 → 22 | Date: 147 AD, Feb 22 | Season: Winter
+[2025-10-19T11:31:03.556Z] END_TURN: Andriy | AP remaining: 9 | Banked AP before: 0
+[2025-10-19T11:31:03.557Z]   → Banked 6 AP (total banked: 6)
+[2025-10-19T11:31:03.557Z] NEXT_TURN: Andriy(idx:0) → Bob | Order: [Andriy, Bob] | First player: Andriy | Cycling: false
+[2025-10-19T11:31:03.558Z] BUILDINGS_UNLOCKED: Bob built first building (Mill) in Stone age, all Stone buildings now visible
+[2025-10-19T11:31:03.559Z] END_TURN: Bob | AP remaining: 0 | Banked AP before: 0
+[2025-10-19T11:31:03.559Z]   → No AP to bank
+[2025-10-19T11:31:03.559Z] NEXT_TURN: Bob(idx:1) → Andriy | Order: [Andriy, Bob] | First player: Andriy | Cycling: true
+[2025-10-19T11:31:03.559Z] TRIGGERING MONTH ADVANCE (cycling back to first player)
+[2025-10-19T11:31:03.559Z] MONTH_ADVANCED: 13 → 14 | Day: 22 → 1 | Date: 147 AD, Mar 1 | Season: Spring
+[2025-10-19T11:31:03.559Z] RAID_CHECK: Year 1, Season Spring, Chance: 25%, Roll: 77.9%, Result: No raid this season
+[2025-10-19T11:31:04.946Z] END_TURN: Andriy | AP remaining: 9 | Banked AP before: 0
+[2025-10-19T11:31:04.946Z]   → Banked 6 AP (total banked: 6)
+[2025-10-19T11:31:04.947Z] NEXT_TURN: Andriy(idx:0) → Bob | Order: [Andriy, Bob] | First player: Andriy | Cycling: false
+[2025-10-19T11:31:04.947Z] END_TURN: Bob | AP remaining: 0 | Banked AP before: 0
+[2025-10-19T11:31:04.948Z]   → No AP to bank
+[2025-10-19T11:31:04.948Z] NEXT_TURN: Bob(idx:1) → Andriy | Order: [Andriy, Bob] | First player: Andriy | Cycling: true
+[2025-10-19T11:31:04.948Z] TRIGGERING MONTH ADVANCE (cycling back to first player)
+[2025-10-19T11:31:04.948Z] MONTH_ADVANCED: 14 → 15 | Day: 1 → 1 | Date: 147 AD, Apr 1 | Season: Spring
+[2025-10-19T11:31:06.503Z] END_TURN: Andriy | AP remaining: 9 | Banked AP before: 0
+[2025-10-19T11:31:06.503Z]   → Banked 6 AP (total banked: 6)
+[2025-10-19T11:31:06.504Z] NEXT_TURN: Andriy(idx:0) → Bob | Order: [Andriy, Bob] | First player: Andriy | Cycling: false
+[2025-10-19T11:31:06.504Z] END_TURN: Bob | AP remaining: 0 | Banked AP before: 0
+[2025-10-19T11:31:06.506Z]   → No AP to bank
+[2025-10-19T11:31:06.506Z] NEXT_TURN: Bob(idx:1) → Andriy | Order: [Andriy, Bob] | First player: Andriy | Cycling: true
+[2025-10-19T11:31:06.507Z] TRIGGERING MONTH ADVANCE (cycling back to first player)
+[2025-10-19T11:31:06.507Z] MONTH_ADVANCED: 15 → 16 | Day: 1 → 24 | Date: 147 AD, May 24 | Season: Spring
+[2025-10-19T11:31:14.497Z] COMMAND: Andriy executed: /add 500 all me
+[2025-10-19T11:31:14.498Z] COMMAND_ADD: Andriy added 500 of ALL resources to Andriy
+[2025-10-19T11:31:17.286Z] BUILDINGS_UNLOCKED: Andriy built first building (Barracks) in Wood age, all Wood buildings now visible
+[2025-10-19T11:31:23.201Z] END_TURN: Andriy | AP remaining: 7 | Banked AP before: 0
+[2025-10-19T11:31:23.202Z]   → Banked 6 AP (total banked: 6)
+[2025-10-19T11:31:23.202Z] NEXT_TURN: Andriy(idx:0) → Bob | Order: [Andriy, Bob] | First player: Andriy | Cycling: false
+[2025-10-19T11:31:23.203Z] END_TURN: Bob | AP remaining: 0 | Banked AP before: 0
+[2025-10-19T11:31:23.204Z]   → No AP to bank
+[2025-10-19T11:31:23.204Z] NEXT_TURN: Bob(idx:1) → Andriy | Order: [Andriy, Bob] | First player: Andriy | Cycling: true
+[2025-10-19T11:31:23.204Z] TRIGGERING MONTH ADVANCE (cycling back to first player)
+[2025-10-19T11:31:23.204Z] MONTH_ADVANCED: 16 → 17 | Day: 24 → 18 | Date: 147 AD, Jun 18 | Season: Summer
+[2025-10-19T11:31:23.205Z] RAID_CHECK: Year 1, Season Summer, Chance: 25%, Roll: 90.2%, Result: No raid this season
+[2025-10-19T11:31:33.969Z] BUILDINGS_UNLOCKED: Andriy built first building (Armory) in Stone age, all Stone buildings now visible
+[2025-10-19T11:31:36.565Z] END_TURN: Andriy | AP remaining: 4 | Banked AP before: 0
+[2025-10-19T11:31:36.566Z]   → Banked 4 AP (total banked: 4)
+[2025-10-19T11:31:36.566Z] NEXT_TURN: Andriy(idx:0) → Bob | Order: [Andriy, Bob] | First player: Andriy | Cycling: false
+[2025-10-19T11:31:36.567Z] END_TURN: Bob | AP remaining: 0 | Banked AP before: 0
+[2025-10-19T11:31:36.567Z]   → No AP to bank
+[2025-10-19T11:31:36.568Z] NEXT_TURN: Bob(idx:1) → Andriy | Order: [Andriy, Bob] | First player: Andriy | Cycling: true
+[2025-10-19T11:31:36.568Z] TRIGGERING MONTH ADVANCE (cycling back to first player)
+[2025-10-19T11:31:36.568Z] MONTH_ADVANCED: 17 → 18 | Day: 18 → 27 | Date: 147 AD, Jul 27 | Season: Summer
+[2025-10-19T11:31:37.967Z] END_TURN: Andriy | AP remaining: 7 | Banked AP before: 0
+[2025-10-19T11:31:37.967Z]   → Banked 6 AP (total banked: 6)
+[2025-10-19T11:31:37.968Z] NEXT_TURN: Andriy(idx:0) → Bob | Order: [Andriy, Bob] | First player: Andriy | Cycling: false
+[2025-10-19T11:31:37.969Z] END_TURN: Bob | AP remaining: 0 | Banked AP before: 0
+[2025-10-19T11:31:37.969Z]   → No AP to bank
+[2025-10-19T11:31:37.969Z] NEXT_TURN: Bob(idx:1) → Andriy | Order: [Andriy, Bob] | First player: Andriy | Cycling: true
+[2025-10-19T11:31:37.970Z] TRIGGERING MONTH ADVANCE (cycling back to first player)
+[2025-10-19T11:31:37.970Z] MONTH_ADVANCED: 18 → 19 | Day: 27 → 6 | Date: 147 AD, Aug 6 | Season: Summer
+[2025-10-19T11:31:43.317Z] BUILDINGS_UNLOCKED: Andriy built first building (Greenhouse) in Modern age, all Modern buildings now visible
+[2025-10-19T11:31:53.284Z] END_TURN: Andriy | AP remaining: 6 | Banked AP before: 0
+[2025-10-19T11:31:53.285Z]   → Banked 6 AP (total banked: 6)
+[2025-10-19T11:31:53.285Z] NEXT_TURN: Andriy(idx:0) → Bob | Order: [Andriy, Bob] | First player: Andriy | Cycling: false
+[2025-10-19T11:31:53.287Z] END_TURN: Bob | AP remaining: 0 | Banked AP before: 0
+[2025-10-19T11:31:53.288Z]   → No AP to bank
+[2025-10-19T11:31:53.289Z] NEXT_TURN: Bob(idx:1) → Andriy | Order: [Andriy, Bob] | First player: Andriy | Cycling: true
+[2025-10-19T11:31:53.289Z] TRIGGERING MONTH ADVANCE (cycling back to first player)
+[2025-10-19T11:31:53.289Z] MONTH_ADVANCED: 19 → 20 | Day: 6 → 4 | Date: 147 AD, Sep 4 | Season: Autumn
+[2025-10-19T11:31:53.289Z] RAID_CHECK: Year 1, Season Autumn, Chance: 25%, Roll: 25.9%, Result: No raid this season
+[2025-10-19T11:32:05.873Z] END_TURN: Andriy | AP remaining: 8 | Banked AP before: 0
+[2025-10-19T11:32:05.873Z]   → Banked 6 AP (total banked: 6)
+[2025-10-19T11:32:05.874Z] NEXT_TURN: Andriy(idx:0) → Bob | Order: [Andriy, Bob] | First player: Andriy | Cycling: false
+[2025-10-19T11:32:05.875Z] END_TURN: Bob | AP remaining: 0 | Banked AP before: 0
+[2025-10-19T11:32:05.876Z]   → No AP to bank
+[2025-10-19T11:32:05.876Z] NEXT_TURN: Bob(idx:1) → Andriy | Order: [Andriy, Bob] | First player: Andriy | Cycling: true
+[2025-10-19T11:32:05.876Z] TRIGGERING MONTH ADVANCE (cycling back to first player)
+[2025-10-19T11:32:05.876Z] MONTH_ADVANCED: 20 → 21 | Day: 4 → 10 | Date: 147 AD, Oct 10 | Season: Autumn
+[2025-10-19T11:32:11.766Z] MONUMENT_UNLOCKED: Andriy built 4 buildings in Modern age, Monument now visible

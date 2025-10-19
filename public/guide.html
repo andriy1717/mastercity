@@ -1,0 +1,261 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>City Rebuilders Field Guide</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+body.guide { background:radial-gradient(circle at top, rgba(30,64,175,0.35), rgba(15,23,42,0.95)), #0f172a; color:#f1f5f9; font-family:"Cinzel", "Times New Roman", serif; cursor: crosshair; }
+.guide header { position:relative; background:
+      radial-gradient(900px 240px at 20% -10%, rgba(31,95,184,0.25), transparent 60%),
+      linear-gradient(180deg, #0b1222, #0a0e1a);
+      box-shadow:0 10px 24px rgba(0,0,0,0.6), inset 0 -2px 0 rgba(31,95,184,0.35);
+    }
+    .guide header::after{ content:""; position:absolute; left:0; right:0; bottom:-18px; height:36px; background: radial-gradient(60% 100% at 50% 0%, rgba(31,95,184,0.3), transparent 70%); pointer-events:none; }
+    .guide-main { max-width:1100px; margin:40px auto 120px; padding:0 16px; }
+    .guide-hero { text-align:center; margin-bottom:32px; }
+    .guide-hero h1 { font-size:42px; margin-bottom:12px; letter-spacing:0.08em; text-transform:uppercase; }
+    .guide-hero p { font-size:18px; max-width:720px; margin:0 auto; opacity:0.85; }
+    .guide-nav { display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin:28px 0; }
+    .guide-nav button { border:1px solid rgba(148,163,184,0.6); background:rgba(30,41,59,0.85); color:#e2e8f0; font-family:inherit; padding:10px 18px; border-radius:999px; transition:all 0.2s ease; }
+    .guide-nav button.active, .guide-nav button:hover { background:#facc15; color:#111827; border-color:#facc15; transform:translateY(-2px); }
+    .guide-grid { display:grid; gap:20px; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); }
+    .guide-card { background:rgba(15,23,42,0.8); border:1px solid rgba(148,163,184,0.3); border-radius:14px; padding:18px; box-shadow:0 4px 12px rgba(0,0,0,0.4); position:relative; overflow:hidden; }
+    .guide-card::before { content:""; position:absolute; inset:0; background:linear-gradient(135deg, rgba(250,204,21,0.12), transparent 60%); pointer-events:none; }
+    .guide-card h2 { margin-top:0; font-size:22px; text-transform:uppercase; letter-spacing:0.06em; }
+    .guide-card p { margin:12px 0; }
+    .guide-card .badge { display:inline-block; padding:4px 10px; border-radius:999px; background:rgba(250,204,21,0.18); color:#fde68a; font-size:12px; letter-spacing:0.08em; text-transform:uppercase; margin-bottom:8px; }
+
+    .timeline { position:relative; padding:24px 0 24px 20px; border-left:2px solid rgba(148,163,184,0.2); }
+    .timeline-step { margin-bottom:28px; position:relative; }
+    .timeline-step::before { content:""; position:absolute; left:-31px; top:4px; width:16px; height:16px; border:2px solid #facc15; border-radius:50%; background:#0f172a; }
+    .timeline-step h3 { margin:0 0 6px; font-size:20px; }
+    .timeline-step .note { font-size:14px; opacity:0.8; }
+
+    .season-board { display:grid; gap:16px; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); margin-top:16px; }
+    .season-card { background:rgba(30,41,59,0.75); border:1px solid rgba(148,163,184,0.2); padding:16px; border-radius:12px; }
+    .season-card h3 { margin-top:0; font-size:18px; letter-spacing:0.04em; text-transform:uppercase; }
+    .season-card .season-mods { margin:6px 0 10px; font-size:13px; display:flex; flex-wrap:wrap; gap:6px; }
+    .season-card .season-mods span { background:rgba(148,163,184,0.18); color:#e2e8f0; border-radius:999px; padding:3px 10px; }
+    .season-card .season-note { margin:0 0 10px; font-size:14px; }
+    .season-card .event { font-style:italic; margin-top:10px; }
+
+    details.guide-toggle { background:rgba(30,41,59,0.78); border:1px solid rgba(148,163,184,0.2); border-radius:10px; padding:12px 16px; transition:all 0.2s ease; }
+    details.guide-toggle[open] { border-color:#facc15; box-shadow:0 6px 16px rgba(250,204,21,0.18); }
+    details.guide-toggle summary { cursor:pointer; font-weight:700; letter-spacing:0.05em; }
+    details.guide-toggle summary::marker { color:#facc15; }
+    .legend { display:flex; flex-wrap:wrap; gap:10px; margin:16px 0; }
+    .legend span { padding:4px 10px; border-radius:999px; font-size:12px; text-transform:uppercase; letter-spacing:0.06em; background:rgba(148,163,184,0.12); color:#e2e8f0; }
+
+    .age-table { width:100%; border-collapse:collapse; margin-top:14px; font-size:15px; }
+    .age-table th, .age-table td { border-bottom:1px solid rgba(148,163,184,0.2); padding:10px; text-align:left; }
+    .age-table th { text-transform:uppercase; letter-spacing:0.05em; font-size:13px; color:#facc15; }
+
+    .callout { background:rgba(74,222,128,0.12); border-left:4px solid #4ade80; padding:12px 16px; margin:18px 0; border-radius:0 12px 12px 0; color:#bbf7d0; }
+    .callout strong { color:#4ade80; text-transform:uppercase; letter-spacing:0.08em; font-size:12px; display:block; margin-bottom:6px; }
+
+    footer.guide-footer { margin-top:80px; text-align:center; color:#94a3b8; font-size:14px; }
+    footer.guide-footer a { color:#facc15; text-decoration:none; }
+    .return-link { display:inline-flex; align-items:center; gap:6px; color:#facc15; text-decoration:none; font-weight:600; margin-top:18px; }
+    .guide-card .story-image { max-width: 50%; height: auto; border-radius: 8px; margin-top: 16px; display: block; margin-left: auto; margin-right: auto; }
+
+    @media (max-width:768px){
+      .guide-hero h1 { font-size:30px; }
+      .guide-nav { gap:8px; }
+      .guide-nav button { padding:8px 14px; font-size:14px; }
+      .timeline { padding-left:16px; }
+      .timeline-step::before { left:-25px; }
+      .guide-card .story-image { max-width: 80%; }
+    }
+  </style>
+</head>
+<body class="guide">
+  <header>
+    <div class="hero" style="align-items:flex-start;">
+      <div class="hero-text">
+        <h1 style="font-size:26px; letter-spacing:0.08em;">City Rebuilders Guide</h1>
+        <p class="tagline" style="font-size:14px;">For Romans, Vikings, Mongols, and Slavs determined to rebuild a lasting city.</p>
+        <a class="return-link" href="index.html">Back to the Game</a>
+      </div>
+      <div class="hero-art">
+        <img src="/media/City%20Builders.png" alt="City Rebuilders" />
+      </div>
+    </div>
+  </header>
+
+  <main class="guide-main">
+    <section class="guide-hero">
+      <h1>Your People's Saga</h1>
+      <p>City Rebuilders is a turn-by-turn race to grow a shattered settlement into a legendary capital. Each civilization arrives with its own talents (Roman accountants, Viking hunters, Mongol smiths, Slavic farmers), but everyone faces the same pressures: scarce seasons, prowling raiders, and rival leaders chasing the same dream. Guide your people from the Wood Age to the Modern Age, hold off every threat, and finish a city that will outlive every storyteller.</p>
+      <div class="guide-nav">
+        <button data-scroll="goal" class="active">🎯 Goal</button>
+        <button data-scroll="mechanics">⚙️ Core Mechanics</button>
+        <button data-scroll="progression">🏗️ Progression</button>
+        <button data-scroll="features">✨ Key Features</button>
+      </div>
+    </section>
+
+    <section id="goal" class="guide-card">
+      <span class="badge">Victory Condition</span>
+      <h2>🎯 The Goal: Build the Monument</h2>
+      <p><strong>Win by building the Monument in the Modern Age.</strong> This ultimate structure becomes available once you've built enough advanced buildings and have the resources to afford it.</p>
+      <div class="callout">
+        <strong>Quick Start</strong>
+        <p>Start with basic resources and a few soldiers. Use Moves each turn to gather resources, build structures, and advance through the Wood → Stone → Modern ages. Buildings you create stay forever and provide permanent bonuses.</p>
+      </div>
+      <p>Each turn you get <strong>3 Moves</strong> to spend on actions like gathering resources, building structures, training soldiers, or trading. Unused Moves can be saved in a small bank for later. Your civilization bonus and seasonal effects influence how many resources you gather.</p>
+      <img src="/media/Story screen1.png" alt="A bustling city in the game." class="story-image">
+    </section>
+
+    <section id="mechanics" class="guide-card">
+      <span class="badge">How It Works</span>
+      <h2>⚙️ Core Mechanics</h2>
+      <div class="guide-grid">
+        <div class="guide-card">
+          <h3>📦 Resources & Gathering</h3>
+          <p><strong>4 Main Resources:</strong> Wood, Rock, Metal, Food</p>
+          <p><strong>Golden Coins:</strong> Earned from buildings and trades</p>
+          <p>Spend 1 Move to gather any resource. Your buildings and civilization bonus affect how much you get.</p>
+        </div>
+        <div class="guide-card">
+          <h3>🏗️ Building & Upgrading</h3>
+          <p><strong>Build:</strong> Pay resources to construct new buildings (no Move cost)</p>
+          <p><strong>Upgrade:</strong> Spend 1 Move + coins to increase building output</p>
+          <p>Each building can only be built once, but upgrades make them more powerful.</p>
+        </div>
+        <div class="guide-card">
+          <h3>⚔️ Military & Combat</h3>
+          <p><strong>Soldiers:</strong> Defend against raids and launch your own attacks</p>
+          <p><strong>Defense:</strong> Higher defense % = better protection from raids</p>
+          <p>Soldiers consume food each turn, so balance army size with food production.</p>
+        </div>
+        <div class="guide-card">
+          <h3>💰 Trading & Diplomacy</h3>
+          <p><strong>Bank Trading:</strong> Sell 3 resources for 1 coin, or buy 1 resource for 2 coins</p>
+          <p><strong>Player Trading:</strong> Make direct deals with other players</p>
+          <p><strong>Visitors:</strong> Send traders, spies, or robbers to other players</p>
+        </div>
+      </div>
+      <div class="timeline">
+        <div class="timeline-step">
+          <h3>Turn Sequence</h3>
+          <p class="note">1. <strong>Income:</strong> Collect coins from buildings<br>
+          2. <strong>Upkeep:</strong> Feed your soldiers<br>
+          3. <strong>Actions:</strong> Spend your 3 Moves on gathering, building, trading, or military<br>
+          4. <strong>Season:</strong> Time advances, seasonal effects and events occur</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="progression" class="guide-card">
+      <span class="badge">Advancement Path</span>
+      <h2>🏗️ Progression: The Three Ages</h2>
+      <p><strong>Advance automatically</strong> when you build enough buildings in your current age. Progress is permanent - you never go backwards, and old buildings keep working.</p>
+      
+      <div class="season-board">
+        <div class="season-card">
+          <h3>🌲 Wood Age</h3>
+          <p class="season-note"><strong>Starting Age:</strong> Basic buildings and simple defenses.</p>
+          <div class="season-mods">
+            <span>Fields (Food)</span>
+            <span>Sawmills (Wood)</span>
+            <span>Markets (Coins)</span>
+            <span>Barracks (Soldiers)</span>
+          </div>
+          <p><strong>Advance:</strong> Build 2 different Wood Age buildings</p>
+        </div>
+        <div class="season-card">
+          <h3>🏰 Stone Age</h3>
+          <p class="season-note"><strong>Mid Game:</strong> Stronger buildings and better defenses.</p>
+          <div class="season-mods">
+            <span>Quarries (Rock)</span>
+            <span>Town Centers (Coins)</span>
+            <span>Stone Walls (Defense)</span>
+            <span>Armories (Army)</span>
+          </div>
+          <p><strong>Advance:</strong> Build 3 different Stone Age buildings</p>
+        </div>
+        <div class="season-card">
+          <h3>⚙️ Modern Age</h3>
+          <p class="season-note"><strong>End Game:</strong> Industrial buildings and the Monument.</p>
+          <div class="season-mods">
+            <span>Factories (Metal)</span>
+            <span>Banks (Coins)</span>
+            <span>Defense Grids</span>
+            <span>Monument (Victory!)</span>
+          </div>
+          <p><strong>Victory:</strong> Build the Monument to win</p>
+        </div>
+      </div>
+      
+      <div class="callout">
+        <strong>Building Strategy</strong>
+        <p>Start with 2 random buildings visible per age. Build your first structure in a new age to see all other options. Focus on resource production early, then build defenses and the Monument.</p>
+      </div>
+      <img src="/media/Story screen2.png" alt="A city in a later age." class="story-image">
+    </section>
+
+    <section id="features" class="guide-card">
+      <span class="badge">Game Systems</span>
+      <h2>✨ Key Features</h2>
+      
+      <details class="guide-toggle" open>
+        <summary>🌍 Seasons & Events</summary>
+        <p><strong>Seasons change every few turns</strong> and affect resource gathering. Spring boosts food, Summer favors wood and metal, Autumn provides balanced gathering, and Winter slows most production. Random events can provide bonuses or challenges.</p>
+      </details>
+      
+      <details class="guide-toggle" style="margin-top:12px;">
+        <summary>🏛️ Civilizations</summary>
+        <p><strong>Romans:</strong> +15% Rock, +1 coin/turn, -10% Metal<br>
+        <strong>Vikings:</strong> +20% Food, -5% Wood<br>
+        <strong>Mongols:</strong> +10% Metal, -10% Rock<br>
+        <strong>Slavs:</strong> +10% Wood & Food, -15% Metal, -1 coin/turn</p>
+      </details>
+      
+      <details class="guide-toggle" style="margin-top:12px;">
+        <summary>⚔️ Military & Raids</summary>
+        <p><strong>Defense:</strong> Soldiers + walls protect against tribal raids. Low defense = lost resources or destroyed buildings.<br>
+        <strong>Player Raids:</strong> Attack other players to steal resources. Success depends on army size vs enemy defense.<br>
+        <strong>Mercenaries:</strong> Pay 20 coins for guaranteed raid success (once per season).</p>
+      </details>
+      
+      <details class="guide-toggle" style="margin-top:12px;">
+        <summary>🕵️ Diplomacy & Visitors</summary>
+        <p><strong>Traders:</strong> Both players gain coins if accepted<br>
+        <strong>Spies:</strong> Reveal enemy defense and resources<br>
+        <strong>Robbers:</strong> Steal coins/resources if accepted<br>
+        <em>Cost:</em> 10 coins + 1 Move, once per season</p>
+      </details>
+      
+      <details class="guide-toggle" style="margin-top:12px;">
+        <summary>🔧 Building Upgrades</summary>
+        <p>Spend 1 Move + coins to upgrade buildings for better output. Success rate decreases with each level (100% → 90% → 80%, etc.). 5% chance for critical success that grants +2 levels instead of +1.</p>
+      </details>
+      
+      <img src="/media/Story screen3.png" alt="A city under attack." class="story-image">
+    </section>
+
+
+
+  </main>
+
+  <footer class="guide-footer">
+    <p>Good luck, and may your city prosper!</p>
+    <p><a href="index.html">Back to the Game</a></p>
+  </footer>
+
+  <script>
+    const navButtons = document.querySelectorAll(".guide-nav button");
+    navButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        navButtons.forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        const target = document.getElementById(btn.dataset.scroll);
+        target?.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    });
+  </script>
+</body>
+</html>
+
