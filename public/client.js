@@ -13,6 +13,7 @@ socket.on('connect', () => {
 
 let ROOM=null, ME=null, COLOR="blue", PLAYERS={}, BUILDINGS={}, AGES=[], TRADE_PRICES=null;
 let YOUR_TURN=false;
+let SUPPRESS_LEAVE_PROMPT = false; // suppress beforeunload when true
 const TRAIN_CONFIG = {
   Wood: { batchSize: 2, cost: { food: 25, coins: 5 } },
   Stone: { batchSize: 4, cost: { food: 50, coins: 10 } },
@@ -507,10 +508,21 @@ function gatherLoreSegments(uniqCivs){
 let SFX_ON = true; // SFX on by default
 let MUSIC_ON = true; // Music plays by default
 
+// Music volume control (capped)
+const MUSIC_VOLUME_LEVELS = [0.0, 0.1, 0.2];
+let musicVolumeIdx = 2;
+function desiredMusicVolume(){ return MUSIC_VOLUME_LEVELS[musicVolumeIdx] || 0.2; }
+
 // Music and SFX toggle buttons
 function updateMusicIcon() {
   const btn = document.getElementById('musicToggle');
   if (btn) btn.textContent = MUSIC_ON ? '🎵' : '🔇';
+}
+function updateMusicVolumeIcon(){
+  const btn = document.getElementById('musicVolume');
+  if (!btn) return;
+  const v = desiredMusicVolume();
+  btn.textContent = v <= 0 ? '🔇' : v < 0.15 ? '🔈' : '🔉';
 }
 function updateSfxIcon() {
   const btn = document.getElementById('sfxToggle');
@@ -519,6 +531,7 @@ function updateSfxIcon() {
 
 document.addEventListener('DOMContentLoaded', () => {
   const musicBtn = document.getElementById('musicToggle');
+  const musicVolBtn = document.getElementById('musicVolume');
   const sfxBtn = document.getElementById('sfxToggle');
 
   if (musicBtn) {
@@ -536,6 +549,18 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  if (musicVolBtn) {
+    musicVolBtn.addEventListener('click', () => {
+      musicVolumeIdx = (musicVolumeIdx + 1) % MUSIC_VOLUME_LEVELS.length;
+      try{
+        if (musicEl){
+          musicEl.volume = Math.min(MUSIC_VOLUME_CAP, desiredMusicVolume());
+        }
+      }catch(e){}
+      updateMusicVolumeIcon();
+    });
+  }
+
   if (sfxBtn) {
     sfxBtn.addEventListener('click', () => {
       SFX_ON = !SFX_ON;
@@ -547,6 +572,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Set initial icons
   updateMusicIcon();
+  updateMusicVolumeIcon();
   updateSfxIcon();
 });
 
@@ -643,6 +669,50 @@ function sfxNoise(dur=0.08, vol=0.06) {
   src.connect(g).connect(audioCtx.destination); src.start();
 }
 
+// ===== War result modal (player wars) =====
+function formatNumber(n){
+  try{ return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','); }catch(e){ return String(n); }
+}
+function narrativeLosses(committed, casualties){
+  const c = Math.max(0, Math.floor(casualties|0));
+  const sent = Math.max(0, Math.floor(committed|0));
+  let scale = 100; // default hundreds
+  if (sent >= 15) scale = 1000; // thousands for very large armies
+  else if (sent >= 6) scale = 100; // hundreds
+  else scale = 50; // dozens for very small forces
+  let approx = Math.max(0, c * scale);
+  // round to nearest reasonable chunk
+  const step = scale >= 1000 ? 100 : 50;
+  approx = Math.round(approx / step) * step;
+  return `≈${formatNumber(approx)} warriors`;
+}
+function showWarResult(evt){
+  try{
+    const modal = document.getElementById('raidNotificationModal');
+    const img = document.getElementById('raidImage');
+    const outcomeText = document.getElementById('raidOutcomeText');
+    const details = document.getElementById('raidDetailsText');
+    const target = document.getElementById('raidTargetPlayer');
+    if (!modal) return;
+    if (img) img.src = evt.image || '/media/Dispatched.png';
+    if (outcomeText){
+      outcomeText.textContent = evt.outcome === 'success' ? 'WAR SUCCESS' : 'WAR FAILED';
+      outcomeText.parentElement.style.background = evt.outcome === 'success' ? 'linear-gradient(135deg,#16a34a,#166534)' : 'linear-gradient(135deg,#991b1b,#7f1d1d)';
+    }
+    if (target) target.textContent = `${evt.playerId} — ${evt.civ}`;
+    const lootParts = Object.entries(evt.loot||{}).filter(([,v])=>v>0).map(([k,v])=>`${v} ${k}`);
+    const lootStr = lootParts.length? `Loot: ${lootParts.join(', ')}` : 'No loot';
+    const lossStr = (evt.casualties>0) ? `Losses: ${narrativeLosses(evt.committed||0, evt.casualties||0)}` : 'No losses';
+    if (details) details.textContent = `${evt.lore || ''} ${lootStr}. ${lossStr}.`;
+    modal.classList.remove('hidden');
+    const closeBtn = document.getElementById('raidNotificationClose');
+    if (closeBtn){ closeBtn.onclick = ()=> modal.classList.add('hidden'); }
+  }catch(e){}
+}
+
+// Socket event for war results
+socket.on('raidReturn', (evt)=>{ showWarResult(evt); });
+
 // ===== Music per age =====
 const MUSIC = { Wood:["wood1.mp3","wood2.mp3"], Stone:["stone1.mp3","stone2.mp3"], Modern:["modern1.mp3","modern2.mp3","modern3.mp3"] };
 let musicEl=null, lastAge=null, musicCapInterval=null;
@@ -651,7 +721,8 @@ const MUSIC_VOLUME_CAP = 0.2;
 function enforceMusicVolumeCap(){
   try{
     if (!musicEl) return;
-    if (musicEl.volume > MUSIC_VOLUME_CAP) musicEl.volume = MUSIC_VOLUME_CAP;
+    const target = Math.min(MUSIC_VOLUME_CAP, desiredMusicVolume());
+    if (musicEl.volume !== target) musicEl.volume = target;
   }catch(e){}
 }
 
@@ -675,7 +746,7 @@ function ensureMusic(age) {
     musicEl = new Audio();
     musicEl.loop = false;
     // Cap music volume at 20%
-    musicEl.volume = MUSIC_VOLUME_CAP;
+    musicEl.volume = Math.min(MUSIC_VOLUME_CAP, desiredMusicVolume());
     musicEl.addEventListener("ended", () => playAgeTrack(lastAge));
     bindMusicCapListeners();
   }
@@ -689,7 +760,7 @@ function playAgeTrack(age) {
   const pick = list[Math.floor(Math.random() * list.length)];
   musicEl.src = `/music/${pick}`;
   // Enforce max 20% volume on every play
-  musicEl.volume = Math.min(MUSIC_VOLUME_CAP, musicEl.volume || 1);
+  musicEl.volume = Math.min(MUSIC_VOLUME_CAP, desiredMusicVolume());
   musicEl.play().then(enforceMusicVolumeCap).catch(() => {});
 }
 
@@ -843,6 +914,54 @@ function setSeasonTheme(season){
   if(season) b.classList.add(`season-${season.toLowerCase()}`);
 }
 
+// Map soldier count to descriptive army size by civ/age
+function armyDescriptor(soldiers, age, civ){
+  const n = Math.max(0, soldiers|0);
+  const tiers = {
+    Vikings: [ { t:2, name:'Small Band' }, { t:6, name:'Warband' }, { t:10, name:'Shieldwall' }, { t:15, name:'Great Host' } ],
+    Romans:  [ { t:2, name:'Contubernium' }, { t:6, name:'Maniple' }, { t:10, name:'Cohort' }, { t:15, name:'Legion' } ],
+    Mongols: [ { t:2, name:'Scout Pair' }, { t:6, name:'War Party' }, { t:10, name:'Tumen Wing' }, { t:15, name:'Great Horde' } ],
+    Slavs:   [ { t:2, name:'Village Band' }, { t:6, name:'War Party' }, { t:10, name:'Shield Circle' }, { t:15, name:'Grand Host' } ]
+  };
+  const list = tiers[civ] || tiers.Romans;
+  let label = 'No army';
+  for (let i=list.length-1;i>=0;i--){ if (n>=list[i].t){ label = list[i].name; break; } }
+  return label;
+}
+
+function clientBuildingEffect(name){
+  try{
+    for (const defs of Object.values(BUILDINGS||{})){
+      if (defs && defs[name]) return defs[name].effect||{};
+    }
+  }catch(e){}
+  return null;
+}
+function estimateWarChance(me, commit){
+  const soldiers = Math.max(0, commit|0);
+  let base = 0.08; // mirrors server tuning
+  if (soldiers >= 15) base = 0.70; else if (soldiers >= 10) base = 0.55; else if (soldiers >= 6) base = 0.30;
+  let bonus = 0;
+  try{
+    for (const [name, info] of Object.entries(me.structures||{})){
+      const eff = clientBuildingEffect(name); if (!eff) continue;
+      if (eff.raidPower){
+        const lvl = (info&&info.level)||1;
+        bonus += (eff.raidPower + (lvl-1)*0.01);
+      }
+    }
+  }catch(e){}
+  const chance = Math.max(0.05, Math.min(0.90, base + bonus));
+  return chance;
+}
+function warChanceLabel(p){
+  if (p >= 0.95) return 'Guaranteed success';
+  if (p >= 0.85) return 'Very likely';
+  if (p >= 0.65) return 'Likely';
+  if (p >= 0.35) return 'Even odds';
+  if (p >= 0.15) return 'Unlikely';
+  return 'Very unlikely';
+}
 function updateUI(){
   if(!ROOM||!ME) return;
   const me=PLAYERS[ME]; if(!me) return;
@@ -920,10 +1039,14 @@ function updateUI(){
   }catch(e){}
   const soldierCount = Math.max(0, me.soldiers|0);
   const soldierCap = Math.max(0, me.soldierCap|0);
+  const armySizeLabelEl = document.getElementById('armySizeLabel');
+  if (armySizeLabelEl){
+    armySizeLabelEl.textContent = armyDescriptor(soldierCount, me.age||'Wood', me.civ||'Romans');
+  }
   const defencePct = Math.max(0, Math.min(100, Math.round(me.defense||0)));
   const raidActive = !!(me.raid?.active);
   const raidCommitted = raidActive ? (me.raid?.committed||0) : 0;
-  const raidStatusDetail = raidActive ? `Raid in progress - ${raidCommitted} soldiers en route` : 'No raid in progress.';
+  const raidStatusDetail = raidActive ? `War in progress — forces are marching` : 'No war in progress.';
 
   // Update Army Command section only (removed duplicate sidebar stats)
   const armySoldiersEl = document.getElementById('armySoldiers');
@@ -931,6 +1054,7 @@ function updateUI(){
   const armyDefenseEl = document.getElementById('armyDefense');
   const armyRaidStatusEl = document.getElementById('armyRaidStatus');
 
+  // Show numeric soldiers/cap again
   if (armySoldiersEl) armySoldiersEl.textContent = soldierCount;
   if (armyCapEl) armyCapEl.textContent = soldierCap;
   if (armyDefenseEl) armyDefenseEl.textContent = `${defencePct}%`;
@@ -977,7 +1101,7 @@ function updateUI(){
   if (armyHint){
     const age = me?.age || 'Wood';
     const config = getTrainingConfig(age);
-    armyHint.textContent = `Cost: ${config.cost.food} food + ${config.cost.coins} coins for ${config.batchSize} warriors`;
+    armyHint.textContent = `Cost: ${config.cost.food} Food + ${config.cost.coins} Coins to train a Small Army (+${config.batchSize})`;
   }
 
   // Compact players list under Overview
@@ -992,7 +1116,7 @@ function updateUI(){
       const pct = Math.max(0, Math.min(100, p.progress||0));
       const pc = toRGB(p.color||'blue');
       const civIcon = CIV_PLAYER_ICON[p.civ] || '👤';
-      const movesInline = (pid===ME) ? ` <span class=\"movesInline\">• Moves: <span id=\"ap\">${p.ap|0}</span></span>` : '';
+      const movesInline = '';
       const ageDisplay = p.age ? `Age: <strong>${p.age}</strong>` : '';
 
       // Only show military info for own player - hidden from others
@@ -1003,8 +1127,10 @@ function updateUI(){
         const defence = Math.max(0, Math.min(100, p?.defense||0));
         militaryInfo = ` &bull; Soldiers: <strong>${soldiers}/${cap}</strong> &bull; Defence: <strong>${defence}%</strong>`;
       }
+      const canKick = ROOM?.host && ROOM.host===ME && pid!==ME;
+      const kickBtn = canKick ? ` <button class=\"kickBtn\" data-kick=\"${pid}\" title=\"Kick player\">✖</button>` : '';
 
-      return `<div class=\"p-item ${turn?'turn':''}\" style=\"--pc:${pc}\">\n        <div class=\"pnameRow\"><span class=\"dot\"></span><span class=\"civIcon\">${civIcon}</span><span class=\"name\">${pid}</span>${movesInline}</div>\n        <div class=\"villRow\">${ageDisplay}${militaryInfo}</div>\n        <div class=\"progress mini\"><div class=\"fill\" style=\"width:${pct}%\"></div></div>\n      </div>`;
+      return `<div class=\"p-item ${turn?'turn':''}\" style=\"--pc:${pc}\">\n        <div class=\"pnameRow\"><span class=\"dot\"></span><span class=\"civIcon\">${civIcon}</span><span class=\"name\">${pid}</span>${movesInline}${kickBtn}</div>\n        <div class=\"villRow\">${ageDisplay}${militaryInfo}</div>\n        <div class=\"progress mini\"><div class=\"fill\" style=\"width:${pct}%\"></div></div>\n      </div>`;
     }).join('');
   }
   // Visitor open button label (do not disable; show toast on click instead)
@@ -1015,8 +1141,31 @@ function updateUI(){
   // (Visitor inbox removed - now uses immediate modal like trade offers)
 
   // Enable End Turn button
-  const endBtn = document.querySelector('[data-action="endTurn"]');
-  if (endBtn){ endBtn.disabled = !(ROOM.active && ROOM.turnOf===ME); }
+  const endBtn = document.querySelector('[data-action=\"endTurn\"]');
+  const overlay = document.getElementById('endTurnOverlay');
+  const overlayWrap = document.getElementById('endTurnOverlayWrap');
+  const overlayBtn = document.getElementById('endTurnOverlayBtn');
+  if (endBtn){
+    const canEnd = (ROOM.active && ROOM.turnOf===ME);
+    endBtn.disabled = !canEnd;
+    endBtn.classList.toggle('inactive', !canEnd);
+    try{
+      const meNow = PLAYERS[ME];
+      const apLeft = Math.max(0, meNow?.ap|0);
+      if (canEnd) {
+        const html = `END TURN <span class=\"movesNum\">${apLeft}</span> <span class=\"movesLabel\">Moves left</span>`;
+        endBtn.innerHTML = html;
+        endBtn.setAttribute('aria-label', `End Turn, ${apLeft} moves left`);
+        if (overlayBtn) { overlayBtn.innerHTML = html; overlayBtn.classList.remove('inactive'); overlayBtn.disabled = false; }
+      } else {
+        const current = ROOM?.turnOf || 'Opponent';
+        endBtn.textContent = `${current}'s Turn`;
+        endBtn.setAttribute('aria-label', `${current}'s Turn`);
+        if (overlayBtn) { overlayBtn.textContent = `${current}'s Turn`; overlayBtn.classList.add('inactive'); overlayBtn.disabled = true; }
+      }
+    }catch(e){}
+  }
+  try{ window.__refreshEndTurnOverlay && window.__refreshEndTurnOverlay(); }catch(e){}
   // Disable send in modal if not enough coins
   { const btn=document.getElementById('visitSendBtn'); if (btn){ const canAff = (PLAYERS[ME]?.resources.coins||0)>=5; btn.disabled = !canAff; } }
   // Update resource counts
@@ -1048,18 +1197,47 @@ function updateUI(){
   { const tb = document.getElementById('openTradeBtn'); if (tb) tb.disabled = !canAct; }
   const trainBtn = document.getElementById('trainBtn');
   if (trainBtn){
-    // Train soldiers button is always enabled during player's turn (no Year 1 blocking)
     const age = me?.age || 'Wood';
     const config = getTrainingConfig(age);
-    const canTrain = canAct && soldierCount < soldierCap && (me.resources.food||0) >= config.cost.food && (me.resources.coins||0) >= config.cost.coins;
-    trainBtn.disabled = !canTrain;
-    trainBtn.textContent = `Train ${config.batchSize} Soldiers`;
+    const hasBarracks = !!(me.structures && me.structures.Barracks);
+    const baseCanTrain = canAct && soldierCount < soldierCap && (me.resources.food||0) >= config.cost.food && (me.resources.coins||0) >= config.cost.coins;
+    if (!hasBarracks){
+      trainBtn.disabled = true;
+      trainBtn.style.opacity = '0.6';
+      trainBtn.style.filter = 'grayscale(0.7)';
+      trainBtn.title = 'Build Barracks to unlock training';
+      trainBtn.textContent = 'Build Barracks';
+    } else if (raidActive){
+      trainBtn.disabled = false;
+      trainBtn.style.opacity = '0.6';
+      trainBtn.style.filter = 'grayscale(0.7)';
+      trainBtn.title = 'Your army is at war';
+      trainBtn.textContent = 'Recruit Soldiers';
+  } else {
+      trainBtn.style.opacity = '';
+      trainBtn.style.filter = '';
+      trainBtn.title = '';
+        trainBtn.disabled = !baseCanTrain;
+      trainBtn.textContent = 'Recruit Soldiers';
+}
   }
   const raidBtn = document.getElementById('raidBtn');
   if (raidBtn){
     const canRaid = canAct && !raidActive && soldierCount >= RAID_MIN_COMMIT;
     raidBtn.disabled = !canRaid;
-    raidBtn.textContent = raidActive ? 'Raid In Progress' : `Dispatch ${soldierCount} Soldiers`;
+    raidBtn.textContent = raidActive ? 'War In Progress' : 'Go To War';
+    const riskEl = document.getElementById('warRiskLine');
+    if (riskEl){
+      if (raidActive){
+        riskEl.textContent = 'At war — awaiting results';
+      } else if (soldierCount < RAID_MIN_COMMIT){
+        riskEl.textContent = `Need at least ${RAID_MIN_COMMIT} soldiers to go to war.`;
+      } else {
+        const chance = estimateWarChance(me, soldierCount);
+        const label = warChanceLabel(chance);
+        riskEl.textContent = `War success chance: ${label} (${Math.round(chance*100)}%)`;
+      }
+    }
   }
   // Mercenary hire availability
   const mercBtn = document.getElementById('triggerRaidBtn');
@@ -1140,27 +1318,7 @@ function buildSeasonSummaryLines(summary){
       }
     }
   });
-  const raids=Array.isArray(summary.raidReports)?summary.raidReports:[];
-  raids.forEach(rep=>{
-    const name = rep.playerId || 'Unknown';
-    // Use lore if available
-    if (rep.lore) {
-      const lootText = formatBundleSummary(rep.loot);
-      const lootSegment = lootText ? ` Loot: ${lootText}.` : '';
-      const lossSegment = rep.casualties>0 ? ` Losses: ${rep.casualties} soldiers.` : '';
-      lines.push(`${name}: ${rep.lore}${lootSegment}${lossSegment}`);
-    } else {
-      // Fallback to old format
-      const lootText = formatBundleSummary(rep.loot);
-      const lootSegment = lootText ? ` Loot: ${lootText}.` : '';
-      const lossSegment = rep.casualties>0 ? ` Losses: ${rep.casualties}.` : '';
-      if (rep.outcome === 'success'){
-        lines.push(`${name}'s raid succeeded.${lootSegment}${lossSegment}`);
-      } else if (rep.outcome === 'failure'){
-        lines.push(`${name}'s raid failed.${lootSegment}${lossSegment}`);
-      }
-    }
-  });
+  // Do not include player war results in this section anymore
   return lines;
 }
 
@@ -1175,10 +1333,13 @@ $("#playVsAiBtn").addEventListener("click",()=>{
 
 function joinOrCreate(kind, playVsAi = false){
   const name=$("#playerName").value.trim()||`Player${Math.floor(Math.random()*90+10)}`;
-  const code=$("#roomCode").value.trim().toUpperCase()||"ROOM";
+  const codeInput=$("#roomCode").value.trim().toUpperCase();
   const color=$("#playerColor").value||"blue";
   const civ=$("#playerCiv") ? $("#playerCiv").value : "Romans";
   ME=name; COLOR=color; setTint(color);
+  // Validate join requires a code; create may generate a random one on server when blank
+  if (kind === 'join' && !codeInput){ toast('Enter Field Code to join.'); return; }
+  const code = codeInput;
 
   // IMPORTANT: Reset the lore flag when joining/creating
   LORE_SHOWN = false;
@@ -1211,6 +1372,17 @@ function emitAction(action,payload){ if(!ROOM||!ME) return; socket.emit("perform
 
 // Delegated click handler
 document.addEventListener("click",(ev)=>{
+  // Kick button handler (host only)
+  const kickBtn = ev.target.closest('button[data-kick]');
+  if (kickBtn && ROOM && ROOM.host===ME){
+    const target = kickBtn.getAttribute('data-kick');
+    if (target){
+      showConfirm(`Kick ${target} from the session?`, 'Confirm Kick').then(ok=>{
+        if (ok){ socket.emit('kickPlayer', { code: ROOM.code, by: ME, target }); }
+      });
+    }
+    return;
+  }
   const btn=ev.target.closest("button[data-action]"); if(!btn) return;
   if(!(ROOM?.active && ROOM?.turnOf===ME)){ toast("Not your turn."); sfxTone(220,0.05,0.05); return; }
   const a=btn.dataset.action;
@@ -1225,6 +1397,12 @@ document.addEventListener("click",(ev)=>{
   }
   else if(a==="gather-food"){
     if (!performActionWithDelay("Gathering Food", ()=>{ emitAction("gather",{ type:"food" }); apFloat(-1); sfxTone(500,0.04,0.05); })) return;
+  }
+  else if(a==="endTurn"){
+    // Animate transition to grayed out state
+    const btnEl = document.querySelector('[data-action="endTurn"]');
+    if (btnEl){ btnEl.classList.add('ending'); setTimeout(()=>btnEl.classList.remove('ending'), 350); }
+    if (!performActionWithDelay('Ending Turn', ()=>{ emitAction('endTurn'); })) return;
   }
   else if(a==="build"){
     const me = PLAYERS[ME];
@@ -1261,6 +1439,10 @@ document.addEventListener("click",(ev)=>{
   else if(a==="train"){
     const me = PLAYERS[ME];
     if (!me) return;
+    // Require Barracks
+    if (!(me.structures && me.structures.Barracks)) { toast('Build Barracks to unlock training.'); sfxTone(220,0.05,0.05); return; }
+    // Block training while army is at war
+    if (me.raid?.active){ toast('Cannot train while your army is at war.'); sfxTone(220,0.05,0.05); return; }
     const soldierCount = Math.max(0, me.soldiers|0);
     const soldierCap = Math.max(0, me.soldierCap|0);
     const age = me.age || 'Wood';
@@ -1280,37 +1462,16 @@ document.addEventListener("click",(ev)=>{
   else if(a==="raid"){
     const me = PLAYERS[ME];
     if (!me) return;
-    const calendar = ROOM?.calendar;
-    const raidsUnlocked = true; // Raids are always available from year 1
     const soldierCount = Math.max(0, me.soldiers|0);
     const raidActive = !!(me.raid?.active);
     const ap = Math.max(0, me.ap|0);
-    // Automatically dispatch ALL available soldiers
-    const commitVal = soldierCount;
+    const commitVal = soldierCount; // send all
 
-    // Validation checks with detailed feedback
-    if (!raidsUnlocked) {
-      toast('❌ Raids are not yet unlocked. Progress to a later age.');
-      sfxTone(220,0.05,0.05);
-      return;
-    }
-    if (raidActive) {
-      toast('❌ You already have a raid in progress. Wait for it to resolve.');
-      sfxTone(220,0.05,0.05);
-      return;
-    }
-    if (soldierCount < RAID_MIN_COMMIT) {
-      toast(`❌ Not enough soldiers. You have ${soldierCount}, but need at least ${RAID_MIN_COMMIT} to raid.`);
-      sfxTone(220,0.05,0.05);
-      return;
-    }
-    if (ap < 1) {
-      toast('❌ Not enough Action Points. You need 1 AP to dispatch a raid.');
-      sfxTone(220,0.05,0.05);
-      return;
-    }
+    if (raidActive) { toast('❌ You already went to war. Wait for results.'); sfxTone(220,0.05,0.05); return; }
+    if (soldierCount < RAID_MIN_COMMIT) { toast(`❌ Not enough soldiers. Need at least ${RAID_MIN_COMMIT} to go to war.`); sfxTone(220,0.05,0.05); return; }
+    if (ap < 1) { toast('❌ Not enough Moves. You need 1 Move to go to war.'); sfxTone(220,0.05,0.05); return; }
 
-    if (!performActionWithDelay(`Dispatching ${commitVal} Soldiers to Raid`, ()=>{ emitAction("raid",{ commit:commitVal }); apFloat(-1); sfxTone(620,0.06,0.05); })) return;
+    if (!performActionWithDelay('Going To War', ()=>{ emitAction('raid',{ commit:commitVal }); apFloat(-1); sfxTone(620,0.06,0.05); })) return;
   }
   // old trade buttons removed
   else if(a==="skip"){
@@ -1697,6 +1858,79 @@ document.addEventListener('click', (e) => {
 $("#createBtn").addEventListener("click",()=>joinOrCreate("create"));
 $("#joinBtn").addEventListener("click",()=>joinOrCreate("join"));
 
+// Mobile affix for End Turn button
+(function setupEndTurnAffix(){
+  let inited = false;
+  const mql = window.matchMedia('(max-width: 768px)');
+  let container = null;
+  const overlay = document.getElementById('endTurnOverlay');
+  const overlayWrap = document.getElementById('endTurnOverlayWrap');
+  const overlayBtn = document.getElementById('endTurnOverlayBtn');
+
+  function syncOverlayToContainer(){
+    if (!container || !overlay || !overlayWrap) return;
+    const rect = container.getBoundingClientRect();
+    overlayWrap.style.left = rect.left + 'px';
+    overlayWrap.style.width = rect.width + 'px';
+    try{
+      const h = (document.getElementById('endTurnOverlayBtn')?.offsetHeight||0);
+      if (h>0) overlay.style.height = h + 'px';
+    }catch(e){}
+  }
+  function onScroll(){
+    if (!container) return;
+    if (!mql.matches) {
+      overlay && (overlay.style.display = 'none');
+      container && (container.style.visibility = '');
+      return;
+    }
+    // Decide based on live position, no stored offsets
+    const rect = container.getBoundingClientRect();
+    if (rect.top <= 0) {
+      syncOverlayToContainer();
+      overlay.style.display = 'block';
+      container.style.visibility = 'hidden';
+    } else {
+      overlay.style.display = 'none';
+      container.style.visibility = '';
+    }
+  }
+  function onResize(){ syncOverlayToContainer(); onScroll(); }
+
+  function init(){
+    container = document.querySelector('.sidebarTurn');
+    if (!container) return;
+    if (!inited){
+      window.addEventListener('scroll', onScroll, { passive:true });
+      window.addEventListener('resize', onResize);
+      mql.addEventListener?.('change', onResize);
+      if (overlayBtn){
+        overlayBtn.addEventListener('click', ()=>{
+          const canEnd = ROOM?.active && ROOM?.turnOf===ME;
+          if (!canEnd) return;
+          overlayBtn.classList.add('ending'); setTimeout(()=>overlayBtn.classList.remove('ending'), 350);
+          if (!performActionWithDelay('Ending Turn', ()=>{ emitAction('endTurn'); })) return;
+        });
+      }
+      inited = true;
+    }
+    syncOverlayToContainer();
+    onScroll();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+  window.__refreshEndTurnOverlay = () => { try{ init(); }catch(e){} };
+  const origJoin = joinOrCreate;
+  joinOrCreate = function(kind, playVsAi=false){
+    origJoin(kind, playVsAi);
+    setTimeout(()=>{ init(); }, 200);
+  };
+})();
+
 
 
 // === Injected enhancements (v8-b) ===
@@ -1833,7 +2067,6 @@ socket.on("roomUpdate", ({ room, players, buildings, ages, prices, visitPending,
 
     // Show raid notification modal for any tribal attacks
     if (seasonSummary && seasonSummary.attackReports && seasonSummary.attackReports.length > 0) {
-      // Show modal for each raid (usually just one per season)
       seasonSummary.attackReports.forEach(raid => {
         showRaidNotification(raid);
       });
@@ -2192,6 +2425,47 @@ document.addEventListener('DOMContentLoaded', ()=>{
   const readyBtn = document.getElementById('readyBtn');
   if (readyBtn) readyBtn.addEventListener('click', ()=>{
     try{ socket.emit('setReady', { code:ROOM.code, playerId:ME, ready: !(PLAYERS[ME]?.ready) }); }catch(e){}
+  });
+
+  // Exit and Restart buttons
+  const exitBtn = document.getElementById('exitBtn');
+  const restartBtn = document.getElementById('restartBtn');
+  if (exitBtn){
+    exitBtn.addEventListener('click', ()=>{
+      showConfirm('Leave this session?', 'Exit Session').then(ok=>{
+        if (!ok) return;
+        SUPPRESS_LEAVE_PROMPT = true;
+        try{ socket.emit('leaveRoom', { code: ROOM?.code, playerId: ME }); }catch(e){}
+        // Return to lobby UI
+        try{
+          document.getElementById('game')?.classList.add('hidden');
+          document.getElementById('lobby')?.classList.remove('hidden');
+          // Reset theme/tint classes to lobby defaults
+          document.body.classList.remove('theme-wood','theme-stone','theme-modern');
+          document.body.classList.remove('tint-blue','tint-red','tint-green','tint-yellow','tint-purple','tint-orange','tint-tint-pink','tint-cyan','tint-gray');
+        }catch(e){}
+        ROOM=null; PLAYERS={};
+      });
+    });
+  }
+  if (restartBtn){
+    restartBtn.addEventListener('click', ()=>{
+      if (!(ROOM && ROOM.host===ME)) { toast('Only host can restart.'); return; }
+      showConfirm('Restart the game for all players? Everyone will return to lobby.', 'Restart Game').then(ok=>{
+        if (ok){ socket.emit('restartGame', { code: ROOM.code, by: ME }); }
+      });
+    });
+  }
+
+  // Kicked handler
+  socket.on('kicked', ()=>{
+    toast('You were removed from the session.');
+    SUPPRESS_LEAVE_PROMPT = true;
+    try{
+      document.getElementById('game')?.classList.add('hidden');
+      document.getElementById('lobby')?.classList.remove('hidden');
+    }catch(e){}
+    ROOM=null; PLAYERS={};
   });
 
   // Ready toggle (lobby modal button)

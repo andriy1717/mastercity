@@ -249,9 +249,9 @@ const BASE = {
   },
   raid: {
     minCommit: 3,
-    baseSuccess: 0.15,
-    perSoldier: 0.002,
-    casualtyFloor: 0.05,
+    baseSuccess: 0.10,
+    perSoldier: 0.0015,
+    casualtyFloor: 0.12,
     lootMultiplier: { wood: 8, rock: 7, metal: 4, food: 9, coins: 5 }
   }
 };
@@ -971,15 +971,15 @@ function computeDefense(p){
 function computeRaidPower(p, committed){
   const soldiers = Math.max(0, committed||0);
 
-  // New tiered success rates based on soldier count
-  // 3 soldiers = 15%, 6 = 50%, 10 = 75%, 15+ = 85%
-  let baseRate = 0.15; // 3 soldiers
+  // Re-tuned tiered success rates based on soldier count (harder overall)
+  // 3 soldiers = 8%, 6 = 30%, 10 = 55%, 15+ = 70%
+  let baseRate = 0.08; // 3 soldiers
   if (soldiers >= 15) {
-    baseRate = 0.85;
+    baseRate = 0.70;
   } else if (soldiers >= 10) {
-    baseRate = 0.75;
+    baseRate = 0.55;
   } else if (soldiers >= 6) {
-    baseRate = 0.50;
+    baseRate = 0.30;
   }
 
   // Add bonuses from raid-boosting buildings
@@ -991,7 +991,7 @@ function computeRaidPower(p, committed){
       power += (eff.raidPower + bonus * 0.01); // +1% raid power per level
     }
   }
-  return Math.min(0.95, power); // Cap at 95%
+  return Math.min(0.90, power); // Cap at 90%
 }
 function sanitizeRaidState(raid){
   if (!raid) return null;
@@ -1730,6 +1730,31 @@ function ensurePlayer(room, playerId, color){
     writeSessionLog(room, `PLAYER_JOINED: ${playerId} | Current order: [${room.order.join(', ')}]`);
   }
 }
+function removePlayerFromRoom(room, playerId){
+  if (!room || !playerId) return;
+  if (!room.state[playerId] && !room.order.includes(playerId)) return;
+  writeSessionLog(room, `PLAYER_REMOVED: ${playerId}`);
+  delete room.state[playerId];
+  room.order = room.order.filter(id=>id!==playerId);
+  // Remove any socket mappings for this player
+  for (const [sid,pid] of Object.entries(room.playersBySocket)){
+    if (pid===playerId) delete room.playersBySocket[sid];
+  }
+  // If it was their turn, advance
+  if (room.turnOf === playerId){
+    if (room.order.length>0){
+      room.turnOf = room.order[0];
+      // Reset AP for new current player
+      const p = room.state[room.turnOf];
+      if (p){ p.ap = BASE.apPerTurn; p.bankedAp = 0; }
+      startOfTurn(room, room.turnOf);
+    } else {
+      room.active = false; room.turnOf = null;
+    }
+  }
+  // If active game now has <2 players, deactivate
+  if (room.active && room.order.length < 2){ room.active = false; room.turnOf = null; }
+}
 
 // Send personalized room updates to each player
 function broadcastRoomUpdate(room){
@@ -2037,7 +2062,7 @@ function resolvePendingRaids(room){
     if (!raid?.active) continue;
     if (raid.resolvesAfterSeason !== currentSeason) continue;
     const committed = Math.max(0, raid.committed|0);
-    const successChance = Math.min(0.95, Math.max(0.05, computeRaidPower(p, committed)));
+    const successChance = Math.min(0.90, Math.max(0.05, computeRaidPower(p, committed)));
     const roll = Math.random();
     const loot={};
     let outcome="failure";
@@ -2054,12 +2079,12 @@ if (roll <= successChance){
         }
       }
       addResources(p.resources, loot);
-      // Successful raids have fewer casualties (0-5% of committed)
+      // Successful wars have some casualties (0-12% of committed)
       casualties = Math.round(committed * (BASE.raid.casualtyFloor * Math.random()));
 } else {
       if (p.stats) p.stats.raidsFailed = (p.stats.raidsFailed||0) + 1;
-      // Failed raids have higher casualties (5-20% of committed)
-      casualties = Math.max(Math.round(committed * (BASE.raid.casualtyFloor + 0.15*Math.random())), 1);
+      // Failed wars have higher casualties (20-40% of committed)
+      casualties = Math.max(Math.round(committed * (0.20 + 0.20*Math.random())), 1);
     }
     casualties = Math.min(committed, casualties);
     const survivors = committed - casualties;
@@ -2079,13 +2104,13 @@ if (roll <= successChance){
       msg = `${lore}${lootText}${lossText}`;
     } else {
       msg = outcome === "success"
-        ? `🎉 Raid succeeded!${lootText}${lossText}`
-        : `⚔️ Raid failed. Survivors returned empty-handed.${lossText}`;
+        ? `🎉 War succeeded!${lootText}${lossText}`
+        : `⚔️ War failed. Survivors returned empty-handed.${lossText}`;
     }
 
     notifyPlayer(room, pid, msg);
 
-    // Broadcast a full-screen return notification to all players
+    // Broadcast a full-screen return notification to all players (result only)
     io.to(room.code).emit("raidReturn", {
       playerId: pid,
       outcome,
@@ -2191,6 +2216,13 @@ function resolveSeasonEnd(room){
       const report = resolveTribalAttack(room, mercRaid.target, context);
 
       if (report) {
+        // Notify players on failure (repelled)
+        if (report.outcome === 'defended') {
+          try {
+            notifyPlayer(room, mercRaid.hirer, '💀 Your mercenaries failed. A lone survivor staggered back — the raid was repelled.');
+            notifyPlayer(room, mercRaid.target, '🛡️ Raid repelled! Mercenaries failed to breach your defenses.');
+          } catch(e) {}
+        }
         // Calculate mercenary cut and hirer's share
         const hirerGains = {};
         const mercenaryCut = {};
@@ -2253,6 +2285,7 @@ function roomPayload(room){
     code: room.code,
     turnOf: room.turnOf,
     active: room.active,
+    host: room.host,
     season: seasonName(room),
     seasonalMultipliers: room.seasonalMultipliers,
     attackChance: room.seasonAttackChance,
@@ -2331,16 +2364,26 @@ if (!room.firstTurnEver) {
   }
   try{ trackWealth(room, p, playerId); }catch(e){}
 
-  // soldier upkeep: consume a little food
+  // soldier upkeep: consume food and a small amount of coins (scaled by army size)
   const soldiers = Math.max(0, p.soldiers|0);
-  const foodNeed = Math.max(0, Math.floor(soldiers/4)); // 1 food per 4 soldiers
+  const foodNeed = Math.max(0, Math.floor(soldiers/2)); // doubled: 1 food per 2 soldiers
   if (foodNeed>0){
     const have = Math.max(0, p.resources.food|0);
     const eat = Math.min(have, foodNeed);
     p.resources.food = have - eat;
     if (eat<foodNeed){
       // not enough food to feed all; notify the active player
-      for (const [sid,pid] of Object.entries(room.playersBySocket)) if (pid===playerId) io.to(sid).emit("toast", { text: "Not enough food to sustain your soldiers." });
+      for (const [sid,pid] of Object.entries(room.playersBySocket)) if (pid===playerId) io.to(sid).emit("toast", { text: "Not enough food to sustain your army." });
+    }
+  }
+  // coin upkeep: 1 coin per 10 soldiers
+  const coinNeed = Math.max(0, Math.floor(soldiers/10));
+  if (coinNeed>0){
+    const haveC = Math.max(0, p.resources.coins|0);
+    const pay = Math.min(haveC, coinNeed);
+    p.resources.coins = haveC - pay;
+    if (pay<coinNeed){
+      for (const [sid,pid] of Object.entries(room.playersBySocket)) if (pid===playerId) io.to(sid).emit("toast", { text: "Your army demands pay, but you lack enough coins." });
     }
   }
 
@@ -2580,60 +2623,41 @@ case "train": {
           break;
         }
 
-        // Minimum 3 soldiers required to raid
+        // Enforce 6-month cooldown between wars
+        const nowMonth = Math.max(0, room.monthIndex|0);
+        if (typeof p.lastWarMonth === 'number' && (nowMonth - p.lastWarMonth) < 6) {
+          const wait = 6 - (nowMonth - p.lastWarMonth);
+          socket.emit("toast", { text: `You can only go to war every 6 months. Wait ${wait} more month(s).` });
+          break;
+        }
+
+        // Minimum 3 soldiers required to go to war
         const minRequired = 3;
         const commit = Math.max(minRequired, Math.floor(payload?.commit||payload?.amount||minRequired));
         if ((p.soldiers||0) < commit){
-          socket.emit("toast", { text: `Need at least ${minRequired} soldiers to raid` });
+          socket.emit("toast", { text: `Need at least ${minRequired} soldiers to go to war` });
           break;
         }
         if(!spendAp(1)) return;
         p.soldiers -= commit;
 
-        // Raid resolves next season
+        // War resolves next season
         const currentSeasonIdx = SEASON_ORDER.indexOf(seasonName(room));
         const nextSeasonIdx = (currentSeasonIdx + 1) % SEASON_ORDER.length;
         const nextSeason = SEASON_ORDER[nextSeasonIdx];
-      p.raid = {
-        active:true,
-        committed:commit,
-        startedSeason: seasonName(room),
-        resolvesAfterSeason: nextSeason
-      };
-addPersonalLog(room, playerId, `Launched raid with ${commit} soldiers`, "military");
-      if (p.stats) p.stats.raidsLaunched = (p.stats.raidsLaunched||0) + 1;
+        p.raid = {
+          active:true,
+          committed:commit,
+          startedSeason: seasonName(room),
+          resolvesAfterSeason: nextSeason
+        };
+        p.lastWarMonth = nowMonth;
+        addPersonalLog(room, playerId, `Went to war with ${commit} soldiers`, "military");
+        if (p.stats) p.stats.raidsLaunched = (p.stats.raidsLaunched||0) + 1;
 
-      // Broadcast dispatch notification to all players
-      const dispatchCore = buildDispatchLore(playerId, p.civ || "Romans", commit);
-      const dispatchMessage = `⚔️ ${dispatchCore}`;
-
-      // Emit a dedicated dispatch event for a full-screen modal
-      io.to(room.code).emit("raidDispatched", {
-        playerId,
-        committed: commit,
-        civ: p.civ || "Romans",
-        age: p.age || "Wood",
-        message: dispatchMessage,
-        lore: dispatchCore,
-        image: "/media/Dispatched.png"
-      });
-
-      // Also add to chat/event feed for history
-      const dispatchChat = {
-        player: playerId,
-        text: dispatchMessage,
-        ts: Date.now(),
-        type: "military",
-        image: "/media/Dispatched.png",
-        system: true
-      };
-      room.chat.push(dispatchChat);
-      if (room.chat.length > 50) room.chat.shift();
-      const latestDispatchChat = room.chat.slice(-6).reverse();
-      io.to(room.code).emit("chatUpdate", latestDispatchChat);
-
-      break;
-    }
+        // Do NOT broadcast any dispatch/raid initiated messages anymore.
+        break;
+      }
       case "upgrade": {
         const { name } = payload||{};
         if (!p.structures[name]) return;
@@ -2765,6 +2789,68 @@ Available Commands:
     case '/raid':
       handleRaidCommand(room, playerId, args, socket);
       break;
+
+    case '/kick': {
+      // /kick <player>
+      if (room.host !== playerId) { socket.emit('toast', { text: 'Only host can kick.' }); break; }
+      if (args.length < 2) { socket.emit('toast', { text: 'Usage: /kick <player>' }); break; }
+      const targetName = args.slice(1).join(' ');
+      const targetId = Object.keys(room.state).find(id => id.toLowerCase() === targetName.toLowerCase());
+      if (!targetId) { socket.emit('toast', { text: `Player not found: ${targetName}` }); break; }
+      for (const sid of socketsForPlayer(room, targetId)) io.to(sid).emit('kicked');
+      removePlayerFromRoom(room, targetId);
+      addGameLog(room, `${targetId} was removed by host via command.`, 'command');
+      broadcastRoomUpdate(room);
+      break;
+    }
+
+    case '/restart': {
+      if (room.host !== playerId) { socket.emit('toast', { text: 'Only host can restart.' }); break; }
+      // Reuse restart logic
+      const code = room.code;
+      io.to(code).emit('toast', { text: '🔁 Game restarting…' });
+      // Simulate restart via same handler
+      try {
+        const prevRoom = ROOMS.get(code);
+        if (prevRoom) {
+          const prev = { ...prevRoom.state };
+          const order = [...prevRoom.order];
+          prevRoom.state = {};
+          order.forEach(pid => {
+            const old = prev[pid] || {};
+            const color = old.color || 'blue';
+            const civ = old.civ || 'Romans';
+            prevRoom.state[pid] = initialPlayer(color);
+            if (civ && CIVS[civ]) prevRoom.state[pid].civ = civ;
+            prevRoom.state[pid].ready = false;
+          });
+          prevRoom.active = false;
+          prevRoom.turnOf = null;
+          prevRoom.firstTurnEver = true;
+          prevRoom.pendingTrades = {};
+          prevRoom.pendingVisits = {};
+          prevRoom.raidTracking = { lastRaidSeason: null, playerTriggeredRaidsUsed: {} };
+          prevRoom.seasonalMultipliers = generateSeasonalVariations();
+          prevRoom.seasonsElapsed = 0;
+          prevRoom.attacksLog = [];
+          prevRoom.monthIndex = Math.floor(Math.random()*12);
+          prevRoom.startingDay = 1 + Math.floor(Math.random()*28);
+          prevRoom.lastSeasonName = undefined;
+          prevRoom.statistics = { startTime: Date.now(), endTime: null, totalTurns: 0, playerStats: {} };
+          writeSessionLog(prevRoom, `\n===== SESSION RESTARTED by ${playerId} (command) =====\n`);
+          broadcastRoomUpdate(prevRoom);
+        }
+      } catch(e) {}
+      break;
+    }
+
+    case '/exit': {
+      // Self-leave the session
+      removePlayerFromRoom(room, playerId);
+      socket.emit('toast', { text: 'You left the session.' });
+      broadcastRoomUpdate(room);
+      break;
+    }
 
     default:
       socket.emit("toast", { text: `Unknown command: ${command}. Type /help for available commands.` });
@@ -2984,6 +3070,8 @@ io.on("connection",(socket)=>{
     const room=createRoom(code, performAction.bind(null, code));
     room.playersBySocket[socket.id]=playerId;
     ensurePlayer(room,playerId,color||"blue");
+    // Mark host/creator
+    room.host = playerId;
     if (civ && CIVS[civ]) room.state[playerId].civ = civ;
     socket.join(code);
 
@@ -3002,7 +3090,7 @@ io.on("connection",(socket)=>{
   socket.on("joinRoom", ({ code, playerId, color, civ }) => {
     code=(code||"").toUpperCase();
     const room=ROOMS.get(code); if(!room) return socket.emit("toast",{ text:"Room not found." });
-    if (room.order.length>=4) return socket.emit("toast",{ text:"Room is full." });
+    if (room.order.length>=8) return socket.emit("toast",{ text:"Room is full." });
     room.playersBySocket[socket.id]=playerId;
     ensurePlayer(room,playerId,color||"blue");
     if (civ && CIVS[civ]) room.state[playerId].civ = civ;
@@ -3053,6 +3141,10 @@ io.on("connection",(socket)=>{
         break;
       }
       case "train": {
+        // Require Barracks to unlock training
+        if (!(p.structures && p.structures.Barracks)){
+          break;
+        }
         const cap = soldierCap(p);
         const current = Math.max(0, p.soldiers||0);
         if (current >= cap){
@@ -3150,17 +3242,25 @@ p.soldiers = Math.min(cap, current + gained);
           break;
         }
 
-        // Minimum 3 soldiers required to raid
+        // Enforce 6-month cooldown between wars
+        const nowMonth = Math.max(0, room.monthIndex|0);
+        if (typeof p.lastWarMonth === 'number' && (nowMonth - p.lastWarMonth) < 6) {
+          const wait = 6 - (nowMonth - p.lastWarMonth);
+          socket.emit("toast", { text: `You can only go to war every 6 months. Wait ${wait} more month(s).` });
+          break;
+        }
+
+        // Minimum 3 soldiers required to go to war
         const minRequired = 3;
         const commit = Math.max(minRequired, Math.floor(payload?.commit||payload?.amount||minRequired));
         if ((p.soldiers||0) < commit){
-          socket.emit("toast", { text: `Need at least ${minRequired} soldiers to raid` });
+          socket.emit("toast", { text: `Need at least ${minRequired} soldiers to go to war` });
           break;
         }
         if(!spendAp(1)) return;
         p.soldiers -= commit;
 
-        // Raid resolves next season
+        // War resolves next season
         const currentSeasonIdx = SEASON_ORDER.indexOf(seasonName(room));
         const nextSeasonIdx = (currentSeasonIdx + 1) % SEASON_ORDER.length;
         const nextSeason = SEASON_ORDER[nextSeasonIdx];
@@ -3170,21 +3270,10 @@ p.soldiers = Math.min(cap, current + gained);
           startedSeason: seasonName(room),
           resolvesAfterSeason: nextSeason
         };
-addPersonalLog(room, playerId, `Launched raid with ${commit} soldiers`, "military");
+        p.lastWarMonth = nowMonth;
+        addPersonalLog(room, playerId, `Went to war with ${commit} soldiers`, "military");
         if (p.stats) p.stats.raidsLaunched = (p.stats.raidsLaunched||0) + 1;
-
-        // Emit dispatch event to all players for modal notification
-        const dispatchCore = buildDispatchLore(playerId, p.civ || 'Romans', commit);
-        const dispatchMessage = `⚔️ ${dispatchCore}`;
-        io.to(room.code).emit('raidDispatched', {
-          playerId,
-          committed: commit,
-          civ: p.civ || 'Romans',
-          age: p.age || 'Wood',
-          message: dispatchMessage,
-          lore: dispatchCore,
-          image: '/media/Dispatched.png'
-        });
+        // No dispatch event or chat entry
         break;
       }
       case "upgrade": {
@@ -3610,7 +3699,7 @@ fromP.resources[offer.want.type]=(fromP.resources[offer.want.type]||0)+offer.wan
   socket.on("addAiPlayer", ({ code }) => {
     const room = ROOMS.get(code);
     if (!room) return socket.emit("toast", { text: "Room not found." });
-    if (room.order.length >= 4) return socket.emit("toast", { text: "Room is full." });
+    if (room.order.length >= 8) return socket.emit("toast", { text: "Room is full." });
 
     const aiName = AI_NAMES.find((name) => !room.state[name]);
     if (!aiName) return socket.emit("toast", { text: "No more AI players available." });
@@ -3623,6 +3712,86 @@ fromP.resources[offer.want.type]=(fromP.resources[offer.want.type]||0)+offer.wan
     broadcastRoomUpdate(room);
     for (const [sid, pid] of Object.entries(room.playersBySocket))
       io.to(sid).emit("turnFlag", { yourTurn: room.active && room.turnOf === pid });
+  });
+
+  // Player voluntarily leaves the room
+  socket.on("leaveRoom", ({ code, playerId }) => {
+    const room = ROOMS.get(code); if (!room) return;
+    // Capture sids before removal
+    const sids = socketsForPlayer(room, playerId);
+    // Remove player mapping and state
+    removePlayerFromRoom(room, playerId);
+    // Make their sockets leave the room so they stop receiving any events
+    try{
+      sids.forEach(sid => {
+        const sock = io.sockets.sockets.get(sid);
+        if (sock) sock.leave(code);
+      });
+    }catch(e){}
+
+    // If host left, reassign host to next player if any
+    if (room.host === playerId) {
+      if (room.order.length > 0) {
+        room.host = room.order[0];
+        // Notify remaining players
+        for (const [sid] of Object.entries(room.playersBySocket)) io.to(sid).emit('toast', { text: `Host left. ${room.host} is the new host.` });
+      } else {
+        // No players left — destroy room
+        ROOMS.delete(code);
+        return;
+      }
+    }
+
+    broadcastRoomUpdate(room);
+  });
+
+  // Host kicks a player
+  socket.on("kickPlayer", ({ code, by, target }) => {
+    const room = ROOMS.get(code); if (!room) return;
+    if (room.host !== by) return socket.emit("toast", { text: "Only host can kick." });
+    if (!room.state[target]) return socket.emit("toast", { text: "Player not found." });
+    // Notify kicked player's sockets
+    for (const sid of socketsForPlayer(room, target)) io.to(sid).emit('kicked');
+    removePlayerFromRoom(room, target);
+    addGameLog(room, `${target} was removed by host.`, 'command');
+    broadcastRoomUpdate(room);
+  });
+
+  // Host restarts the game
+  socket.on("restartGame", ({ code, by }) => {
+    const room = ROOMS.get(code); if (!room) return;
+    if (room.host !== by) return socket.emit("toast", { text: "Only host can restart." });
+    // Preserve order/colors/civs; reset states
+    const prev = { ...room.state };
+    const order = [...room.order];
+    room.state = {};
+    order.forEach(pid => {
+      const old = prev[pid] || {};
+      const color = old.color || 'blue';
+      const civ = old.civ || 'Romans';
+      room.state[pid] = initialPlayer(color);
+      if (civ && CIVS[civ]) room.state[pid].civ = civ;
+      room.state[pid].ready = false;
+    });
+    room.active = false;
+    room.turnOf = null;
+    room.firstTurnEver = true;
+    room.pendingTrades = {};
+    room.pendingVisits = {};
+    room.raidTracking = { lastRaidSeason: null, playerTriggeredRaidsUsed: {} };
+    room.seasonalMultipliers = generateSeasonalVariations();
+    room.seasonsElapsed = 0;
+    room.attacksLog = [];
+    room.monthIndex = Math.floor(Math.random()*12);
+    room.startingDay = 1 + Math.floor(Math.random()*28);
+    room.lastSeasonName = undefined;
+    // Reset statistics
+    room.statistics = { startTime: Date.now(), endTime: null, totalTurns: 0, playerStats: {} };
+    writeSessionLog(room, `\n===== SESSION RESTARTED by ${by} =====\n`);
+
+    // Notify everyone
+    for (const [sid] of Object.entries(room.playersBySocket)) io.to(sid).emit('toast', { text: '🔁 Game restarted. Back to lobby.' });
+    broadcastRoomUpdate(room);
   });
 
   socket.on("disconnect", () => {});

@@ -27,7 +27,7 @@
       <div class="card lobby-card">
         <h2>Join or Create a Field</h2>
         <div class="row"><label>Ruler Name</label><input id="playerName" placeholder="e.g., Andriy" /></div>
-        <div class="row"><label>Field Code</label><input id="roomCode" value="FIELD" /></div>
+        <div class="row"><label>Field Code</label><input id="roomCode" placeholder="e.g., ABC123" /></div>
         <div class="row">
           <label>Color</label>
           <select id="playerColor">
@@ -67,6 +67,13 @@
     <section id="game" class="hidden">
       <div id="toast" class="toast"></div>
 
+      <!-- Mobile End Turn Overlay (affixed) -->
+      <div id="endTurnOverlay" class="hidden" style="position:fixed; top:0; left:0; right:0; display:none; pointer-events:auto; z-index:1100; background: rgba(2,6,23,0.55); box-shadow: 0 12px 28px rgba(0,0,0,0.35);">
+        <div id="endTurnOverlayWrap" style="position:absolute; top:0; left:0; width:100%; padding:0; display:flex; justify-content:center;">
+          <button id="endTurnOverlayBtn" class="endBtn" style="width:100%; max-width:640px; pointer-events:auto;">End Turn</button>
+        </div>
+      </div>
+
       <!-- Event Slider: Combined Logs & Chat -->
       <div id="eventSlider" class="event-slider collapsed">
         <div class="event-slider-header">
@@ -87,7 +94,10 @@
             <h3 style="font-size: 18px; margin: 0;">📊 Overview — <span id="roomName">—</span></h3>
             <div style="display: flex; gap: 4px;">
               <button id="musicToggle" class="iconBtn" title="Toggle Music" style="font-size: 14px; padding: 4px; background-color: #1e3a8a;">🎵</button>
+              <button id="musicVolume" class="iconBtn" title="Cycle Music Volume" style="font-size: 14px; padding: 4px; background-color: #1e3a8a;">🔈</button>
               <button id="sfxToggle" class="iconBtn" title="Toggle Sound Effects" style="font-size: 14px; padding: 4px; background-color: #1e3a8a;">🔔</button>
+              <button id="restartBtn" class="iconBtn" title="Restart Game (host only)" style="font-size: 14px; padding: 4px; background-color: #7c2d12;">⟲</button>
+              <button id="exitBtn" class="iconBtn" title="Exit Session" style="font-size: 14px; padding: 4px; background-color: #991b1b;">🚪</button>
             </div>
           </div>
           <div class="stats" id="meStats">
@@ -107,7 +117,7 @@
             <div id="playersMini" class="plist"></div>
           </div>
           <div class="actions two sidebarTurn">
-            <button data-action="endTurn" class="endBtn" style="background: linear-gradient(135deg, #065f46 0%, #064e3b 100%); color: #e2e8f0; border: none;">End Your Turn</button>
+            <button data-action="endTurn" class="endBtn">End Turn</button>
           </div>
         </aside>
 
@@ -181,9 +191,9 @@
                         <div style="font-size: 13px; color: #94a3b8;" id="soldierLore">Your forces stand ready</div>
                       </div>
                     </div>
-                    <div style="text-align: right;">
-                      <div style="font-size: 20px; font-weight: 900; color: #e2e8f0;"><span id="armySoldiers">0</span>/<span id="armyCap">0</span></div>
-                    </div>
+                      <div style="text-align: right;">
+                        <div style="font-size: 20px; font-weight: 900; color: #e2e8f0;"><span id="armySoldiers">0</span>/<span id="armyCap">0</span></div>
+                      </div>
                   </div>
 
                   <!-- Defence with lore -->
@@ -206,7 +216,7 @@
                   <div style="font-size: 13px; font-weight: 700; color: #fbbf24; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
                     <span>🏋️</span> Training Grounds
                   </div>
-                  <button data-action="train" id="trainBtn" style="width: 100%; background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%); border: none; color: #78350f; font-weight: 800;">Train Soldiers</button>
+                  <button data-action="train" id="trainBtn" style="width: 100%; background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%); border: none; color: #78350f; font-weight: 800;">Recruit Soldiers</button>
                   <div class="muted" id="armyHint" style="margin-top: 6px; font-size: 12px;"></div>
                 </div>
 
@@ -215,7 +225,8 @@
                   <div style="font-size: 13px; font-weight: 700; color: #ef4444; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
                     <span>⚔️</span> Offensive Operations
                   </div>
-                  <button data-action="raid" id="raidBtn" style="width: 100%; background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%); border: none; color: #fff; font-weight: 800; margin-bottom: 6px;">Dispatch Raid</button>
+                  <button data-action="raid" id="raidBtn" style="width: 100%; background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%); border: none; color: #fff; font-weight: 800; margin-bottom: 6px;">Go To War</button>
+                  <div id="warRiskLine" class="muted" style="font-size: 12px; margin-bottom: 6px;"></div>
                   <button id="triggerRaidBtn" style="width: 100%; background: linear-gradient(135deg, #7c2d12 0%, #451a03 100%); border: none; color: #fdba74; font-weight: 700; font-size: 14px;">💰 Hire Mercenaries (20 coins)</button>
                 </div>
 
