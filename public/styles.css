@@ -539,133 +539,108 @@ button.not-your-turn:hover { transform: none; box-shadow: none; }
 .bcard .actions { gap:6px; margin-top:8px; }
 .bcard button.small { padding:5px 12px; font-size:11px; border-radius:6px; font-weight:600; }
 
-/* Bubbly build button style (from button.txt, adapted) */
+/* Build button style - same as Gather Resources */
 .bcard .actions button.small.available {
   position: relative;
-  background-color: var(--tcolor, #1f5fb8);
-  color: #fff;
   border: none;
   border-radius: 8px;
-  box-shadow: 0 2px 25px rgba(0,0,0,0.35);
-  transition: transform 0.1s ease-in, box-shadow 0.25s ease-in;
+  cursor: pointer;
+  padding: 5px 12px;
+  background: linear-gradient(-30deg, #0b1b3d 50%, #08142b 50%);
+  color: #d4e0f7;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 900;
+  font-size: 11px;
+  overflow: hidden;
+  box-shadow: 0 12px 28px rgba(0,0,0,0.45), 0 0 0 1px rgba(31,95,184,0.35), inset 0 1px 0 rgba(255,255,255,0.12);
+  letter-spacing: 0.5px;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  transition: transform 0.1s ease, box-shadow 0.2s ease;
+}
+.bcard .actions button.small.available:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 26px rgba(0,0,0,0.55), 0 0 0 1px rgba(31,95,184,0.5), inset 0 1px 0 rgba(255,255,255,0.20);
+}
+.bcard .actions button.small.available::before {
+  content: attr(data-ico);
+  font-size: 14px;
+  line-height: 1;
+  flex-shrink: 0;
+  filter: drop-shadow(0 1px 0 rgba(0,0,0,0.2));
+}
+.bcard .actions button.small.available::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(to right, rgba(8,20,43,0), var(--tcolor, #1f5fb8), rgba(8,20,43,0));
+  transform: translateX(-100%);
+  animation: animateTop 12s linear infinite;
+  opacity: 0.95;
+}
+.bcard .actions button.small.available:disabled::after {
+  animation: none;
+  opacity: 0;
 }
 .bcard .actions button.small.available:focus { outline: none; }
 .bcard .actions button.small.available:active {
-  transform: scale(0.96);
-  box-shadow: 0 2px 18px rgba(0,0,0,0.25);
-}
-/* Bubble layers */
-.bcard .actions button.small.available::before,
-.bcard .actions button.small.available::after {
-  position: absolute;
-  content: '';
-  display: none;
-  width: 140%;
-  height: 100%;
-  left: -20%;
-  z-index: 0;
-  transition: all 0.5s ease-in-out;
-  background-repeat: no-repeat;
-  pointer-events: none;
-}
-.bcard .actions button.small.available::before {
-  top: -75%;
-  background-image:
-    radial-gradient(circle, var(--tcolor, #1f5fb8) 20%, transparent 20%),
-    radial-gradient(circle, transparent 20%, var(--tcolor, #1f5fb8) 20%, transparent 30%),
-    radial-gradient(circle, var(--tcolor, #1f5fb8) 20%, transparent 20%),
-    radial-gradient(circle, var(--tcolor, #1f5fb8) 20%, transparent 20%),
-    radial-gradient(circle, transparent 10%, var(--tcolor, #1f5fb8) 15%, transparent 20%),
-    radial-gradient(circle, var(--tcolor, #1f5fb8) 20%, transparent 20%),
-    radial-gradient(circle, var(--tcolor, #1f5fb8) 20%, transparent 20%),
-    radial-gradient(circle, var(--tcolor, #1f5fb8) 20%, transparent 20%),
-    radial-gradient(circle, var(--tcolor, #1f5fb8) 20%, transparent 20%);
-  background-size: 10% 10%, 20% 20%, 15% 15%, 20% 20%, 18% 18%, 10% 10%, 15% 15%, 10% 10%, 18% 18%;
-}
-.bcard .actions button.small.available::after {
-  bottom: -75%;
-  background-image:
-    radial-gradient(circle, var(--tcolor, #1f5fb8) 20%, transparent 20%),
-    radial-gradient(circle, var(--tcolor, #1f5fb8) 20%, transparent 20%),
-    radial-gradient(circle, transparent 10%, var(--tcolor, #1f5fb8) 15%, transparent 20%),
-    radial-gradient(circle, var(--tcolor, #1f5fb8) 20%, transparent 20%),
-    radial-gradient(circle, var(--tcolor, #1f5fb8) 20%, transparent 20%),
-    radial-gradient(circle, var(--tcolor, #1f5fb8) 20%, transparent 20%),
-    radial-gradient(circle, var(--tcolor, #1f5fb8) 20%, transparent 20%);
-  background-size: 15% 15%, 20% 20%, 18% 18%, 20% 20%, 15% 15%, 10% 10%, 20% 20%;
-}
-/* Trigger bubbles when .animate is added */
-.bcard .actions button.small.available.animate::before { display: block; animation: bTopBubbles 0.75s ease-in-out forwards; }
-.bcard .actions button.small.available.animate::after  { display: block; animation: bBottomBubbles 0.75s ease-in-out forwards; }
-
-@keyframes bTopBubbles {
-  0%   { background-position: 5% 90%, 10% 90%, 10% 90%, 15% 90%, 25% 90%, 25% 90%, 40% 90%, 55% 90%, 70% 90%; }
-  50%  { background-position: 0% 80%, 0% 20%, 10% 40%, 20% 0%, 30% 30%, 22% 50%, 50% 50%, 65% 20%, 90% 30%; }
-  100% { background-position: 0% 70%, 0% 10%, 10% 30%, 20% -10%, 30% 20%, 22% 40%, 50% 40%, 65% 10%, 90% 20%; background-size: 0% 0%,0% 0%,0% 0%,0% 0%,0% 0%,0% 0%; }
-}
-@keyframes bBottomBubbles {
-  0%   { background-position: 10% -10%, 30% 10%, 55% -10%, 70% -10%, 85% -10%, 70% -10%, 70% 0%; }
-  50%  { background-position: 0% 80%, 20% 80%, 45% 60%, 60% 100%, 75% 70%, 95% 60%, 105% 0%; }
-  100% { background-position: 0% 90%, 20% 90%, 45% 70%, 60% 110%, 75% 80%, 95% 70%, 110% 10%; background-size: 0% 0%,0% 0%,0% 0%,0% 0%,0% 0%,0% 0%; }
+  transform: scale(0.98);
 }
 
-/* Upgrade button: black with white text, same bubbly effect */
-.bcard .actions button.small[data-action="upgrade"]{
+
+/* Upgrade button: same style as Build */
+.bcard .actions button.small[data-action="upgrade"] {
   position: relative;
-  background:#0b0b0b;
-  color:#ffffff;
-  border:none;
-  border-radius:8px;
-  box-shadow: 0 2px 18px rgba(0,0,0,0.4);
-  transition: transform 0.1s ease-in, box-shadow 0.25s ease-in;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  padding: 5px 12px;
+  background: linear-gradient(-30deg, #0b1b3d 50%, #08142b 50%);
+  color: #d4e0f7;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 900;
+  font-size: 11px;
+  overflow: hidden;
+  box-shadow: 0 12px 28px rgba(0,0,0,0.45), 0 0 0 1px rgba(31,95,184,0.35), inset 0 1px 0 rgba(255,255,255,0.12);
+  letter-spacing: 0.5px;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  transition: transform 0.1s ease, box-shadow 0.2s ease;
 }
-.bcard .actions button.small[data-action="upgrade"]:focus{ outline:none; }
-.bcard .actions button.small[data-action="upgrade"]:active{ transform: scale(0.96); box-shadow: 0 2px 14px rgba(0,0,0,0.35); }
-.bcard .actions button.small[data-action="upgrade"]::before,
-.bcard .actions button.small[data-action="upgrade"]::after{
-  position:absolute;
-  content:'';
-  display:none;
-  width:140%;
-  height:100%;
-  left:-20%;
-  z-index:0;
-  transition: all 0.5s ease-in-out;
-  background-repeat:no-repeat;
-  pointer-events:none;
+.bcard .actions button.small[data-action="upgrade"]:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 26px rgba(0,0,0,0.55), 0 0 0 1px rgba(31,95,184,0.5), inset 0 1px 0 rgba(255,255,255,0.20);
 }
-.bcard .actions button.small[data-action="upgrade"]::before{
-  top:-75%;
-  background-image:
-    radial-gradient(circle, #ffffff 20%, transparent 20%),
-    radial-gradient(circle, transparent 20%, #ffffff 20%, transparent 30%),
-    radial-gradient(circle, #ffffff 20%, transparent 20%),
-    radial-gradient(circle, #ffffff 20%, transparent 20%),
-    radial-gradient(circle, transparent 10%, #ffffff 15%, transparent 20%),
-    radial-gradient(circle, #ffffff 20%, transparent 20%),
-    radial-gradient(circle, #ffffff 20%, transparent 20%),
-    radial-gradient(circle, #ffffff 20%, transparent 20%),
-    radial-gradient(circle, #ffffff 20%, transparent 20%);
-  background-size: 10% 10%, 20% 20%, 15% 15%, 20% 20%, 18% 18%, 10% 10%, 15% 15%, 10% 10%, 18% 18%;
+.bcard .actions button.small[data-action="upgrade"]::before {
+  content: attr(data-ico);
+  font-size: 14px;
+  line-height: 1;
+  flex-shrink: 0;
+  filter: drop-shadow(0 1px 0 rgba(0,0,0,0.2));
 }
-.bcard .actions button.small[data-action="upgrade"]::after{
-  bottom:-75%;
-  background-image:
-    radial-gradient(circle, #ffffff 20%, transparent 20%),
-    radial-gradient(circle, #ffffff 20%, transparent 20%),
-    radial-gradient(circle, transparent 10%, #ffffff 15%, transparent 20%),
-    radial-gradient(circle, #ffffff 20%, transparent 20%),
-    radial-gradient(circle, #ffffff 20%, transparent 20%),
-    radial-gradient(circle, #ffffff 20%, transparent 20%),
-    radial-gradient(circle, #ffffff 20%, transparent 20%);
-  background-size: 15% 15%, 20% 20%, 18% 18%, 20% 20%, 15% 15%, 10% 10%, 20% 20%;
+.bcard .actions button.small[data-action="upgrade"]::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(to right, rgba(8,20,43,0), var(--tcolor, #1f5fb8), rgba(8,20,43,0));
+  transform: translateX(-100%);
+  animation: animateTop 12s linear infinite;
+  opacity: 0.95;
 }
-.bcard .actions button.small[data-action="upgrade"].animate::before{ display:block; animation: bTopBubbles 0.75s ease-in-out forwards; }
-.bcard .actions button.small[data-action="upgrade"].animate::after{ display:block; animation: bBottomBubbles 0.75s ease-in-out forwards; }
+.bcard .actions button.small[data-action="upgrade"]:disabled::after {
+  animation: none;
+  opacity: 0;
+}
+.bcard .actions button.small[data-action="upgrade"]:focus { outline: none; }
+.bcard .actions button.small[data-action="upgrade"]:active { transform: scale(0.98); }
 
 button.locked { background:#a0a8b8; }
 button.available { background:#1f5fb8; }

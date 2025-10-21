@@ -935,14 +935,14 @@ function buildCardHTML(name, def, me){
   // Hide upgrade button if building is at level 3 (max level)
   let upgradeBtn = '';
   if (owned && lvl < 3 && isCurrentAge) {
-    upgradeBtn = `<button class="small" data-action="upgrade" data-name="${name}">🔨 Upgrade</button>`;
+    upgradeBtn = `<button class="small" data-action="upgrade" data-name="${name}" data-ico="🔨">Upgrade</button>`;
   } else if (owned && lvl < 3 && !isCurrentAge) {
-    upgradeBtn = `<button class="small" data-action="upgrade" data-name="${name}" disabled title="Old age — cannot upgrade">🔨 Upgrade</button>`;
+    upgradeBtn = `<button class="small" data-action="upgrade" data-name="${name}" data-ico="🔨" disabled title="Old age — cannot upgrade">Upgrade</button>`;
   }
 
   const buttons = owned
     ? upgradeBtn
-    : `<button class="small ${canAfford(def.cost, me)?'available':'locked'}" data-action="build" data-name="${name}" ${isCurrentAge?'':'disabled title="Old age — cannot build"'}>🔨 Build</button>`;
+    : `<button class="small ${canAfford(def.cost, me)?'available':'locked'}" data-action="build" data-name="${name}" data-ico="🔨" ${isCurrentAge?'':'disabled title="Old age — cannot build"'}>Build</button>`;
 
   return `
     <div class="bcard ${owned?'owned':''}">
@@ -1692,14 +1692,6 @@ document.addEventListener("click",(ev)=>{
     const me = PLAYERS[ME];
     if (!me) return;
     const name=btn.dataset.name;
-    // Bubbly click animation (from button.txt)
-    try{
-      btn.classList.remove('animate');
-      // force reflow to restart animation
-      void btn.offsetWidth;
-      btn.classList.add('animate');
-      setTimeout(()=>btn.classList.remove('animate'),700);
-    }catch(e){}
     // Check if player can afford the building
     const age=me.age; const defs=BUILDINGS[age]||{};
     const buildingDef = defs[name];
@@ -1724,13 +1716,6 @@ document.addEventListener("click",(ev)=>{
     const me = PLAYERS[ME];
     if (!me) return;
     const name=btn.dataset.name;
-    // Bubbly click animation for upgrade
-    try{
-      btn.classList.remove('animate');
-      void btn.offsetWidth;
-      btn.classList.add('animate');
-      setTimeout(()=>btn.classList.remove('animate'),700);
-    }catch(e){}
     // Check if player can afford the upgrade (costs 1 AP, but also check resources if needed)
     // For now, upgrades typically just cost 1 move, but we could add resource validation here too
     if (!performActionWithDelay(name ? `Upgrading ${name}` : "Upgrading", ()=>{ emitAction("upgrade",{ name }); apFloat(-1); sfxNoise(0.06,0.05); })) return;
