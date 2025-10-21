@@ -624,8 +624,6 @@ const RAID_LORE = {
   }
 };
 
-<<<<<<< HEAD
-=======
 const DEFEAT_LORE = [
   "Your army marched confidently into battle, but their confidence turned to chaos when the enemy's tactics proved superior. They were routed in a embarrassing retreat, with many soldiers not making it back home.",
   "The battle started well, but the enemy commander was far more cunning than expected. Your soldiers found themselves surrounded and were forced to flee for their lives.",
@@ -764,7 +762,6 @@ const ROBBER_LORE = [
   "Your robber pretended their leg was injured and asked if they could sit by the coin vault while recovering. By the time they 'healed' and left, 10 coins had miraculously made their way into their travel pack!"
 ];
 
->>>>>>> 0080bf9 (Initial commit)
 const DISPATCH_LORE = {
   Vikings: [
     "{{player}} unleashes {{soldiers}} Viking raiders, sworn to seize fresh coasts for the clans.",
@@ -846,28 +843,18 @@ function downgradeRandomBuilding(p, maxSteps) {
 }
 
 // =================== Core helpers ===================
-<<<<<<< HEAD
-function initialPlayer(color, isAi = false) {
-=======
 function initialPlayer(color, isAi = false, civ = null) {
->>>>>>> 0080bf9 (Initial commit)
   // Select 2 random buildings from Wood age to show initially
   const woodBuildings = Object.keys(BUILDINGS.Wood || {});
   const shuffled = woodBuildings.sort(() => Math.random() - 0.5);
   const initialVisible = shuffled.slice(0, 2);
 
-<<<<<<< HEAD
-  return {
-    color: color || "blue",
-    civ: "Romans",
-=======
   // Randomize AI age progression thresholds (80% - 100% per age)
   const makeThreshold = () => 0.8 + Math.random() * 0.2;
 
   return {
     color: color || "blue",
     civ: civ || "Romans",
->>>>>>> 0080bf9 (Initial commit)
     ready: isAi ? true : false,
     resources: { wood:10, rock:10, metal:10, food:10, coins:10 },
     soldiers: BASE.startingSoldiers,
@@ -878,11 +865,8 @@ function initialPlayer(color, isAi = false, civ = null) {
     raid: null,
     personalLog: [], // Personal event log (only visible to this player)
     isAi: isAi,
-<<<<<<< HEAD
-=======
     // Per-age advancement thresholds for AI (percent of buildings built in current age)
     aiAgeThresholds: { Wood: makeThreshold(), Stone: makeThreshold() },
->>>>>>> 0080bf9 (Initial commit)
     visibleBuildings: {
       Wood: initialVisible,
       Stone: [], // Will be populated when player reaches Stone age
@@ -943,15 +927,12 @@ function countBuildingsInAge(player, age) {
   const buildingNames = Object.keys(BUILDINGS[age]);
   return buildingNames.filter(name => player.structures[name]).length;
 }
-<<<<<<< HEAD
-=======
 function totalBuildingsInAge(age) {
   if (!BUILDINGS[age]) return 0;
   // Exclude Monument for Modern age when counting age completion
   const names = Object.keys(BUILDINGS[age]);
   return age === 'Modern' ? names.filter(n => n !== 'Monument').length : names.length;
 }
->>>>>>> 0080bf9 (Initial commit)
 
 // Statistics tracking helpers
 function trackResourceGathered(player, resource, amount) {
@@ -1253,17 +1234,6 @@ function maybeAdvanceAge(p, room){
   const names = Object.keys(BUILDINGS[currentAge]||{});
   const have = names.filter(n => !!p.structures[n]).length;
 
-<<<<<<< HEAD
-  // Age-specific building requirements:
-  // Wood -> Stone: need 2 buildings
-  // Stone -> Modern: need 3 buildings
-  let required = 2; // Default
-  if (currentAge === 'Stone') {
-    required = 3;
-  }
-
-  if (have >= required) {
-=======
   // Default (for humans): legacy simple thresholds
   let shouldAdvance = false;
 
@@ -1289,7 +1259,6 @@ function maybeAdvanceAge(p, room){
   }
 
   if (shouldAdvance) {
->>>>>>> 0080bf9 (Initial commit)
     const nextAge = AGES[idx+1];
     p.age = nextAge;
 
@@ -1311,9 +1280,6 @@ function maybeAdvanceAge(p, room){
 
 // =================== Rooms ===================
 const ROOMS = new Map();
-<<<<<<< HEAD
-const AI_NAMES = ["Bob", "Alice", "Charlie", "Dave"];
-=======
 const AI_NAMES = ["Bob", "Alice", "Charlie", "Dave"]; // legacy fallback
 
 // Civilization-based ruler names for AI
@@ -1335,23 +1301,12 @@ function generateAiName(room, civ){
   const base = pool[Math.floor(Math.random()*pool.length)] || 'Ruler';
   return uniqueName(room, base);
 }
->>>>>>> 0080bf9 (Initial commit)
 
 class AIManager {
   constructor(room, performAction) {
     this.room = room;
     this.states = ["gathering", "building", "advancing", "trading", "military"];
     this.currentState = "gathering";
-<<<<<<< HEAD
-    this.chatMessages = [
-      "I'm not saying I'm the best, but I'm in the top one.",
-      "I'm not arguing, I'm just explaining why I'm right.",
-      "I'm not lazy, I'm on energy-saving mode.",
-      "I'm not weird, I'm a limited edition.",
-      "I'm not a complete idiot, some parts are missing.",
-    ];
-=======
->>>>>>> 0080bf9 (Initial commit)
     this.performAction = performAction;
     this.logFilePath = room.logFilePath;
   }
@@ -1390,16 +1345,6 @@ class AIManager {
   }
 
   // Strategic helpers
-<<<<<<< HEAD
-  missingBuildingsInAge(player){
-    const names = Object.keys(BUILDINGS[player.age]||{});
-    return names.filter(n=>!player.structures[n] && n!=="Monument");
-  }
-  pickTargetBuilding(player){
-    // If in Modern and Monument not built but prerequisites nearly met, target Monument
-    if (player.age === "Modern" && !player.structures["Monument"]) {
-      // Require at least 2 buildings in each age to attempt Monument per rules
-=======
   missingBuildingsInAge(player, age){
     const names = Object.keys(BUILDINGS[age]||{});
     return names.filter(n=>!player.structures[n] && n!=="Monument");
@@ -1407,39 +1352,24 @@ class AIManager {
   pickTargetBuilding(player){
     // If in Modern and Monument not built but prerequisites nearly met, target Monument (requires 4 Modern buildings to be visible)
     if (player.age === "Modern" && !player.structures["Monument"]) {
->>>>>>> 0080bf9 (Initial commit)
       let okPerAge=true;
       for (const age of AGES){
         const names = Object.keys(BUILDINGS[age]||{});
         const have = names.filter(n=>!!player.structures[n]).length;
         if (have<2){ okPerAge=false; break; }
       }
-<<<<<<< HEAD
-      if (okPerAge){
-=======
       const modernBuilt = countBuildingsInAge(player, 'Modern');
       if (okPerAge && modernBuilt >= 4){
->>>>>>> 0080bf9 (Initial commit)
         const def = (BUILDINGS["Modern"]||{})["Monument"];
         if (def) return { name:"Monument", def, score:Infinity };
       }
     }
-<<<<<<< HEAD
-    // Otherwise prefer to complete at least 2 distinct buildings in current age
-    const names = this.missingBuildingsInAge(player);
-    if (!names.length) return null;
-    // Score by total resource deficit to afford
-    let best=null, bestScore=Infinity;
-    for (const name of names){
-      const def = BUILDINGS[player.age][name];
-=======
     // Restrict targeting to current age only (server build rules)
     const age = player.age;
     let best=null, bestScore=Infinity;
     const names = this.missingBuildingsInAge(player, age);
     for (const name of names){
       const def = BUILDINGS[age][name];
->>>>>>> 0080bf9 (Initial commit)
       if (!def) continue;
       const cost = def.cost||{};
       let score=0;
@@ -1482,21 +1412,6 @@ class AIManager {
     return true;
   }
 
-<<<<<<< HEAD
-  // Occasionally send a visitor if rich enough (once per year, ~50% chance)
-  maybeSendVisitor(playerId){
-    const p = this.room.state[playerId];
-    if (!p) return;
-    if ((p.resources.coins||0) < 5) return;
-
-    // Check if a visitor has already been sent this season (globally for the room)
-    const currentSeason = seasonName(this.room);
-    if (this.room.lastVisitorSeason === currentSeason) return; // Already sent this season
-
-    // ~50% chance per year = approximately 1.2% chance per turn (assuming ~40 turns per year)
-    if (Math.random() < 0.012){
-      const targets = Object.keys(this.room.state).filter(id=>id!==playerId && !this.room.state[id].isAi);
-=======
   // Dispatch a trader 1-3 times per game (never robber/spy), at most once per season
   maybeSendVisitor(playerId){
     const p = this.room.state[playerId];
@@ -1520,45 +1435,19 @@ class AIManager {
 
     if (Math.random() < chance){
       const targets = Object.keys(this.room.state).filter(id=>id!==playerId);
->>>>>>> 0080bf9 (Initial commit)
       if (!targets.length) return;
       const to = targets[Math.floor(Math.random()*targets.length)];
       const id = Math.random().toString(36).slice(2,10);
 
-<<<<<<< HEAD
-      // Randomly choose trader or robber (50/50)
-      const kind = Math.random() < 0.5 ? 'trader' : 'robber';
-
-      // Generate lore message
-      const loreMessage = generateVisitorLore(playerId, p.civ || 'Unknown');
-
-      // Store visitor (new system)
-      if (!this.room.pendingVisits) this.room.pendingVisits = {};
-      this.room.pendingVisits[id] = {
-        id,
-        from: playerId,
-        to,
-        kind: kind,
-        lore: loreMessage,
-        ts: Date.now()
-      };
-=======
       const kind = (Math.random() < 0.5) ? 'trader' : 'robber';
       const loreMessage = generateVisitorLore(playerId, p.civ || 'Unknown');
 
       if (!this.room.pendingVisits) this.room.pendingVisits = {};
       this.room.pendingVisits[id] = { id, from: playerId, to, kind, lore: loreMessage, ts: Date.now() };
->>>>>>> 0080bf9 (Initial commit)
 
       // Mark that a visitor was sent this season (room-wide)
       this.room.lastVisitorSeason = currentSeason;
 
-<<<<<<< HEAD
-      // Spend coins
-      p.resources.coins -= 5;
-
-      // Notify recipient
-=======
       // Spend coins (server sendVisit uses 10 coins)
       p.resources.coins -= 10;
 
@@ -1566,14 +1455,10 @@ class AIManager {
       this.room.aiVisitorCounts[playerId] = used + 1;
 
       // Notify recipient immediately
->>>>>>> 0080bf9 (Initial commit)
       for (const sid of socketsForPlayer(this.room, to)) {
         io.to(sid).emit("visitorOffer", this.room.pendingVisits[id]);
       }
 
-<<<<<<< HEAD
-      this.log(`AI ${playerId} dispatched a ${kind} to ${to}.`);
-=======
       // If recipient is AI, auto-consider the visitor after delay (same behavior as human-initiated visits)
       const recipient = this.room.state[to];
       if (recipient?.isAi) {
@@ -1581,7 +1466,6 @@ class AIManager {
       }
 
       this.log(`AI ${playerId} dispatched a trader to ${to}. (${this.room.aiVisitorCounts[playerId]}/3)`);
->>>>>>> 0080bf9 (Initial commit)
       broadcastRoomUpdate(this.room);
     }
   }
@@ -1593,13 +1477,6 @@ class AIManager {
     if (!entries.length) return;
     const p = room.state[playerId]; if (!p) return;
 
-<<<<<<< HEAD
-    // Determine current target to assess needs
-    const target = this.pickTargetBuilding(p);
-    const needMap = Object.assign({ wood:0, rock:0, metal:0, food:0, coins:0 }, (target?.def?.cost||{}));
-
-=======
->>>>>>> 0080bf9 (Initial commit)
     for (const [offerId, offer] of entries){
       if (!offer || offer.to !== playerId) continue;
       const fromP = room.state[offer.from]; const toP = room.state[offer.to];
@@ -1608,33 +1485,6 @@ class AIManager {
       // Both must have a Move to complete trade
       if (!hasMove(fromP) || !hasMove(toP)) continue;
 
-<<<<<<< HEAD
-      const unit = BASE.tradeUnitPrice||{ wood:4, rock:4, metal:4, food:4 };
-      const giveValue = (offer.give.amount|0) * (unit[offer.give.type]||4);
-      const wantValue = (offer.want.amount|0) * (unit[offer.want.type]||4);
-
-      // Surplus if resource above target need by a margin
-      const haveGive = (toP.resources[offer.give.type]||0);
-      const needGive = Math.max(0, (needMap[offer.give.type]||0));
-      const surplusAfter = haveGive - offer.give.amount - needGive;
-      const isSurplus = surplusAfter >= 0; // don't dip below needs
-
-      // Needed if want type deficit remains
-      const haveWant = (toP.resources[offer.want.type]||0);
-      const wantNeed = Math.max(0, (needMap[offer.want.type]||0) - haveWant);
-      const helpsNeed = (offer.want.type==='coins') ? ((needMap.coins||0) > haveWant) : (wantNeed > 0);
-
-      // Fairness: accept if want value <= give value * 1.15
-      const fair = wantValue <= Math.ceil(giveValue * 1.15);
-
-      if (fair && isSurplus && (helpsNeed || target==null)){
-        // Execute accept (mirrors server respondTrade accept path)
-        // Validate resources
-        const has = (pl,t,a)=> (pl.resources[t]||0) >= a;
-        if (!has(fromP, offer.give.type, offer.give.amount)) continue;
-        if (!has(toP, offer.want.type, offer.want.amount)) continue;
-
-=======
       // Evaluate strict 3:1 value ratio (what AI receives vs what AI pays)
       const unit = { wood:1, rock:1, metal:1, food:1, coins:1 };
       const receiveValue = (offer.give.amount|0) * (unit[offer.give.type]||1);
@@ -1647,7 +1497,6 @@ class AIManager {
       const receiverCanPay = has(toP, offer.want.type, offer.want.amount);
 
       if (ratioOK && senderHas && receiverCanPay){
->>>>>>> 0080bf9 (Initial commit)
         consumeMove(fromP);
         consumeMove(toP);
         fromP.resources[offer.give.type]-=offer.give.amount;
@@ -1655,15 +1504,6 @@ class AIManager {
         toP.resources[offer.want.type]-=offer.want.amount;
         fromP.resources[offer.want.type]=(fromP.resources[offer.want.type]||0)+offer.want.amount;
         delete room.pendingTrades[offerId];
-<<<<<<< HEAD
-        addGameLog(room, `${offer.from} and ${offer.to} traded: ${offer.give.amount} ${offer.give.type} for ${offer.want.amount} ${offer.want.type}`, "trade");
-        fromP.progress = computeProgress(fromP);
-        toP.progress = computeProgress(toP);
-        this.log(`AI ${playerId} accepted trade from ${offer.from}: gave ${offer.give.amount} ${offer.give.type}, got ${offer.want.amount} ${offer.want.type}.`);
-        broadcastRoomUpdate(room);
-        // Only accept one per consideration step to avoid burning all Moves at once
-        break;
-=======
         addGameLog(room, `${offer.to} accepted a 3:1 trade from ${offer.from}: got ${offer.give.amount} ${offer.give.type} for ${offer.want.amount} ${offer.want.type}`, "trade");
         fromP.progress = computeProgress(fromP);
         toP.progress = computeProgress(toP);
@@ -1675,13 +1515,10 @@ class AIManager {
         delete room.pendingTrades[offerId];
         addGameLog(room, `${offer.to} rejected trade from ${offer.from} (below 3:1 or insufficient resources).`, "trade");
         broadcastRoomUpdate(room);
->>>>>>> 0080bf9 (Initial commit)
       }
     }
   }
 
-<<<<<<< HEAD
-=======
   // Occasionally propose a simple even trade to another player (equal quantities)
   maybeOfferEvenTrade(playerId){
     const room = this.room; if (!room) return;
@@ -1719,111 +1556,12 @@ class AIManager {
     }
   }
 
->>>>>>> 0080bf9 (Initial commit)
   // Handle incoming visitor offers for AI players
   considerVisitorOffer(playerId, visitor) {
     const room = this.room;
     const p = room.state[playerId];
     if (!p || !p.isAi) return;
 
-<<<<<<< HEAD
-    // AI decision logic:
-    // - Traders are usually beneficial (+5 coins if accepted)
-    // - Robbers are risky (steal coins or resources if accepted)
-    // - AI will accept traders 80% of the time
-    // - AI will reject robbers 70% of the time (good intuition)
-
-    let decision = 'reject';
-
-    if (visitor.kind === 'trader') {
-      // Accept traders most of the time (80%)
-      decision = Math.random() < 0.8 ? 'accept' : 'reject';
-      this.log(`AI ${playerId} decided to ${decision} trader from ${visitor.from}.`);
-    } else {
-      // Reject robbers most of the time (70% rejection rate = 30% acceptance)
-      decision = Math.random() < 0.3 ? 'accept' : 'reject';
-      this.log(`AI ${playerId} decided to ${decision} suspicious visitor from ${visitor.from}.`);
-    }
-
-    // Execute the decision immediately
-    const receiver = room.state[playerId];
-    const sender = room.state[visitor.from];
-    const notify = (pid, msg) => {
-      for (const [sid, pid2] of Object.entries(room.playersBySocket)) {
-        if (pid2 === pid) io.to(sid).emit("toast", { text: msg });
-      }
-    };
-
-    if (decision === 'accept') {
-      if (visitor.kind === 'trader') {
-        receiver.resources.coins = (receiver.resources.coins || 0) + 5;
-        notify(playerId, `✅ Trader received: +5 coins.`);
-        notify(visitor.from, `✅ ${playerId} welcomed your trader. You gain +5 coins (trader returned).`);
-        sender.resources.coins = (sender.resources.coins || 0) + 5;
-        addGameLog(room, `${playerId} accepted trader from ${visitor.from}. Both gained coins.`, "trade");
-        addPersonalLog(room, playerId, `Accepted trader from ${visitor.from}: +5 coins`);
-        addPersonalLog(room, visitor.from, `${playerId} accepted your trader: +5 coins`);
-      } else {
-        // robber outcome when admitted
-        const keys = ['wood', 'rock', 'metal', 'food'];
-        if ((receiver.resources.coins || 0) >= 5) {
-          receiver.resources.coins -= 5;
-          sender.resources.coins = (sender.resources.coins || 0) + 10;
-          notify(playerId, `⚠️ A disguised robber stole 5 coins!`);
-          notify(visitor.from, `✅ ${playerId} admitted your robber. You gained 10 coins (5 stolen + 5 bank).`);
-          addGameLog(room, `${playerId} admitted ${visitor.from}'s robber. Lost 5 coins, ${visitor.from} gained 10 coins.`, "military");
-          addPersonalLog(room, playerId, `Admitted robber from ${visitor.from}: -5 coins stolen!`);
-          addPersonalLog(room, visitor.from, `${playerId} admitted your robber: +10 coins (5 stolen + 5 bonus)`);
-        } else {
-          const options = keys.filter(k => (receiver.resources[k] || 0) > 0);
-          let stoleType = null, stoleAmt = 0;
-          if (options.length) {
-            stoleType = options[Math.floor(Math.random() * options.length)];
-            stoleAmt = receiver.resources[stoleType] || 0;
-            receiver.resources[stoleType] = 0;
-            sender.resources[stoleType] = (sender.resources[stoleType] || 0) + stoleAmt;
-            notify(playerId, `⚠️ A disguised robber stole all your ${stoleType} (${stoleAmt})!`);
-            notify(visitor.from, `✅ Your robber stole ${stoleAmt} ${stoleType} and gained +5 coins from the bank.`);
-            sender.resources.coins = (sender.resources.coins || 0) + 5;
-            addGameLog(room, `${playerId} admitted ${visitor.from}'s robber. Lost ${stoleAmt} ${stoleType}, ${visitor.from} gained it + 5 coins.`, "military");
-            addPersonalLog(room, playerId, `Admitted robber from ${visitor.from}: -${stoleAmt} ${stoleType} stolen!`);
-            addPersonalLog(room, visitor.from, `${playerId} admitted your robber: +${stoleAmt} ${stoleType} + 5 coins`);
-          } else {
-            notify(playerId, `⚠️ A disguised robber found nothing to steal.`);
-            notify(visitor.from, `✅ Robber found nothing to steal but you gained +5 coins from the bank.`);
-            sender.resources.coins = (sender.resources.coins || 0) + 5;
-            addGameLog(room, `${playerId} admitted ${visitor.from}'s robber but had nothing to steal. ${visitor.from} gained 5 coins.`, "military");
-            addPersonalLog(room, playerId, `Admitted robber from ${visitor.from} but had nothing to steal`);
-            addPersonalLog(room, visitor.from, `${playerId} admitted your robber: +5 coins (nothing to steal)`);
-          }
-        }
-      }
-    } else {
-      // reject
-      notify(playerId, `🚫 You turned the visitor away.`);
-      if (visitor.kind === 'trader') {
-        sender.resources.coins = (sender.resources.coins || 0) + 10;
-        notify(visitor.from, `🚫 ${playerId} rejected your trader. You gained 10 coins (returned with profit).`);
-        addGameLog(room, `${playerId} rejected trader from ${visitor.from}. ${visitor.from} gained 10 coins.`, "trade");
-        addPersonalLog(room, playerId, `Rejected trader from ${visitor.from}`);
-        addPersonalLog(room, visitor.from, `${playerId} rejected your trader: +10 coins (returned with profit)`);
-      } else {
-        notify(visitor.from, `🚫 Your robber was uncovered and thrown out the gate in shame.`);
-        addGameLog(room, `${playerId} rejected ${visitor.from}'s robber. Robber was uncovered!`, "military");
-        addPersonalLog(room, playerId, `Rejected suspicious visitor from ${visitor.from} (was a robber!)`);
-        addPersonalLog(room, visitor.from, `${playerId} uncovered your robber - no gains`);
-      }
-    }
-
-    // Remove visit from pendingVisits
-    delete room.pendingVisits[visitor.id];
-
-    // NOTE: Do NOT clear room.lastVisitorSeason here - it stays set for the entire season
-    // It will be cleared when the season changes in nextSeason()
-
-    // Update state
-    broadcastRoomUpdate(room);
-=======
     // Delay 5 seconds before deciding
     setTimeout(() => {
       // Ensure still pending and player exists
@@ -1925,19 +1663,12 @@ class AIManager {
         }
       } catch(e) {}
     }, 5000);
->>>>>>> 0080bf9 (Initial commit)
   }
 
   playTurn(room, playerId) {
     const player = this.room.state[playerId];
     if (!player || !player.isAi) return;
 
-<<<<<<< HEAD
-    this.log(`AI ${playerId} is starting its turn in state: ${this.currentState}`);
-    // Out-of-band diplomacy: maybe send a visitor at start of turn
-    this.maybeSendVisitor(playerId);
-    // Consider pending trades sent to AI
-=======
     // Initialize per-age quotas and tracking
     if (!player.aiPlan) player.aiPlan = { trainedSoldiers:{ Wood:0, Stone:0, Modern:0 }, wars:{ Wood:0, Stone:0, Modern:0 } };
     const TRAIN_TARGET_SOLDIERS = { Wood:2, Stone:4, Modern:8 };
@@ -1949,7 +1680,6 @@ class AIManager {
     this.maybeSendVisitor(playerId);
     this.maybeOfferEvenTrade(playerId);
     // Consider pending trades sent to AI (uses 3:1 rule)
->>>>>>> 0080bf9 (Initial commit)
     this.considerPendingTrades(playerId);
     if (Math.random() < 0.1) this.sendChatMessage(playerId);
 
@@ -1959,39 +1689,6 @@ class AIManager {
       safety += 1;
       const beforeSnap = this.snapshotPlayer(player);
 
-<<<<<<< HEAD
-      // Priority: build towards 2 buildings in current age, then advance; spend AP only on gathering to reach next build
-      const buildable = this.getBuildableBuildings(player);
-      if (buildable.length > 0) {
-        const building = buildable[0];
-        this.log(`AI ${playerId} is building ${building.name}.`);
-        this.performAction(this.room, playerId, "build", { name: building.name });
-      } else if (this.canAdvance(player)) {
-        this.log(`AI ${playerId} is advancing to the next age.`);
-        this.performAction(this.room, playerId, "advance", {});
-      } else {
-        // Gather AP towards the most needed resource for the next target building
-        const target = this.pickTargetBuilding(player);
-        if (target){
-          const needed = this.mostNeededResourceFor(target.def.cost, player.resources);
-          if (needed === 'coins'){
-            const raised = this.tryRaiseCoins(player, target.def.cost);
-            if (!raised){
-              // fallback to best general gather if cannot raise coins right now
-              const resources = ["wood","rock","metal","food"];
-              const type = resources[Math.floor(Math.random()*resources.length)];
-              this.log(`AI ${playerId} is gathering ${type} (fallback).`);
-              this.performAction(this.room, playerId, "gather", { type });
-            }
-          } else {
-            this.log(`AI ${playerId} is gathering ${needed} for ${target.name}.`);
-            this.performAction(this.room, playerId, "gather", { type: needed });
-          }
-        } else {
-          // Fallback: balanced gather
-          this.log(`AI ${playerId} is gathering resources.`);
-          this.gatherResources(room, player, playerId);
-=======
       // Try to advance age if eligible (no AP cost)
       this.performAction(this.room, playerId, "advance", {});
 
@@ -2088,34 +1785,22 @@ class AIManager {
             this.log(`AI ${playerId} is gathering resources.`);
             this.gatherResources(room, player, playerId);
           }
->>>>>>> 0080bf9 (Initial commit)
         }
       }
 
       // Refresh player ref (state mutates synchronously)
       const afterSnap = this.snapshotPlayer(player);
       this.logDelta(playerId, beforeSnap, afterSnap, 'action result');
-<<<<<<< HEAD
-      // If no AP was spent and no free action changed state, attempt a gather to ensure progress
-      if (this.room.turnOf !== playerId) break;
-=======
       
       // Check if turn changed (action may have auto-ended turn)
       if (this.room.turnOf !== playerId) break;
       
       // If no AP was spent and no free action changed state, attempt a gather to ensure progress
->>>>>>> 0080bf9 (Initial commit)
       if ((afterSnap.ap|0) === (beforeSnap.ap|0)) {
         // Force a gather to drain one Move
         this.gatherResources(room, player, playerId);
         const afterForce = this.snapshotPlayer(player);
         this.logDelta(playerId, afterSnap, afterForce, 'forced gather');
-<<<<<<< HEAD
-      }
-    }
-    // If loop ended while still AI's turn, and AP is 0, the core handler will auto-end.
-    // Log turn end condition for clarity.
-=======
         
         // Check again if turn changed after forced gather
         if (this.room.turnOf !== playerId) break;
@@ -2127,7 +1812,6 @@ class AIManager {
         }
       }
     }
->>>>>>> 0080bf9 (Initial commit)
     if (this.room.turnOf === playerId) {
       const p = this.room.state[playerId];
       if ((p.ap|0) === 0) {
@@ -2146,44 +1830,18 @@ class AIManager {
 
   getBuildableBuildings(player) {
     const buildableBuildings = [];
-<<<<<<< HEAD
-    for (const age of AGES) {
-      if (AGES.indexOf(age) <= AGES.indexOf(player.age)) {
-        for (const buildingName in BUILDINGS[age]) {
-          if (!player.structures[buildingName]) {
-            const building = BUILDINGS[age][buildingName];
-            if (canAfford(player.resources, building.cost)) {
-              buildableBuildings.push({ name: buildingName, ...building });
-            }
-          }
-=======
     const age = player.age;
     for (const buildingName in (BUILDINGS[age] || {})) {
       if (!player.structures[buildingName]) {
         const building = BUILDINGS[age][buildingName];
         if (canAfford(player.resources, building.cost)) {
           buildableBuildings.push({ name: buildingName, ...building });
->>>>>>> 0080bf9 (Initial commit)
         }
       }
     }
     return buildableBuildings;
   }
 
-<<<<<<< HEAD
-  canAdvance(player) {
-    const idx = AGES.indexOf(player.age);
-    if (idx >= AGES.length - 1) return false;
-    const names = Object.keys(BUILDINGS[player.age] || {});
-    const have = names.filter((n) => !!player.structures[n]).length;
-    if (have >= 2) {
-      return true;
-    }
-    return false;
-  }
-
-=======
->>>>>>> 0080bf9 (Initial commit)
   trade(player, playerId) {
     const resources = ["wood", "rock", "metal", "food"];
     const resourceToSell = resources[Math.floor(Math.random() * resources.length)];
@@ -2220,9 +1878,6 @@ class AIManager {
   }
 
   sendChatMessage(playerId) {
-<<<<<<< HEAD
-    const message = this.chatMessages[Math.floor(Math.random() * this.chatMessages.length)];
-=======
     const p = this.room.state[playerId];
     const civ = p?.civ || 'Romans';
     const CIV_AI_CHAT = {
@@ -2249,7 +1904,6 @@ class AIManager {
     };
     const pool = CIV_AI_CHAT[civ] || CIV_AI_CHAT.Romans;
     const message = pool[Math.floor(Math.random() * pool.length)];
->>>>>>> 0080bf9 (Initial commit)
     this.room.chat.push({ player: playerId, text: message, ts: Date.now() });
     const latest = this.room.chat.slice(-6).reverse();
     io.to(this.room.code).emit("chatUpdate", latest);
@@ -2375,15 +2029,9 @@ function createRoom(code, performAction){
   return room;
 }
 function socketsForPlayer(room, playerId){ return Object.entries(room.playersBySocket).filter(([sid,pid])=>pid===playerId).map(([sid])=>sid); }
-<<<<<<< HEAD
-function ensurePlayer(room, playerId, color){
-  const isNewPlayer = !room.state[playerId];
-  if (isNewPlayer) room.state[playerId]=initialPlayer(color);
-=======
 function ensurePlayer(room, playerId, color, isAi = false, civ = null){
   const isNewPlayer = !room.state[playerId];
   if (isNewPlayer) room.state[playerId]=initialPlayer(color, isAi, civ);
->>>>>>> 0080bf9 (Initial commit)
   if(!room.order.includes(playerId)) {
     room.order.push(playerId);
     writeSessionLog(room, `PLAYER_JOINED: ${playerId} | Current order: [${room.order.join(', ')}]`);
@@ -2544,8 +2192,6 @@ function getRaidLore(civ, age, type){
   return icon + story;
 }
 
-<<<<<<< HEAD
-=======
 function getWarOutcomeLore(civ, successChance) {
   // Normalize civ
   const normalizedCiv = civ || 'Romans';
@@ -2574,7 +2220,6 @@ function getWarOutcomeLore(civ, successChance) {
   return stories[Math.floor(Math.random() * stories.length)];
 }
 
->>>>>>> 0080bf9 (Initial commit)
 function collapseStructures(p, count){
   const removed=[];
   const candidates = Object.keys(p.structures).filter(name=>{
@@ -2800,8 +2445,6 @@ if (roll <= successChance){
 
     notifyPlayer(room, pid, msg);
 
-<<<<<<< HEAD
-=======
     // Determine image and add defeat story if failed
     let displayImage = outcome === "success" ? "/media/Dispatched.png" : "/media/defeat.png";
     let defeatStory = "";
@@ -2809,7 +2452,6 @@ if (roll <= successChance){
       defeatStory = DEFEAT_LORE[Math.floor(Math.random() * DEFEAT_LORE.length)];
     }
 
->>>>>>> 0080bf9 (Initial commit)
     // Broadcast a full-screen return notification to all players (result only)
     io.to(room.code).emit("raidReturn", {
       playerId: pid,
@@ -2820,12 +2462,8 @@ if (roll <= successChance){
       age: p.age,
       civ: p.civ,
       lore,
-<<<<<<< HEAD
-      image: "/media/Dispatched.png"
-=======
       defeatStory,
       image: displayImage
->>>>>>> 0080bf9 (Initial commit)
     });
 
     reports.push({ playerId: pid, outcome, committed, casualties, loot, lore });
@@ -2849,17 +2487,6 @@ function resolveSeasonEnd(room){
   const highestAgeIdx = Math.max(0, ...Object.values(room.state).map(p=>AGES.indexOf(p.age)));
   const attackReports = [];
 
-<<<<<<< HEAD
-  // Raid system: 20% chance of ONE raid per season
-  // If a raid already happened this season (natural or mercenary), no more raids
-  const raidAlreadyHappenedThisSeason = room.raidTracking.lastRaidSeason === currentSeason;
-
-  if (raidAlreadyHappenedThisSeason) {
-    writeSessionLog(room, `RAID_SKIP: Year ${currentYear}, Season ${currentSeason}, Reason: Raid already occurred this season`);
-  } else {
-    // 25% chance of raid
-    const raidChance = 0.25;
-=======
   // Raid system: Skip first season only, then 20% chance per season
   // If a raid already happened this season (natural or mercenary), no more raids
   const raidAlreadyHappenedThisSeason = room.raidTracking.lastRaidSeason === currentSeason;
@@ -2875,7 +2502,6 @@ function resolveSeasonEnd(room){
   } else {
     // 20% chance of raid starting from season 2
     const raidChance = 0.20;
->>>>>>> 0080bf9 (Initial commit)
     const raidRoll = Math.random();
     const willRaid = raidRoll < raidChance;
 
@@ -3125,10 +2751,6 @@ if (!room.firstTurnEver) {
     io.to(sid).emit("turnFlag",{ yourTurn: room.active && room.turnOf===pid });
   }
 
-<<<<<<< HEAD
-  if (p.isAi) {
-    room.aiManager.playTurn(room, playerId);
-=======
 if (p.isAi) {
     const delay = 1000 + Math.floor(Math.random()*1000); // 1-2 seconds
     setTimeout(() => {
@@ -3137,7 +2759,6 @@ if (p.isAi) {
         room.aiManager.playTurn(room, playerId);
       }
     }, delay);
->>>>>>> 0080bf9 (Initial commit)
   }
 }
 function nextTurn(room){
@@ -3160,8 +2781,6 @@ function nextTurn(room){
   p.bankedAp = 0;
   startOfTurn(room, next);
 }
-<<<<<<< HEAD
-=======
 // =================== Starving Army Mechanic ===================
 
 function applyStarvingMechanic(room, playerId) {
@@ -3208,7 +2827,6 @@ function applyStarvingMechanic(room, playerId) {
   writeSessionLog(room, `STARVATION: ${playerId} lost ${actualCasualties} soldiers (had ${currentSoldiers}, now ${p.soldiers})`);
 }
 
->>>>>>> 0080bf9 (Initial commit)
 function endTurn(room, playerId, reasonToast){
   // Guard against double-ending the same turn
   if (room.turnOf !== playerId) {
@@ -3246,11 +2864,8 @@ if (saved>0){
     }
   }catch(e){}
   try{ trackWealth(room, p, playerId); }catch(e){}
-<<<<<<< HEAD
-=======
   // Apply starving mechanic BEFORE advancing turn
   applyStarvingMechanic(room, playerId);
->>>>>>> 0080bf9 (Initial commit)
   room.statistics.totalTurns = (room.statistics.totalTurns||0) + 1;
   nextTurn(room);
 }
@@ -3280,11 +2895,8 @@ if (saved>0){
     writeSessionLog(room, `  → Banked ${actualSaved} AP (total banked: ${p.bankedAp})`);
   }
   try{ trackWealth(room, p, playerId); }catch(e){}
-<<<<<<< HEAD
-=======
   // Apply starving mechanic BEFORE advancing turn
   applyStarvingMechanic(room, playerId);
->>>>>>> 0080bf9 (Initial commit)
   room.statistics.totalTurns = (room.statistics.totalTurns||0) + 1;
   nextTurn(room);
 }
@@ -3328,8 +2940,6 @@ const performAction = (code, room, playerId, action, payload) => {
     const p=room.state[playerId];
     let turnChanged = false; // guard to avoid double end-turns within one action
 
-<<<<<<< HEAD
-=======
     // Block acting if there is a pending visitor for this player (cannot ignore visitor)
     try{
       const pending = room.pendingVisits || {};
@@ -3340,7 +2950,6 @@ const performAction = (code, room, playerId, action, payload) => {
       }
     }catch(e){}
 
->>>>>>> 0080bf9 (Initial commit)
     const spendAp = (n) => { if(p.ap<n) { return false; } p.ap-=n; return true; };
 
     switch(action){
@@ -3411,10 +3020,7 @@ case "train": {
         }
     
         if(!canAfford(p.resources, def.cost)) return;
-<<<<<<< HEAD
-=======
         if(!spendAp(1)) return; // Building costs 1 Move
->>>>>>> 0080bf9 (Initial commit)
         payCost(p.resources, def.cost);
         p.structures[name]={ level:1 };
         if (def.effect?.soldiers) p.soldiers = Math.min(soldierCap(p), (p.soldiers||0) + def.effect.soldiers);
@@ -3465,8 +3071,6 @@ case "train": {
         addPersonalLog(room, playerId, `Went to war with ${commit} soldiers`, "military");
         if (p.stats) p.stats.raidsLaunched = (p.stats.raidsLaunched||0) + 1;
 
-<<<<<<< HEAD
-=======
         // Generate war outcome lore message for the initiating player
         const successChance = Math.min(0.90, Math.max(0.05, computeRaidPower(p, commit)));
         const warLore = getWarOutcomeLore(p.civ, successChance);
@@ -3474,7 +3078,6 @@ case "train": {
           notifyPlayer(room, playerId, `⚔️ War Forecast:\n\n${warLore}`);
         }
 
->>>>>>> 0080bf9 (Initial commit)
         // Do NOT broadcast any dispatch/raid initiated messages anymore.
         break;
       }
@@ -3489,31 +3092,12 @@ case "train": {
         if (info.level >= BASE.upgradeMax) return;
         if (!spendAp(1)) return;
 
-<<<<<<< HEAD
-        // Upgrade probability: Level 1->2 = 100%, Level 2->3 = 50%, Level 3 = 25%
-        const level = info.level;
-        const successChance = level === 1 ? 1.0 : (level === 2 ? 0.50 : 0.25);
-        const upgraded = Math.random() < successChance;
-
-if (upgraded){
-          info.level = Math.min(BASE.upgradeMax, info.level + 1);
-          socket.emit("toast", { text: `✅ ${name} upgraded to Level ${info.level}! (+1 yield)` });
-          addPersonalLog(room, playerId, `Upgraded ${name} to level ${info.level}`, "building");
-          if (p.stats) p.stats.buildingsUpgraded = (p.stats.buildingsUpgraded||0) + 1;
-          p.progress = computeProgress(p);
-        } else {
-          const pct = Math.round(successChance*100);
-          socket.emit("toast", { text: `❌ ${name} upgrade failed (${pct}% chance)` });
-          addPersonalLog(room, playerId, `Upgrade failed for ${name} (${pct}% chance)`, "building");
-        }
-=======
         // Always succeed: upgrade to next level (same AP cost)
         info.level = Math.min(BASE.upgradeMax, info.level + 1);
         socket.emit("toast", { text: `✅ ${name} upgraded to Level ${info.level}! (+1 yield)` });
         addPersonalLog(room, playerId, `Upgraded ${name} to level ${info.level}`, "building");
         if (p.stats) p.stats.buildingsUpgraded = (p.stats.buildingsUpgraded||0) + 1;
         p.progress = computeProgress(p);
->>>>>>> 0080bf9 (Initial commit)
         break;
       }
       case "trade": {
@@ -3621,10 +3205,6 @@ Available Commands:
 
     case '/kick': {
       // /kick <player>
-<<<<<<< HEAD
-      if (room.host !== playerId) { socket.emit('toast', { text: 'Only host can kick.' }); break; }
-=======
->>>>>>> 0080bf9 (Initial commit)
       if (args.length < 2) { socket.emit('toast', { text: 'Usage: /kick <player>' }); break; }
       const targetName = args.slice(1).join(' ');
       const targetId = Object.keys(room.state).find(id => id.toLowerCase() === targetName.toLowerCase());
@@ -3636,8 +3216,6 @@ Available Commands:
       break;
     }
 
-<<<<<<< HEAD
-=======
     case '/close': {
       // Close the current room (anyone can invoke)
       const code = Array.from(ROOMS.entries()).find(([,r]) => r && r.playersBySocket && Object.values(r.playersBySocket).includes(playerId))?.[0];
@@ -3651,7 +3229,6 @@ Available Commands:
       break;
     }
 
->>>>>>> 0080bf9 (Initial commit)
     case '/restart': {
       if (room.host !== playerId) { socket.emit('toast', { text: 'Only host can restart.' }); break; }
       // Reuse restart logic
@@ -3913,11 +3490,7 @@ io.on("connection",(socket)=>{
     const list = room?.pendingVisits?.[playerId]||[];
     return Array.isArray(list) && list.length>0;
   };
-<<<<<<< HEAD
-  socket.on("createRoom", ({ code, playerId, color, civ, addAiPlayer }) => {
-=======
   socket.on("createRoom", ({ code, playerId, color, civ, presetAIs }) => {
->>>>>>> 0080bf9 (Initial commit)
     code=(code||"").toUpperCase().slice(0,6)||Math.random().toString(36).slice(2,8).toUpperCase();
     const room=createRoom(code, performAction.bind(null, code));
     room.playersBySocket[socket.id]=playerId;
@@ -3927,16 +3500,6 @@ io.on("connection",(socket)=>{
     if (civ && CIVS[civ]) room.state[playerId].civ = civ;
     socket.join(code);
 
-<<<<<<< HEAD
-    if (addAiPlayer) {
-      const aiName = AI_NAMES.find((name) => !room.state[name]);
-      if (aiName) {
-        ensurePlayer(room, aiName, "gray", true);
-        room.state[aiName].isAi = true;
-        room.state[aiName].ready = true;
-      }
-    }
-=======
     // If preset AIs are provided, add them now (civ/color from client)
     try{
       const normalizeCiv = (name) => {
@@ -3964,7 +3527,6 @@ io.on("connection",(socket)=>{
         });
       }
     }catch(e){}
->>>>>>> 0080bf9 (Initial commit)
 
     broadcastRoomUpdate(room);
   });
@@ -4009,8 +3571,6 @@ io.on("connection",(socket)=>{
     const p=room.state[playerId];
     let turnChanged = false; // guard to avoid double end-turns within one action
 
-<<<<<<< HEAD
-=======
     // Block acting if there is a pending visitor for this player (cannot ignore visitor)
     try{
       const pending = room.pendingVisits || {};
@@ -4021,7 +3581,6 @@ io.on("connection",(socket)=>{
       }
     }catch(e){}
 
->>>>>>> 0080bf9 (Initial commit)
     const spendAp = (n) => { if(p.ap<n) { return false; } p.ap-=n; return true; };
 
     switch(action){
@@ -4095,10 +3654,7 @@ p.soldiers = Math.min(cap, current + gained);
         }
 
         if(!canAfford(p.resources, def.cost)) return;
-<<<<<<< HEAD
-=======
         if(!spendAp(1)) return; // Building costs 1 Move
->>>>>>> 0080bf9 (Initial commit)
         payCost(p.resources, def.cost);
         p.structures[name]={ level:1 };
         if (def.effect?.soldiers) p.soldiers = Math.min(soldierCap(p), (p.soldiers||0) + def.effect.soldiers);
@@ -4185,28 +3741,11 @@ p.soldiers = Math.min(cap, current + gained);
         if (info.level >= BASE.upgradeMax) return;
         if (!spendAp(1)) return;
 
-<<<<<<< HEAD
-        // Upgrade probability: Level 1->2 = 100%, Level 2->3 = 50%, Level 3 = 25%
-        const level = info.level;
-        const successChance = level === 1 ? 1.0 : (level === 2 ? 0.50 : 0.25);
-        const upgraded = Math.random() < successChance;
-
-if (upgraded){
-          info.level = Math.min(BASE.upgradeMax, info.level + 1);
-          addPersonalLog(room, playerId, `Upgraded ${name} to level ${info.level}`, "building");
-          if (p.stats) p.stats.buildingsUpgraded = (p.stats.buildingsUpgraded||0) + 1;
-          p.progress = computeProgress(p);
-        } else {
-          const pct = Math.round(successChance*100);
-          addPersonalLog(room, playerId, `Upgrade failed for ${name} (${pct}% chance)`, "building");
-        }
-=======
         // Always succeed upgrade to next level
         info.level = Math.min(BASE.upgradeMax, info.level + 1);
         addPersonalLog(room, playerId, `Upgraded ${name} to level ${info.level}`, "building");
         if (p.stats) p.stats.buildingsUpgraded = (p.stats.buildingsUpgraded||0) + 1;
         p.progress = computeProgress(p);
->>>>>>> 0080bf9 (Initial commit)
         break;
       }
       case "trade": {
@@ -4434,18 +3973,12 @@ case "advance": {
     const disguisedAs = visit.disguisedAs || actualKind; // what receiver sees
 
     const notifyWithImage = (pid, msg, type = 'trader') => {
-<<<<<<< HEAD
-      for (const [sid, pid2] of Object.entries(room.playersBySocket)) {
-        if (pid2 === pid) {
-          io.to(sid).emit("visitorOutcome", { message: msg, type, image: '/media/trader.png' });
-=======
       let imagePath = '/media/trader.png';
       if (type === 'robber') imagePath = '/media/robber.png';
       else if (type === 'spy') imagePath = '/media/spy.png';
       for (const [sid, pid2] of Object.entries(room.playersBySocket)) {
         if (pid2 === pid) {
           io.to(sid).emit("visitorOutcome", { message: msg, type, image: imagePath });
->>>>>>> 0080bf9 (Initial commit)
         }
       }
     };
@@ -4476,21 +4009,12 @@ case "advance": {
       } else if (actualKind === 'robber') {
         // Robber: receiver gets 20 coins (thinks it's trader), sender steals 10 coins
         receiver.resources.coins -= 10; // Net +10 (got 20, lost 10)
-<<<<<<< HEAD
-        sender.resources.coins = (sender.resources.coins || 0) + 30; // Net +20 (spent 10, gained 30)
-
-        const lore = `${visit.from}'s envoy seemed trustworthy at first, sharing tales of distant markets and promising mutual prosperity. You welcomed them with open arms, only to discover too late that their honeyed words masked treacherous intent. While you were distracted by their charm, they made off with 10 Golden Coins from your coffers!`;
-
-        notifyWithImage(playerId, `You were deceived! What appeared to be a trader was actually a robber in disguise!\n\n${lore}\n\nNet result: +10 coins (gained 20, lost 10)`, 'robber');
-        notifyWithImage(visit.from, `Your robber successfully deceived ${playerId}! They welcomed your disguised robber as a trader, and you stole 10 coins. You gained 30 coins total (20 trade bonus + 10 stolen).`, 'robber');
-=======
         sender.resources.coins = (sender.resources.coins || 0) + 20;  // Get back 10 coins spent + 10 stolen = 20 total
 
         const robberStory = ROBBER_LORE[Math.floor(Math.random() * ROBBER_LORE.length)];
 
         notifyWithImage(playerId, `You were deceived! What appeared to be a trader was actually a robber in disguise!\n\n${robberStory}`, 'robber');
         notifyWithImage(visit.from, `Your robber successfully deceived ${playerId}! ${robberStory}\n\nYou gained 10 Golden Coins from the theft.`, 'robber');
->>>>>>> 0080bf9 (Initial commit)
         addGameLog(room, `${playerId} was deceived by ${visit.from}'s robber disguised as trader.`, "military");
       }
     } else {
@@ -4621,19 +4145,6 @@ fromP.resources[offer.want.type]=(fromP.resources[offer.want.type]||0)+offer.wan
     }
   });
 
-<<<<<<< HEAD
-  socket.on("addAiPlayer", ({ code }) => {
-    const room = ROOMS.get(code);
-    if (!room) return socket.emit("toast", { text: "Room not found." });
-    if (room.order.length >= 8) return socket.emit("toast", { text: "Room is full." });
-
-    const aiName = AI_NAMES.find((name) => !room.state[name]);
-    if (!aiName) return socket.emit("toast", { text: "No more AI players available." });
-
-    ensurePlayer(room, aiName, "gray", true);
-    room.state[aiName].isAi = true;
-    room.state[aiName].ready = true;
-=======
 socket.on("addAiPlayer", ({ code, color, civ }) => {
 const room = ROOMS.get(code);
     if (!room) return socket.emit("toast", { text: "Room not found." });
@@ -4663,7 +4174,6 @@ const room = ROOMS.get(code);
     // Announce
     addGameLog(room, `AI added: ${aiName} — Civ: ${room.state[aiName].civ}, Color: ${room.state[aiName].color}`, 'command');
     broadcastRoomUpdate(room);
->>>>>>> 0080bf9 (Initial commit)
 
     startIfReady(room);
     broadcastRoomUpdate(room);
@@ -4705,10 +4215,6 @@ const room = ROOMS.get(code);
   // Host kicks a player
   socket.on("kickPlayer", ({ code, by, target }) => {
     const room = ROOMS.get(code); if (!room) return;
-<<<<<<< HEAD
-    if (room.host !== by) return socket.emit("toast", { text: "Only host can kick." });
-=======
->>>>>>> 0080bf9 (Initial commit)
     if (!room.state[target]) return socket.emit("toast", { text: "Player not found." });
     // Notify kicked player's sockets
     for (const sid of socketsForPlayer(room, target)) io.to(sid).emit('kicked');
@@ -4729,16 +4235,10 @@ const room = ROOMS.get(code);
       const old = prev[pid] || {};
       const color = old.color || 'blue';
       const civ = old.civ || 'Romans';
-<<<<<<< HEAD
-      room.state[pid] = initialPlayer(color);
-      if (civ && CIVS[civ]) room.state[pid].civ = civ;
-      room.state[pid].ready = false;
-=======
       room.state[pid] = initialPlayer(color, !!old.isAi, civ);
       // preserve AI and auto-ready them
       room.state[pid].isAi = !!old.isAi;
       room.state[pid].ready = !!old.isAi;
->>>>>>> 0080bf9 (Initial commit)
     });
     room.active = false;
     room.turnOf = null;

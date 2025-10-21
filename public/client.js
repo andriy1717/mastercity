@@ -508,34 +508,14 @@ function gatherLoreSegments(uniqCivs){
 let SFX_ON = true; // SFX on by default
 let MUSIC_ON = true; // Music plays by default
 
-<<<<<<< HEAD
-// Music volume control (capped)
-const MUSIC_VOLUME_LEVELS = [0.0, 0.1, 0.2];
-let musicVolumeIdx = 2;
-function desiredMusicVolume(){ return MUSIC_VOLUME_LEVELS[musicVolumeIdx] || 0.2; }
-=======
 // Music volume control (capped) - always 20%
 const MUSIC_VOLUME_LEVELS = [0.2];
 let musicVolumeIdx = 0;
 function desiredMusicVolume(){ return 0.2; }
->>>>>>> 0080bf9 (Initial commit)
 
 // Music and SFX toggle buttons
 function updateMusicIcon() {
   const btn = document.getElementById('musicToggle');
-<<<<<<< HEAD
-  if (btn) btn.textContent = MUSIC_ON ? '🎵' : '🔇';
-}
-function updateMusicVolumeIcon(){
-  const btn = document.getElementById('musicVolume');
-  if (!btn) return;
-  const v = desiredMusicVolume();
-  btn.textContent = v <= 0 ? '🔇' : v < 0.15 ? '🔈' : '🔉';
-}
-function updateSfxIcon() {
-  const btn = document.getElementById('sfxToggle');
-  if (btn) btn.textContent = SFX_ON ? '🔔' : '🔕';
-=======
   if (btn) btn.innerHTML = MUSIC_ON ? '🎵 <span class="controlLabel">Music</span>' : '🔇 <span class="controlLabel">Muted</span>';
 }
 function updateMusicVolumeIcon(){
@@ -544,15 +524,10 @@ function updateMusicVolumeIcon(){
 function updateSfxIcon() {
   const btn = document.getElementById('sfxToggle');
   if (btn) btn.innerHTML = SFX_ON ? '🔔 <span class="controlLabel">SFX</span>' : '🔕 <span class="controlLabel">SFX Off</span>';
->>>>>>> 0080bf9 (Initial commit)
 }
 
 document.addEventListener('DOMContentLoaded', () => {
   const musicBtn = document.getElementById('musicToggle');
-<<<<<<< HEAD
-  const musicVolBtn = document.getElementById('musicVolume');
-=======
->>>>>>> 0080bf9 (Initial commit)
   const sfxBtn = document.getElementById('sfxToggle');
 
   if (musicBtn) {
@@ -570,21 +545,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-<<<<<<< HEAD
-  if (musicVolBtn) {
-    musicVolBtn.addEventListener('click', () => {
-      musicVolumeIdx = (musicVolumeIdx + 1) % MUSIC_VOLUME_LEVELS.length;
-      try{
-        if (musicEl){
-          musicEl.volume = Math.min(MUSIC_VOLUME_CAP, desiredMusicVolume());
-        }
-      }catch(e){}
-      updateMusicVolumeIcon();
-    });
-  }
-
-=======
->>>>>>> 0080bf9 (Initial commit)
   if (sfxBtn) {
     sfxBtn.addEventListener('click', () => {
       SFX_ON = !SFX_ON;
@@ -594,12 +554,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-<<<<<<< HEAD
-  // Set initial icons
-  updateMusicIcon();
-  updateMusicVolumeIcon();
-  updateSfxIcon();
-=======
   // Warn before unloading/closing the page unless explicitly exiting
   try{
     window.addEventListener('beforeunload', (e) => {
@@ -618,7 +572,6 @@ document.addEventListener('DOMContentLoaded', () => {
     ensureMusic('Wood');
     playAgeTrack('Wood');
   }
->>>>>>> 0080bf9 (Initial commit)
 });
 
 // ===== Toast =====
@@ -760,51 +713,12 @@ socket.on('raidReturn', (evt)=>{ showWarResult(evt); });
 
 // ===== Music per age =====
 const MUSIC = { Wood:["wood1.mp3","wood2.mp3"], Stone:["stone1.mp3","stone2.mp3"], Modern:["modern1.mp3","modern2.mp3","modern3.mp3"] };
-<<<<<<< HEAD
-let musicEl=null, lastAge=null, musicCapInterval=null;
-const MUSIC_VOLUME_CAP = 0.2;
-
-function enforceMusicVolumeCap(){
-  try{
-    if (!musicEl) return;
-    const target = Math.min(MUSIC_VOLUME_CAP, desiredMusicVolume());
-    if (musicEl.volume !== target) musicEl.volume = target;
-  }catch(e){}
-}
-
-function bindMusicCapListeners(){
-  if (!musicEl) return;
-  const clamp = enforceMusicVolumeCap;
-  ['loadedmetadata','canplay','canplaythrough','play','volumechange','timeupdate'].forEach(ev=>{
-    try{ musicEl.addEventListener(ev, clamp, { passive:true }); }catch(e){}
-  });
-  if (!musicCapInterval){
-    musicCapInterval = setInterval(()=>{
-      if (!musicEl) return;
-      clamp();
-    }, 1000);
-  }
-}
-=======
 let musicEl=null, lastAge=null, audioCtxMusic=null, gainNodeMusic=null, sourceNodeMusic=null;
 const MUSIC_VOLUME = 0.15; // 15% volume
->>>>>>> 0080bf9 (Initial commit)
 
 function ensureMusic(age) {
   if (!MUSIC_ON) return;
   if (!musicEl) {
-<<<<<<< HEAD
-    musicEl = new Audio();
-    musicEl.loop = false;
-    // Cap music volume at 20%
-    musicEl.volume = Math.min(MUSIC_VOLUME_CAP, desiredMusicVolume());
-    musicEl.addEventListener("ended", () => playAgeTrack(lastAge));
-    bindMusicCapListeners();
-  }
-  enforceMusicVolumeCap();
-  if (age && age !== lastAge) { lastAge = age; playAgeTrack(age); }
-}
-=======
     // Create audio element
     musicEl = new Audio();
     musicEl.loop = false;
@@ -837,18 +751,12 @@ function ensureMusic(age) {
   if (age && age !== lastAge) { lastAge = age; playAgeTrack(age); }
 }
 
->>>>>>> 0080bf9 (Initial commit)
 function playAgeTrack(age) {
   if (!MUSIC_ON) return;
   const list = MUSIC[age] || [];
   if (!list.length) return;
   const pick = list[Math.floor(Math.random() * list.length)];
   musicEl.src = `/music/${pick}`;
-<<<<<<< HEAD
-  // Enforce max 20% volume on every play
-  musicEl.volume = Math.min(MUSIC_VOLUME_CAP, desiredMusicVolume());
-  musicEl.play().then(enforceMusicVolumeCap).catch(() => {});
-=======
   
   // Set HTML5 volume directly (fallback)
   musicEl.volume = MUSIC_VOLUME;
@@ -870,13 +778,10 @@ function playAgeTrack(age) {
     musicEl.volume = MUSIC_VOLUME;
     console.log('🎵 After play - HTML5 volume:', musicEl.volume);
   }).catch(() => {});
->>>>>>> 0080bf9 (Initial commit)
 }
 
 // ===== Helpers =====
 
-<<<<<<< HEAD
-=======
 // Play vs AI setup (pre-room)
 let PENDING_AI = [];
 let aiSetupPending = false;
@@ -944,7 +849,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
   });
 });
 
->>>>>>> 0080bf9 (Initial commit)
 function setThemeByAge(age){
   const b=document.body;
   b.classList.remove("theme-wood","theme-stone","theme-modern");
@@ -965,9 +869,6 @@ const BUILD_ICONS = { Hut:"🛖", Sawmill:"🪓", Field:"🌾", Palisade:"🛡�
                       Factory:"🏭", Greenhouse:"🏡", Bank:"🏦", PowerPlant:"⚡", Monument:"🗽" };
 const COST_ICON = { wood:"🪵", rock:"🪨", metal:"⚙️", food:"🍞", coins:"💰" };
 
-<<<<<<< HEAD
-function chips(cost){ return Object.entries(cost).map(([k,v])=>`<span class="chip">${COST_ICON[k]||""} ${v}</span>`).join(""); }
-=======
 function chips(cost, me, enableHighlight = true){
   try{
     const res = me?.resources || {};
@@ -981,7 +882,6 @@ function chips(cost, me, enableHighlight = true){
     return Object.entries(cost).map(([k,v])=>`<span class="chip">${COST_ICON[k]||""} ${v}</span>`).join("");
   }
 }
->>>>>>> 0080bf9 (Initial commit)
 
 function apFloat(delta){
   const apEl = $("#ap"); if(!apEl) return;
@@ -1050,11 +950,7 @@ function buildCardHTML(name, def, me){
       <div class="meta">
         <div class="title">${title}</div>
         <div class="desc">${desc}</div>
-<<<<<<< HEAD
-        <div class="cost">${chips(def.cost)}</div>
-=======
         <div class=\"cost\">${chips(def.cost, me, !owned)}</div>
->>>>>>> 0080bf9 (Initial commit)
         <div class="actions">${buttons}</div>
       </div>
     </div>
@@ -1161,8 +1057,6 @@ function warChanceLabel(p){
   if (p >= 0.15) return 'Unlikely';
   return 'Very unlikely';
 }
-<<<<<<< HEAD
-=======
 
 // Persist war-risk lore per player and success chance so it doesn't change every action
 // Structure: { [playerId]: { lastChanceKey: string|null, lastBracket: string|null, indexByBracket: { [bracket]: number } } }
@@ -1341,7 +1235,6 @@ function getWarOutcomeLore(civ, successChance, playerId) {
   const idx = state.indexByBracket[bracket] % messages.length;
   return messages[idx];
 }
->>>>>>> 0080bf9 (Initial commit)
 function updateUI(){
   if(!ROOM||!ME) return;
   const me=PLAYERS[ME]; if(!me) return;
@@ -1513,11 +1406,7 @@ function updateUI(){
       return `<div class=\"p-item ${turn?'turn':''}\" style=\"--pc:${pc}\">\n        <div class=\"pnameRow\"><span class=\"dot\"></span><span class=\"civIcon\">${civIcon}</span><span class=\"name\">${pid}</span>${movesInline}${kickBtn}</div>\n        <div class=\"villRow\">${ageDisplay}${militaryInfo}</div>\n        <div class=\"progress mini\"><div class=\"fill\" style=\"width:${pct}%\"></div></div>\n      </div>`;
     }).join('');
   }
-<<<<<<< HEAD
-  // Visitor open button label (do not disable; show toast on click instead)
-=======
   // Visitor open button label
->>>>>>> 0080bf9 (Initial commit)
   { const btn=document.getElementById('openVisitBtn'); if (btn){ btn.textContent = VISIT_PENDING? 'Visitor pending…' : '🐪 Send a Visitor'; } }
 
   // Show visitor notification in inbox area (non-interactive, modal handles interaction)
@@ -1576,11 +1465,6 @@ function updateUI(){
   });
   ['gather-wood','gather-rock','gather-metal','gather-food'].forEach(a=>{
     const b = document.querySelector(`[data-action="${a}"]`);
-<<<<<<< HEAD
-    if (b) b.disabled = !canAct;
-  });
-  { const tb = document.getElementById('openTradeBtn'); if (tb) tb.disabled = !canAct; }
-=======
     if (b) {
       b.disabled = !canAct;
       b.classList.toggle('not-your-turn', !canAct);
@@ -1590,7 +1474,6 @@ function updateUI(){
   });
   { const tb = document.getElementById('openTradeBtn'); if (tb) { tb.disabled = !canAct; tb.classList.toggle('not-your-turn', !canAct); const tile = tb.closest('.resTile'); if (tile) tile.classList.toggle('not-your-turn', !canAct); } }
   { const vb = document.getElementById('openVisitBtn'); if (vb) { vb.disabled = !canAct; vb.classList.toggle('not-your-turn', !canAct); } }
->>>>>>> 0080bf9 (Initial commit)
   const trainBtn = document.getElementById('trainBtn');
   if (trainBtn){
     const age = me?.age || 'Wood';
@@ -1630,13 +1513,8 @@ function updateUI(){
         riskEl.textContent = `Need at least ${RAID_MIN_COMMIT} soldiers to go to war.`;
       } else {
         const chance = estimateWarChance(me, soldierCount);
-<<<<<<< HEAD
-        const label = warChanceLabel(chance);
-        riskEl.textContent = `War success chance: ${label} (${Math.round(chance*100)}%)`;
-=======
         const lore = getWarOutcomeLore(me.civ, chance, ME);
         riskEl.innerHTML = `<em style="font-style: italic; opacity: 0.9;">${lore}</em>`;
->>>>>>> 0080bf9 (Initial commit)
       }
     }
   }
@@ -1729,11 +1607,7 @@ let addAiPlayer = false;
 
 $("#playVsAiBtn").addEventListener("click",()=>{
   addAiPlayer = true;
-<<<<<<< HEAD
-  joinOrCreate("create", true);
-=======
   openAiSetupModal();
->>>>>>> 0080bf9 (Initial commit)
 });
 
 function joinOrCreate(kind, playVsAi = false){
@@ -1749,11 +1623,6 @@ function joinOrCreate(kind, playVsAi = false){
   // IMPORTANT: Reset the lore flag when joining/creating
   LORE_SHOWN = false;
   console.log('🔄 Resetting LORE_SHOWN to false');
-<<<<<<< HEAD
-
-  if(kind==="create") {
-    socket.emit("createRoom",{ code, playerId:name, color, civ, addAiPlayer });
-=======
   // Reset war lore cache so war-risk text starts fresh in new rooms
   WAR_LORE_STATE = {};
   console.log('🔄 Resetting WAR_LORE_STATE');
@@ -1762,7 +1631,6 @@ function joinOrCreate(kind, playVsAi = false){
     // For Play vs AI, send presetAIs to server to add before first room update
     const payload = addAiPlayer ? { code, playerId:name, color, civ, presetAIs: (Array.isArray(PENDING_AI)?PENDING_AI:[]) } : { code, playerId:name, color, civ };
     socket.emit("createRoom", payload);
->>>>>>> 0080bf9 (Initial commit)
   } else {
     socket.emit("joinRoom",{ code, playerId:name, color, civ });
   }
@@ -1824,8 +1692,6 @@ document.addEventListener("click",(ev)=>{
     const me = PLAYERS[ME];
     if (!me) return;
     const name=btn.dataset.name;
-<<<<<<< HEAD
-=======
     // Bubbly click animation (from button.txt)
     try{
       btn.classList.remove('animate');
@@ -1834,7 +1700,6 @@ document.addEventListener("click",(ev)=>{
       btn.classList.add('animate');
       setTimeout(()=>btn.classList.remove('animate'),700);
     }catch(e){}
->>>>>>> 0080bf9 (Initial commit)
     // Check if player can afford the building
     const age=me.age; const defs=BUILDINGS[age]||{};
     const buildingDef = defs[name];
@@ -1853,18 +1718,12 @@ document.addEventListener("click",(ev)=>{
         return;
       }
     }
-<<<<<<< HEAD
-    if (!performActionWithDelay(name ? `Building ${name}` : "Building", ()=>{ emitAction("build",{ name }); sfxNoise(0.06,0.05); })) return;
-=======
     if (!performActionWithDelay(name ? `Building ${name}` : "Building", ()=>{ emitAction("build",{ name }); apFloat(-1); sfxNoise(0.06,0.05); })) return;
->>>>>>> 0080bf9 (Initial commit)
   }
   else if(a==="upgrade"){
     const me = PLAYERS[ME];
     if (!me) return;
     const name=btn.dataset.name;
-<<<<<<< HEAD
-=======
     // Bubbly click animation for upgrade
     try{
       btn.classList.remove('animate');
@@ -1872,7 +1731,6 @@ document.addEventListener("click",(ev)=>{
       btn.classList.add('animate');
       setTimeout(()=>btn.classList.remove('animate'),700);
     }catch(e){}
->>>>>>> 0080bf9 (Initial commit)
     // Check if player can afford the upgrade (costs 1 AP, but also check resources if needed)
     // For now, upgrades typically just cost 1 move, but we could add resource validation here too
     if (!performActionWithDelay(name ? `Upgrading ${name}` : "Upgrading", ()=>{ emitAction("upgrade",{ name }); apFloat(-1); sfxNoise(0.06,0.05); })) return;
@@ -2299,10 +2157,7 @@ document.addEventListener('click', (e) => {
 $("#createBtn").addEventListener("click",()=>joinOrCreate("create"));
 $("#joinBtn").addEventListener("click",()=>joinOrCreate("join"));
 
-<<<<<<< HEAD
-=======
 
->>>>>>> 0080bf9 (Initial commit)
 // Mobile affix for End Turn button
 (function setupEndTurnAffix(){
   let inited = false;
@@ -2582,11 +2437,8 @@ socket.on("roomUpdate", ({ room, players, buildings, ages, prices, visitPending,
     }
   }
 
-<<<<<<< HEAD
-=======
   // Clear pending list once room starts streaming updates
   try{ if (aiSetupPending) { PENDING_AI = []; aiSetupPending = false; } }catch(e){}
->>>>>>> 0080bf9 (Initial commit)
   updateUI();
 });
 

@@ -78,15 +78,10 @@ body { margin:0; background:#0a0e1a; color:#e2e8f0; cursor: crosshair; }
 
 /* Header (cool dark blue theme with shapes) */
 header { position: relative; background:
-<<<<<<< HEAD
-  radial-gradient(1200px 300px at 20% -10%, rgba(31,95,184,0.25), transparent 60%),
-  linear-gradient(180deg, #0b1222 0%, #0a0e1a 100%);
-=======
   url('/media/City%20Builders.png') center/cover no-repeat,
   radial-gradient(1200px 300px at 20% -10%, rgba(31,95,184,0.25), transparent 60%),
   linear-gradient(180deg, rgba(11,18,34,0.8) 0%, rgba(10,14,26,0.9) 100%);
   background-blend-mode: overlay, normal, normal;
->>>>>>> 0080bf9 (Initial commit)
   box-shadow:0 10px 24px rgba(0,0,0,0.65), inset 0 -2px 0 rgba(31,95,184,0.35);
   padding:14px 18px; border-bottom:2px solid rgba(31,95,184,0.35);
 }
@@ -176,26 +171,6 @@ button.not-your-turn:hover { transform: none; box-shadow: none; }
 
 .hint { text-align: center; font-size: 13px; color: #94a3b8; margin-top: 20px; }
 
-<<<<<<< HEAD
-/* Header Nav Link */
-.hero-nav { margin-top:6px; display:flex; gap:8px; }
-.hero-nav .guide-link {
-  display:inline-block;
-  padding:8px 16px;
-  background:#c73636; /* Red background */
-  border-radius:8px;
-  color:#fff;
-  text-decoration:none;
-  font-weight:700;
-  letter-spacing:0.02em;
-  transition:background 0.2s ease, transform 0.2s ease;
-}
-.hero-nav .guide-link:hover {
-  background:#e54848;
-  transform:translateY(-1px);
-}
-@media (max-width:700px){ .hero-nav{ justify-content:center; } }
-=======
 /* ===== Header Navigation Menu ===== */
 .hero-nav {
   margin-top: 8px;
@@ -427,7 +402,6 @@ button.not-your-turn:hover { transform: none; box-shadow: none; }
     display: none;
   }
 }
->>>>>>> 0080bf9 (Initial commit)
 
 /* Other styles from the original file... */
 /* Strong shade for End Turn button */
@@ -443,25 +417,12 @@ button.not-your-turn:hover { transform: none; box-shadow: none; }
 .stats .resline{ display:flex; align-items:center; gap:10px; }
 .stats .resline .resVal{ margin-left:6px; margin-right:auto; }
 .resline .resTile{ position:relative; width:100%; height:80px; border-radius:16px; background:#151b2a; border:2px solid rgba(250,204,21,0.25); box-shadow: inset 0 0 0 4px rgba(26,31,46,0.8), 0 8px 20px rgba(0,0,0,0.40), 0 0 16px rgba(250,204,21,0.15); display:flex; align-items:center; gap:12px; padding:12px 16px; justify-content:flex-start; transition: transform 0.2s ease, box-shadow 0.2s ease; cursor: pointer;}
-<<<<<<< HEAD
-.resline .resTile:hover{ transform: translateY(-2px); box-shadow: inset 0 0 0 4px rgba(26,31,46,0.8), 0 10px 24px rgba(0,0,0,0.50), 0 0 20px rgba(250,204,21,0.25); }
-=======
 .resline .resTile:hover{ transform: none; box-shadow: inset 0 0 0 4px rgba(26,31,46,0.8), 0 8px 20px rgba(0,0,0,0.40), 0 0 16px rgba(250,204,21,0.15); }
->>>>>>> 0080bf9 (Initial commit)
 .resline .resTile .resIcon{ font-size:40px; line-height:1; }
 .resline .resTile .resText{ display:flex; flex-direction:column; line-height:1.2; }
 .resline .resTile .resText .resName{ font-weight:600; font-size:15px; color:#facc15; text-transform: uppercase; letter-spacing: 0.5px; }
 .resline .resTile .resText .resAmt{ font-weight:900; font-size:22px; color:#e2e8f0; }
 .resline .yieldBadge{ background:#1bb56d; color:#fff; font-weight:800; font-size:12px; padding:2px 8px; border-radius:10px; box-shadow:0 2px 6px rgba(0,0,0,0.12); margin-left: 6px;}
-<<<<<<< HEAD
-.resline .tileAction{ position:absolute; right:8px; bottom:8px; height:31px; border:none; border-radius:12px 16px 16px 12px; cursor:pointer; padding:0 0 0 10px; background: linear-gradient(135deg, #246ad1 0%, #1a4e95 100%); color:#fff; display:flex; align-items:center; gap:8px; font-weight:900; font-size:12px; width:200px; justify-content:flex-start; overflow:hidden; box-shadow: 0 6px 16px rgba(0,0,0,0.42), 0 0 0 1px rgba(31,95,184,0.35), inset 0 1px 0 rgba(255,255,255,0.15); position: absolute;}
-.resline .tileAction:hover{ transform: translateY(-1px); box-shadow: 0 10px 22px rgba(0,0,0,0.5), 0 0 0 1px rgba(31,95,184,0.45), inset 0 1px 0 rgba(255,255,255,0.18); }
-.resline .tileAction .icon{ font-size:16px; line-height:1; flex-shrink:0; filter: drop-shadow(0 1px 0 rgba(0,0,0,0.2)); }
-.resline .tileAction .lbl{ line-height:1; flex-shrink:0; letter-spacing: 0.3px; text-shadow: 0 1px 0 rgba(0,0,0,0.25); overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
-.resline .tileAction .yieldBadge{ flex-shrink:0; margin-left: auto; background: linear-gradient(135deg, #065f46 0%, #064e3b 100%); color:#fff; font-size:15px; padding:0 14px 0 16px; height:100%; display:flex; align-items:center; border-radius:0 16px 16px 0; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06), inset 0 8px 12px rgba(255,255,255,0.06), 0 0 0 1px rgba(6,79,59,0.35); font-weight:900; text-shadow: 0 1px 0 rgba(0,0,0,0.35); clip-path: polygon(12px 0, 0 100%, 100% 100%, 100% 0); }
-.resline .resTile.coin{ background:#1a1507; border-color:rgba(212,160,23,0.4); box-shadow: inset 0 0 0 4px rgba(26,31,46,0.8), 0 8px 20px rgba(0,0,0,0.40), 0 0 16px rgba(212,160,23,0.30);}
-.resline .resTile.coin .tileAction{ background:#d4a017; }
-=======
 .resline .tileAction{ position:absolute; right:8px; bottom:8px; height:31px; border:none; border-radius:12px 16px 16px 12px; cursor:pointer; padding:0 0 0 10px; background: linear-gradient(-30deg, #0b1b3d 50%, #08142b 50%); color:#d4e0f7; display:flex; align-items:center; gap:8px; font-weight:900; font-size:12px; width:200px; justify-content:flex-start; overflow:hidden; box-shadow: 0 12px 28px rgba(0,0,0,0.45), 0 0 0 1px rgba(31,95,184,0.35), inset 0 1px 0 rgba(255,255,255,0.12); position: absolute; letter-spacing: 0.5px;}
 .resline .tileAction:hover{ transform: translateY(-1px); box-shadow: 0 14px 26px rgba(0,0,0,0.55), 0 0 0 1px rgba(31,95,184,0.5), inset 0 1px 0 rgba(255,255,255,0.20); }
 .resline .tileAction .icon{ font-size:16px; line-height:1; flex-shrink:0; filter: drop-shadow(0 1px 0 rgba(0,0,0,0.2)); }
@@ -495,7 +456,6 @@ button.not-your-turn:hover { transform: none; box-shadow: none; }
 .resline .resTile.not-your-turn{ opacity:0.6; filter: grayscale(0.7) saturate(0.8); transform: none !important; cursor: not-allowed; box-shadow: inset 0 0 0 4px rgba(26,31,46,0.8), 0 4px 10px rgba(0,0,0,0.30), 0 0 12px rgba(250,204,21,0.12); }
 .resline .resTile.not-your-turn:hover{ transform:none; }
 .resline .resTile.not-your-turn .tileAction{ cursor: not-allowed; }
->>>>>>> 0080bf9 (Initial commit)
 .season-spring .resline .resTile{ background: linear-gradient(135deg, #0d1a0f 0%, #0f1b13 100%); border-color: rgba(76,175,80,0.4); box-shadow: inset 0 0 0 4px rgba(26,31,46,0.8), 0 8px 20px rgba(0,0,0,0.40), 0 0 16px rgba(76,175,80,0.25);}
 .season-spring .resline .resTile.coin{ background: linear-gradient(135deg, #1a1a07 0%, #1f1f0d 100%); border-color: rgba(240,215,122,0.4);}
 .season-summer .resline .resTile{ background: linear-gradient(135deg, #1a1107 0%, #1c1410 100%); border-color: rgba(255,152,0,0.4); box-shadow: inset 0 0 0 4px rgba(26,31,46,0.8), 0 8px 20px rgba(0,0,0,0.40), 0 0 16px rgba(255,152,0,0.25);}
@@ -574,11 +534,6 @@ button.not-your-turn:hover { transform: none; box-shadow: none; }
 .bcard .desc { font-size:12px; opacity:0.8; }
 .bcard .cost { margin-top:4px; margin-bottom:8px; }
 .chip { display:inline-flex; align-items:center; gap:4px; background:#0f1419; border:1px solid rgba(250,204,21,0.3); color:#facc15; padding:4px 10px; margin:2px 4px 0 0; border-radius:999px; font-size:14px; font-weight:700; }
-<<<<<<< HEAD
-.chip::before { font-size:16px; }
-.bcard .actions { gap:6px; margin-top:8px; }
-.bcard button.small { padding:5px 12px; font-size:11px; border-radius:6px; font-weight:600; }
-=======
 .chip.ok { background: rgba(16,185,129,0.3); border-color: rgba(16,185,129,0.6); box-shadow: inset 0 0 0 1px rgba(16,185,129,0.35); }
 .chip::before { font-size:16px; }
 .bcard .actions { gap:6px; margin-top:8px; }
@@ -712,7 +667,6 @@ button.not-your-turn:hover { transform: none; box-shadow: none; }
 .bcard .actions button.small[data-action="upgrade"].animate::before{ display:block; animation: bTopBubbles 0.75s ease-in-out forwards; }
 .bcard .actions button.small[data-action="upgrade"].animate::after{ display:block; animation: bBottomBubbles 0.75s ease-in-out forwards; }
 
->>>>>>> 0080bf9 (Initial commit)
 button.locked { background:#a0a8b8; }
 button.available { background:#1f5fb8; }
 button.owned { background:#1bb56d; }
@@ -926,7 +880,4 @@ button.owned { background:#1bb56d; }
     max-width: 300px;
   }
 }
-<<<<<<< HEAD
-=======
 
->>>>>>> 0080bf9 (Initial commit)
