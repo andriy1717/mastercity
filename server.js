@@ -624,6 +624,147 @@ const RAID_LORE = {
   }
 };
 
+<<<<<<< HEAD
+=======
+const DEFEAT_LORE = [
+  "Your army marched confidently into battle, but their confidence turned to chaos when the enemy's tactics proved superior. They were routed in a embarrassing retreat, with many soldiers not making it back home.",
+  "The battle started well, but the enemy commander was far more cunning than expected. Your soldiers found themselves surrounded and were forced to flee for their lives.",
+  "Your army's strategy seemed solid at first, but the enemy's reinforcements arrived faster than anticipated. Outnumbered and outmaneuvered, your soldiers broke ranks and scattered.",
+  "The clash of steel was fierce, but your army was simply outmatched. After a brutal exchange, your soldiers wisely chose retreat over certain death.",
+  "Your forces charged with fury, but the enemy's defensive formation held strong. After suffering heavy losses, your commanders ordered a desperate retreat.",
+  "What was supposed to be a swift victory turned into a nightmare. The enemy's superior archers rained down arrows that decimated your army before they could close in.",
+  "Your army fought valiantly, but sheer bad luck cost them dearly. Just when victory seemed close, the ground gave way under your troops' feet, and they tumbled into disarray.",
+  "The enemy leader proved to be a tactical genius. Your army fell for clever feints and ambush tactics that left them confused and fleeing in shame.",
+  "Your soldiers marched to battle with high spirits, but the morale shattered when they saw the size of the enemy force. They wisely chose discretion over valor and retreated.",
+  "The battle was decided in the first few minutes when your cavalry charge was halted by a wall of spikes. Demoralized, your army fell back in defeat."
+];
+
+// War Outcome Prediction Lore - Historical events based on civilization and success chance
+const WAR_OUTCOME_LORE = {
+  Romans: {
+    veryUnlikely: [
+      "The Roman legionaries marched confidently forth, yet fate conspired against them. At Cannae, Hannibal's forces encircled 80,000 Roman soldiers, crushing them utterly—50,000 fell that day. Your army echoes their doom. **Advisors urge extreme caution.**",
+      "Remember the Varian Disaster—Arminius destroyed three entire legions in the Teutoburg Forest, 20,000 men lost in a single ambush. The Germanic warriors overwhelmed Rome's finest. Your scouts report similar terrain ahead. **Do not march.**",
+      "When Caesar's legions failed to recognize the strength of Pompey, they were routed at Dyrrhachium. Outnumbered and outmaneuvered, Roman discipline cracked. The odds are similarly grim. **Retreat is wisdom.**"
+    ],
+    unlikely: [
+      "When Crassus marched into Parthia with 40,000 soldiers, he found 10,000 Parthian archers. Arrows rained from afar, and Rome suffered a catastrophic defeat at Carrhae. Your army faces equal uncertainty. **Caution advised.**",
+      "At the siege of Alesia, Caesar faced Vercingetorix and a Gallic confederacy that nearly broke Rome's might. Though Caesar prevailed, the cost was tremendous. **Consider the price of victory.**",
+      "The battle of the Milvian Bridge left Constantine victorious, yet his own army once outnumbered him. Luck and tactics, not certainty, won the day. **Fortune is fickle.**"
+    ],
+    moderate: [
+      "Caesar's conquest of Gaul took eight years against fierce barbarian resistance. Rome prevailed, but thousands of legionaries never returned home. **Prepare for heavy losses.**",
+      "When Augustus defeated Mark Antony at Actium, Rome's naval superiority proved decisive, yet the outcome hung in the balance until the final hour. **The gods may favor the brave.**",
+      "Trajan's campaign into Dacia required careful planning, multiple legions, and brilliant strategy. Rome won, but at significant cost. **Rome needs steady resolve.**"
+    ],
+    likely: [
+      "Caesar crushed the Helvetii with superior tactics and discipline—60,000 barbarians fell to 30,000 legionaries. Roman order conquered Germanic chaos. **Your army is well-positioned.**",
+      "When Pompey defeated the pirates at sea, Roman naval superiority and organization decimated the unorganized enemy fleet. **Your forces hold the advantage.**",
+      "During the conquest of Egypt, Augustus's legions overwhelmed local forces through discipline and coordination. The outcome was never in doubt. **Victory beckons.**"
+    ],
+    veryLikely: [
+      "Caesar's subjugation of Egypt was swift and overwhelming. Cleopatra's forces crumbled before Roman might. Caesar's 3,000 soldiers defeated armies ten times their size through superior tactics and morale. **Rome will triumph.**",
+      "When Roman legions faced the Lusitanians, Roman discipline and numbers proved absolutely insurmountable. The enemy was crushed utterly. **Your army cannot fail.**",
+      "Trajan's final victory over Dacia was so complete that Rome annexed the land permanently. No enemy force could withstand the full might of Rome. **Glory awaits.**"
+    ]
+  },
+  Vikings: {
+    veryUnlikely: [
+      "When the Norse raiders landed on unfamiliar shores and faced prepared defenses, they were slaughtered like seals. The Shield Wall of disciplined enemies broke Viking fury. **Your warriors face certain doom.**",
+      "At Stiklestad, King Harold Hardrada's Viking force was decimated by organized enemies. The finest Viking warriors fell to disciplined spears. **Even the bravest can fall.**",
+      "When Vikings sailed up the Thames toward London, they found city walls, trained archers, and coordinated defense. The raid collapsed. Few returned to the ships. **This path leads only to death.**"
+    ],
+    unlikely: [
+      "The Varangian Guard faced enemies who matched them sword for sword and outnumbered them in discipline. Even Viking valor could not overcome overwhelming odds. **Reconsider this war.**",
+      "Norwegian forces at the Stamford Bridge met English longbowmen. Arrows darkened the sky, and Viking shield walls crumbled under the assault. **Your army is not ready.**",
+      "Ragnar Lothbrok's siege of Paris failed—French forces held the walls, and the Vikings were forced to sail away in shame. **Do not repeat this folly.**"
+    ],
+    moderate: [
+      "When Eric Bloodaxe claimed his throne, the battles were fierce and casualties heavy on both sides. Viking cunning and strength eventually prevailed, but many warriors fell. **Prepare for bloodshed.**",
+      "The invasion of England required multiple raids over years. No single Viking force could conquer the island in one assault. **Patience is needed.**",
+      "Norse raiders often faced unexpected resistance and had to retreat. Not every raid returned laden with gold. **Fortune is uncertain.**"
+    ],
+    likely: [
+      "When Viking longships descended upon coastal settlements, the unprepared inhabitants were overwhelmed swiftly. Swift action and brutal force ensured victory. **Your raiders have the advantage.**",
+      "Leif Erikson's discovery of North America showed Viking explorers could venture anywhere unopposed. Undefended lands fell easily to Norse fury. **The gods favor the bold.**",
+      "The sack of Lindisfarne showed how undefended monasteries fell to surprise Viking assault. Easy prey, rich treasure. **Strike now.**"
+    ],
+    veryLikely: [
+      "Ivar the Boneless conquered vast tracts of England with brilliant strategy and overwhelming force. English kingdoms fell one by one, utterly defenseless against Viking coordination. **Your army will devastate all.**",
+      "When Ragnar's sons invaded, they destroyed everything in their path—cities burned, armies broke, treasure flowed back to Scandinavia. **Victory is certain.**",
+      "The Great Heathen Army swept across England leaving only ashes and submission in its wake. No force could stop the Nordic fury. **Destiny awaits.** Sail forth with pride!"
+    ]
+  },
+  Mongols: {
+    veryUnlikely: [
+      "When the Mongol hordes faced the heavily armored European knights at Legnica, they were utterly routed. The knights' discipline and armor proved superior. **Your riders cannot win this battle.**",
+      "At the Battle of Ain Jalut, the Mamluk forces stopped the Mongol advance cold. Cavalry charges met with coordinated spears and discipline. The Mongol legend ended that day. **Retreat while you can.**",
+      "When Mongol forces overextended into fortified positions, concentrated defense broke their mobility. The horsemen were slaughtered like cattle. **This is not a steppe—you will be trapped.**"
+    ],
+    unlikely: [
+      "The Mongols faced the Jin Dynasty's massive fortifications and were slowed to a grinding halt. The enemy held superior defensive positions for years. **Prepared defenses will break you.**",
+      "At the siege of Baghdad, the Mongols suffered unexpected casualties from fortified positions and coordinated defense. Even the great Mongol war machine stumbled. **Do not commit your riders.**",
+      "When Kublai Khan faced the Tocharians in prepared positions, losses were heavy and victory uncertain. **The steppe is your strength—this battle is not yours.**"
+    ],
+    moderate: [
+      "Genghis Khan's conquest of Central Asia took years of brutal fighting. Many cities resisted, and Mongol forces suffered casualties they rarely admitted. **Victory will be costly.**",
+      "The siege of Riazan required both speed and attrition. The Mongols prevailed, but not without price. **Prepare for a long campaign.**",
+      "The conquest of Persia showed even the Mongols faced unexpected resistance. Organized kingdoms fought back fiercely. **Your riders will face hard resistance.**"
+    ],
+    likely: [
+      "When Subutai's cavalry descended upon the Hungarian plain, scattered defenders were crushed utterly. Uncoordinated forces crumbled to Mongol mobility. **Your horses will outrun their defenses.**",
+      "The Mongol conquest of Korea showed how unprepared defenders fell to rapid cavalry strikes. Cities fell in weeks. **Your mobility guarantees victory.**",
+      "Against the Song Dynasty's southern territories, Mongol cavalry proved devastating to unprepared defenders. Rapid assaults won city after city. **Strike fast and often.**"
+    ],
+    veryLikely: [
+      "Genghis Khan's obliteration of the Khwarazmian Empire was absolute and total. An entire civilization was erased—millions dead, cities razed. No force could withstand the Mongol fury. **Your army is unstoppable.**",
+      "The conquest of Baghdad saw 200,000 defenders crushed by Mongol coordination. The enemy barely slowed the charge. **Your riders will sweep all aside.**",
+      "When 100,000 Mongol horsemen descended upon the Jin Dynasty, the outcome was never in doubt. The empire fell to the hooves of Genghis Khan's warriors. **Destiny is yours. Ride forth!**"
+    ]
+  },
+  Slavs: {
+    veryUnlikely: [
+      "When the Swedish knights faced the Slavic forces on the ice of Lake Peipus, they were trapped and broken utterly. The Slavic warriors showed no mercy. Yet your enemies now are prepared and well-fortified. **Even Slavic courage may falter.**",
+      "At the Kulikovo Field, Russian forces faced the Mongol Horde and emerged bloodied but victorious—yet it cost 100,000 lives. **Your warriors cannot afford such losses.**",
+      "When Slavic defenders held the fortress at Rzhev against overwhelming German forces, they were eventually crushed by sheer numbers and firepower. **Your fortifications will not hold.**"
+    ],
+    unlikely: [
+      "Slavic forces held Moscow against medieval sieges, but invaders eventually broke through at terrible cost to both sides. **Prepared enemies will not yield easily.**",
+      "When Ivan the Terrible's armies faced organized opposition, they sometimes faltered. Slavic strength is not always sufficient. **Reconsider this march.**",
+      "The resistance at Novgorod delayed invaders, but eventual capitulation showed even Slavic defiance has limits against superior numbers. **Your army faces an equal foe.**"
+    ],
+    moderate: [
+      "The Dnieper Cossacks resisted Ottoman expansion fiercely, winning battles but eventually losing the greater war through attrition. **This will be a long struggle.**",
+      "Slavic warriors held their own against Mongol incursions, but victory required multiple seasons and great sacrifice. **Prepare your people for hardship.**",
+      "When Alexander Nevsky defended the Russian lands, victory came through cunning and winter more than overwhelming force. **Strategy matters here.**"
+    ],
+    likely: [
+      "When Suvorov's Russian army engaged the Ottomans, Slavic discipline and ferocity overwhelmed the enemy. Victory after victory fell to Russian courage. **Your force has the advantage.**",
+      "Alexander Nevsky's destruction of the Swedish invaders was complete and swift. The enemy never expected Slavic tactical brilliance. **Strike with confidence.**",
+      "The defense of Poltava showed Russian warriors absolutely shattering their opponents. Disciplined Slavic courage proved unbreakable. **Victory is yours.**"
+    ],
+    veryLikely: [
+      "When Russia mobilized against invaders, entire armies were utterly annihilated. At Stalingrad, the enemy was consumed. Slavic willpower and the frozen earth became one unstoppable force. **Your army will triumph completely.**",
+      "Kutuzov's maneuvers broke Napoleon himself. The Grande Armée was destroyed utterly—not by force but by Slavic endurance and strategy. **The enemy cannot withstand your people.**",
+      "When Slavic warriors committed fully to war, enemies were ground to dust. Winter and resolve combined are absolutely unbeatable. **You will crush all before you. March!**"
+    ]
+  }
+};
+
+const ROBBER_LORE = [
+  "The robber dressed as a humble merchant, but once inside your treasury, they 'accidentally' knocked over a vase, making a terrible mess. While you were distracted cleaning it up, they pocketed 10 coins with the sleight of hand of a seasoned pickpocket!",
+  "Your robber befriended your treasurer over a cup of mead, offering increasingly generous compliments. Just as your treasurer let their guard down, the robber 'sneezed' directly into the coin pile, and in the chaos and laughter that followed, 10 coins mysteriously disappeared into their sleeve!",
+  "The robber pretended to be deeply impressed by your city's architecture, asking to see the vault as a 'curious traveler.' Once inside, they started juggling gold coins and 'accidentally' pocketed 10 when everyone was clapping in amazement!",
+  "Your robber claimed to be a tax collector from a distant land and asked to 'verify' your coin reserves. They used a magical-looking counting trick that confused everyone so completely that when the counting ended, 10 coins couldn't be accounted for!",
+  "The robber sang the most beautiful trading songs, so captivating that when they finished their performance, they bowed deeply. As they straightened up, 10 coins had somehow transferred from your purse to theirs during the dramatic gesture!",
+  "Your robber 'accidentally' spilled honey all over the trading floor, and while everyone was busy cleaning it up and the coins were slippery, they managed to pocket exactly 10 coins with practiced precision!",
+  "The robber suggested a game to celebrate the trade deal—'coin flipping for luck.' After 10 rounds of increasingly elaborate tricks and distractions, 10 coins were 'left behind' at their feet when they departed!",
+  "Your robber told the most hilarious jokes about previous failed trades they'd witnessed. Everyone was laughing so hard that when they left, 10 coins walked out with them unnoticed!",
+  "The robber claimed to have a 'lucky coin' and asked if they could borrow one to 'bless your trade.' After examining your treasured coins and getting everyone distracted with stories of their legendary fortune, they returned the coin—but now you're 10 coins poorer!",
+  "Your robber pretended their leg was injured and asked if they could sit by the coin vault while recovering. By the time they 'healed' and left, 10 coins had miraculously made their way into their travel pack!"
+];
+
+>>>>>>> 0080bf9 (Initial commit)
 const DISPATCH_LORE = {
   Vikings: [
     "{{player}} unleashes {{soldiers}} Viking raiders, sworn to seize fresh coasts for the clans.",
@@ -705,15 +846,28 @@ function downgradeRandomBuilding(p, maxSteps) {
 }
 
 // =================== Core helpers ===================
+<<<<<<< HEAD
 function initialPlayer(color, isAi = false) {
+=======
+function initialPlayer(color, isAi = false, civ = null) {
+>>>>>>> 0080bf9 (Initial commit)
   // Select 2 random buildings from Wood age to show initially
   const woodBuildings = Object.keys(BUILDINGS.Wood || {});
   const shuffled = woodBuildings.sort(() => Math.random() - 0.5);
   const initialVisible = shuffled.slice(0, 2);
 
+<<<<<<< HEAD
   return {
     color: color || "blue",
     civ: "Romans",
+=======
+  // Randomize AI age progression thresholds (80% - 100% per age)
+  const makeThreshold = () => 0.8 + Math.random() * 0.2;
+
+  return {
+    color: color || "blue",
+    civ: civ || "Romans",
+>>>>>>> 0080bf9 (Initial commit)
     ready: isAi ? true : false,
     resources: { wood:10, rock:10, metal:10, food:10, coins:10 },
     soldiers: BASE.startingSoldiers,
@@ -724,6 +878,11 @@ function initialPlayer(color, isAi = false) {
     raid: null,
     personalLog: [], // Personal event log (only visible to this player)
     isAi: isAi,
+<<<<<<< HEAD
+=======
+    // Per-age advancement thresholds for AI (percent of buildings built in current age)
+    aiAgeThresholds: { Wood: makeThreshold(), Stone: makeThreshold() },
+>>>>>>> 0080bf9 (Initial commit)
     visibleBuildings: {
       Wood: initialVisible,
       Stone: [], // Will be populated when player reaches Stone age
@@ -784,6 +943,15 @@ function countBuildingsInAge(player, age) {
   const buildingNames = Object.keys(BUILDINGS[age]);
   return buildingNames.filter(name => player.structures[name]).length;
 }
+<<<<<<< HEAD
+=======
+function totalBuildingsInAge(age) {
+  if (!BUILDINGS[age]) return 0;
+  // Exclude Monument for Modern age when counting age completion
+  const names = Object.keys(BUILDINGS[age]);
+  return age === 'Modern' ? names.filter(n => n !== 'Monument').length : names.length;
+}
+>>>>>>> 0080bf9 (Initial commit)
 
 // Statistics tracking helpers
 function trackResourceGathered(player, resource, amount) {
@@ -1085,6 +1253,7 @@ function maybeAdvanceAge(p, room){
   const names = Object.keys(BUILDINGS[currentAge]||{});
   const have = names.filter(n => !!p.structures[n]).length;
 
+<<<<<<< HEAD
   // Age-specific building requirements:
   // Wood -> Stone: need 2 buildings
   // Stone -> Modern: need 3 buildings
@@ -1094,6 +1263,33 @@ function maybeAdvanceAge(p, room){
   }
 
   if (have >= required) {
+=======
+  // Default (for humans): legacy simple thresholds
+  let shouldAdvance = false;
+
+  if (!p.isAi) {
+    // Human player rules (legacy): Wood->Stone need 2, Stone->Modern need 3
+    let required = 2;
+    if (currentAge === 'Stone') required = 3;
+    shouldAdvance = have >= required;
+  } else {
+    // AI rule (per spec + mandatory war/training quotas):
+    // - Wood -> Stone only after ALL Wood buildings are built AND ≥1 war in Wood AND ≥2 soldiers trained in Wood
+    // - Stone -> Modern after ≥3 Stone buildings AND ≥1 war in Stone AND ≥4 soldiers trained in Stone
+    const wars = (p.aiPlan && p.aiPlan.wars) || { Wood:0, Stone:0, Modern:0 };
+    const trainedSoldiers = (p.aiPlan && p.aiPlan.trainedSoldiers) || { Wood:0, Stone:0, Modern:0 };
+    if (currentAge === 'Wood') {
+      const totalWood = totalBuildingsInAge('Wood');
+      shouldAdvance = (have >= totalWood) && (wars.Wood >= 1) && (trainedSoldiers.Wood >= 2);
+    } else if (currentAge === 'Stone') {
+      shouldAdvance = (have >= 3) && (wars.Stone >= 1) && (trainedSoldiers.Stone >= 4);
+    } else {
+      shouldAdvance = false; // No advance beyond Modern
+    }
+  }
+
+  if (shouldAdvance) {
+>>>>>>> 0080bf9 (Initial commit)
     const nextAge = AGES[idx+1];
     p.age = nextAge;
 
@@ -1115,13 +1311,38 @@ function maybeAdvanceAge(p, room){
 
 // =================== Rooms ===================
 const ROOMS = new Map();
+<<<<<<< HEAD
 const AI_NAMES = ["Bob", "Alice", "Charlie", "Dave"];
+=======
+const AI_NAMES = ["Bob", "Alice", "Charlie", "Dave"]; // legacy fallback
+
+// Civilization-based ruler names for AI
+const EMPEROR_NAMES = {
+  Romans: ["Julius Caesar","Augustus","Trajan","Hadrian","Marcus Aurelius","Constantine","Nero","Claudius","Vespasian","Tiberius"],
+  Vikings: ["Ragnar","Bjorn Ironside","Ivar","Harald","Leif Erikson","Eric Bloodaxe","Sigurd","Hrollaug"],
+  Mongols: ["Genghis","Kublai","Ogedei","Tolui","Batu","Mongke","Jochi"],
+  Slavs: ["Vladimir","Yaroslav","Oleg","Rurik","Ivan","Mstislav","Sviatoslav","Boleslav"]
+};
+function randomCiv(){ const keys = Object.keys(CIVS||{}); return keys[Math.floor(Math.random()*keys.length)] || 'Romans'; }
+function uniqueName(room, base){
+  let name = base;
+  let i = 2;
+  while (room.state[name]){ name = `${base} ${i}`; i++; if (i>99) break; }
+  return name;
+}
+function generateAiName(room, civ){
+  const pool = EMPEROR_NAMES[civ] || EMPEROR_NAMES.Romans;
+  const base = pool[Math.floor(Math.random()*pool.length)] || 'Ruler';
+  return uniqueName(room, base);
+}
+>>>>>>> 0080bf9 (Initial commit)
 
 class AIManager {
   constructor(room, performAction) {
     this.room = room;
     this.states = ["gathering", "building", "advancing", "trading", "military"];
     this.currentState = "gathering";
+<<<<<<< HEAD
     this.chatMessages = [
       "I'm not saying I'm the best, but I'm in the top one.",
       "I'm not arguing, I'm just explaining why I'm right.",
@@ -1129,6 +1350,8 @@ class AIManager {
       "I'm not weird, I'm a limited edition.",
       "I'm not a complete idiot, some parts are missing.",
     ];
+=======
+>>>>>>> 0080bf9 (Initial commit)
     this.performAction = performAction;
     this.logFilePath = room.logFilePath;
   }
@@ -1167,6 +1390,7 @@ class AIManager {
   }
 
   // Strategic helpers
+<<<<<<< HEAD
   missingBuildingsInAge(player){
     const names = Object.keys(BUILDINGS[player.age]||{});
     return names.filter(n=>!player.structures[n] && n!=="Monument");
@@ -1175,17 +1399,32 @@ class AIManager {
     // If in Modern and Monument not built but prerequisites nearly met, target Monument
     if (player.age === "Modern" && !player.structures["Monument"]) {
       // Require at least 2 buildings in each age to attempt Monument per rules
+=======
+  missingBuildingsInAge(player, age){
+    const names = Object.keys(BUILDINGS[age]||{});
+    return names.filter(n=>!player.structures[n] && n!=="Monument");
+  }
+  pickTargetBuilding(player){
+    // If in Modern and Monument not built but prerequisites nearly met, target Monument (requires 4 Modern buildings to be visible)
+    if (player.age === "Modern" && !player.structures["Monument"]) {
+>>>>>>> 0080bf9 (Initial commit)
       let okPerAge=true;
       for (const age of AGES){
         const names = Object.keys(BUILDINGS[age]||{});
         const have = names.filter(n=>!!player.structures[n]).length;
         if (have<2){ okPerAge=false; break; }
       }
+<<<<<<< HEAD
       if (okPerAge){
+=======
+      const modernBuilt = countBuildingsInAge(player, 'Modern');
+      if (okPerAge && modernBuilt >= 4){
+>>>>>>> 0080bf9 (Initial commit)
         const def = (BUILDINGS["Modern"]||{})["Monument"];
         if (def) return { name:"Monument", def, score:Infinity };
       }
     }
+<<<<<<< HEAD
     // Otherwise prefer to complete at least 2 distinct buildings in current age
     const names = this.missingBuildingsInAge(player);
     if (!names.length) return null;
@@ -1193,6 +1432,14 @@ class AIManager {
     let best=null, bestScore=Infinity;
     for (const name of names){
       const def = BUILDINGS[player.age][name];
+=======
+    // Restrict targeting to current age only (server build rules)
+    const age = player.age;
+    let best=null, bestScore=Infinity;
+    const names = this.missingBuildingsInAge(player, age);
+    for (const name of names){
+      const def = BUILDINGS[age][name];
+>>>>>>> 0080bf9 (Initial commit)
       if (!def) continue;
       const cost = def.cost||{};
       let score=0;
@@ -1235,6 +1482,7 @@ class AIManager {
     return true;
   }
 
+<<<<<<< HEAD
   // Occasionally send a visitor if rich enough (once per year, ~50% chance)
   maybeSendVisitor(playerId){
     const p = this.room.state[playerId];
@@ -1248,10 +1496,36 @@ class AIManager {
     // ~50% chance per year = approximately 1.2% chance per turn (assuming ~40 turns per year)
     if (Math.random() < 0.012){
       const targets = Object.keys(this.room.state).filter(id=>id!==playerId && !this.room.state[id].isAi);
+=======
+  // Dispatch a trader 1-3 times per game (never robber/spy), at most once per season
+  maybeSendVisitor(playerId){
+    const p = this.room.state[playerId];
+    if (!p) return;
+    if ((p.resources.coins||0) < 10) return; // costs 10 coins for player-initiated visits
+
+    // Per-game cap per AI
+    if (!this.room.aiVisitorCounts) this.room.aiVisitorCounts = {};
+    const used = this.room.aiVisitorCounts[playerId] || 0;
+    if (used >= 3) return;
+
+    // Only one visitor per season globally
+    const currentSeason = seasonName(this.room);
+    if (this.room.lastVisitorSeason === currentSeason) return;
+
+    // Chance logic: ensure at least once by mid-game; otherwise low chance
+    const seasons = Math.max(0, this.room.seasonsElapsed|0);
+    let chance = 0.0;
+    if (used === 0 && seasons >= 4) chance = 0.25; // push to send by mid-game
+    else chance = 0.02; // otherwise small chance per turn
+
+    if (Math.random() < chance){
+      const targets = Object.keys(this.room.state).filter(id=>id!==playerId);
+>>>>>>> 0080bf9 (Initial commit)
       if (!targets.length) return;
       const to = targets[Math.floor(Math.random()*targets.length)];
       const id = Math.random().toString(36).slice(2,10);
 
+<<<<<<< HEAD
       // Randomly choose trader or robber (50/50)
       const kind = Math.random() < 0.5 ? 'trader' : 'robber';
 
@@ -1268,19 +1542,46 @@ class AIManager {
         lore: loreMessage,
         ts: Date.now()
       };
+=======
+      const kind = (Math.random() < 0.5) ? 'trader' : 'robber';
+      const loreMessage = generateVisitorLore(playerId, p.civ || 'Unknown');
+
+      if (!this.room.pendingVisits) this.room.pendingVisits = {};
+      this.room.pendingVisits[id] = { id, from: playerId, to, kind, lore: loreMessage, ts: Date.now() };
+>>>>>>> 0080bf9 (Initial commit)
 
       // Mark that a visitor was sent this season (room-wide)
       this.room.lastVisitorSeason = currentSeason;
 
+<<<<<<< HEAD
       // Spend coins
       p.resources.coins -= 5;
 
       // Notify recipient
+=======
+      // Spend coins (server sendVisit uses 10 coins)
+      p.resources.coins -= 10;
+
+      // Track usage
+      this.room.aiVisitorCounts[playerId] = used + 1;
+
+      // Notify recipient immediately
+>>>>>>> 0080bf9 (Initial commit)
       for (const sid of socketsForPlayer(this.room, to)) {
         io.to(sid).emit("visitorOffer", this.room.pendingVisits[id]);
       }
 
+<<<<<<< HEAD
       this.log(`AI ${playerId} dispatched a ${kind} to ${to}.`);
+=======
+      // If recipient is AI, auto-consider the visitor after delay (same behavior as human-initiated visits)
+      const recipient = this.room.state[to];
+      if (recipient?.isAi) {
+        this.considerVisitorOffer(to, this.room.pendingVisits[id]);
+      }
+
+      this.log(`AI ${playerId} dispatched a trader to ${to}. (${this.room.aiVisitorCounts[playerId]}/3)`);
+>>>>>>> 0080bf9 (Initial commit)
       broadcastRoomUpdate(this.room);
     }
   }
@@ -1292,10 +1593,13 @@ class AIManager {
     if (!entries.length) return;
     const p = room.state[playerId]; if (!p) return;
 
+<<<<<<< HEAD
     // Determine current target to assess needs
     const target = this.pickTargetBuilding(p);
     const needMap = Object.assign({ wood:0, rock:0, metal:0, food:0, coins:0 }, (target?.def?.cost||{}));
 
+=======
+>>>>>>> 0080bf9 (Initial commit)
     for (const [offerId, offer] of entries){
       if (!offer || offer.to !== playerId) continue;
       const fromP = room.state[offer.from]; const toP = room.state[offer.to];
@@ -1304,6 +1608,7 @@ class AIManager {
       // Both must have a Move to complete trade
       if (!hasMove(fromP) || !hasMove(toP)) continue;
 
+<<<<<<< HEAD
       const unit = BASE.tradeUnitPrice||{ wood:4, rock:4, metal:4, food:4 };
       const giveValue = (offer.give.amount|0) * (unit[offer.give.type]||4);
       const wantValue = (offer.want.amount|0) * (unit[offer.want.type]||4);
@@ -1329,6 +1634,20 @@ class AIManager {
         if (!has(fromP, offer.give.type, offer.give.amount)) continue;
         if (!has(toP, offer.want.type, offer.want.amount)) continue;
 
+=======
+      // Evaluate strict 3:1 value ratio (what AI receives vs what AI pays)
+      const unit = { wood:1, rock:1, metal:1, food:1, coins:1 };
+      const receiveValue = (offer.give.amount|0) * (unit[offer.give.type]||1);
+      const payValue = (offer.want.amount|0) * (unit[offer.want.type]||1);
+      const ratioOK = payValue>0 ? (receiveValue / payValue) >= 3 : false;
+
+      // Validate resources
+      const has = (pl,t,a)=> (pl.resources[t]||0) >= a;
+      const senderHas = has(fromP, offer.give.type, offer.give.amount);
+      const receiverCanPay = has(toP, offer.want.type, offer.want.amount);
+
+      if (ratioOK && senderHas && receiverCanPay){
+>>>>>>> 0080bf9 (Initial commit)
         consumeMove(fromP);
         consumeMove(toP);
         fromP.resources[offer.give.type]-=offer.give.amount;
@@ -1336,6 +1655,7 @@ class AIManager {
         toP.resources[offer.want.type]-=offer.want.amount;
         fromP.resources[offer.want.type]=(fromP.resources[offer.want.type]||0)+offer.want.amount;
         delete room.pendingTrades[offerId];
+<<<<<<< HEAD
         addGameLog(room, `${offer.from} and ${offer.to} traded: ${offer.give.amount} ${offer.give.type} for ${offer.want.amount} ${offer.want.type}`, "trade");
         fromP.progress = computeProgress(fromP);
         toP.progress = computeProgress(toP);
@@ -1343,16 +1663,70 @@ class AIManager {
         broadcastRoomUpdate(room);
         // Only accept one per consideration step to avoid burning all Moves at once
         break;
+=======
+        addGameLog(room, `${offer.to} accepted a 3:1 trade from ${offer.from}: got ${offer.give.amount} ${offer.give.type} for ${offer.want.amount} ${offer.want.type}`, "trade");
+        fromP.progress = computeProgress(fromP);
+        toP.progress = computeProgress(toP);
+        this.log(`AI ${playerId} accepted trade (>=3:1) from ${offer.from}.`);
+        broadcastRoomUpdate(room);
+        break; // accept only one per consideration
+      } else {
+        // Reject: remove the offer to keep inbox clean
+        delete room.pendingTrades[offerId];
+        addGameLog(room, `${offer.to} rejected trade from ${offer.from} (below 3:1 or insufficient resources).`, "trade");
+        broadcastRoomUpdate(room);
+>>>>>>> 0080bf9 (Initial commit)
       }
     }
   }
 
+<<<<<<< HEAD
+=======
+  // Occasionally propose a simple even trade to another player (equal quantities)
+  maybeOfferEvenTrade(playerId){
+    const room = this.room; if (!room) return;
+    const p = room.state[playerId]; if (!p) return;
+    if ((p.ap|0) < 1) return;
+
+    // Cap number of AI-initiated offers per game to avoid spam
+    if (!room.aiTradeOffers) room.aiTradeOffers = {};
+    const used = room.aiTradeOffers[playerId] || 0;
+    if (used >= 3) return;
+
+    if (Math.random() < 0.06){ // small chance per turn when acting
+      const others = Object.keys(room.state).filter(id=>id!==playerId);
+      if (!others.length) return;
+      const to = others[Math.floor(Math.random()*others.length)];
+      const types = ['wood','rock','metal','food'];
+      const giveType = types[Math.floor(Math.random()*types.length)];
+      let wantType = types[Math.floor(Math.random()*types.length)];
+      if (wantType === giveType) wantType = types[(types.indexOf(wantType)+1)%types.length];
+      const amount = 10 + Math.floor(Math.random()*11); // 10-20
+
+      // Must have enough to give
+      if ((p.resources[giveType]||0) < amount) return;
+
+      // Spend AP via proposeTrade handler (it will validate and spend)
+      const id = Math.random().toString(36).slice(2,10);
+      room.pendingTrades[id] = { id, from:playerId, to, give:{ type:giveType, amount }, want:{ type:wantType, amount }, ts:Date.now() };
+      // Consume one AP manually (bypass socket)
+      p.ap = Math.max(0, (p.ap|0)-1);
+      // Notify target
+      for (const sid of socketsForPlayer(room, to)) io.to(sid).emit("tradeOffer", room.pendingTrades[id]);
+      room.aiTradeOffers[playerId] = used + 1;
+      addGameLog(room, `${playerId} proposed a trade to ${to}: ${amount} ${giveType} for ${amount} ${wantType}`, 'trade');
+      broadcastRoomUpdate(room);
+    }
+  }
+
+>>>>>>> 0080bf9 (Initial commit)
   // Handle incoming visitor offers for AI players
   considerVisitorOffer(playerId, visitor) {
     const room = this.room;
     const p = room.state[playerId];
     if (!p || !p.isAi) return;
 
+<<<<<<< HEAD
     // AI decision logic:
     // - Traders are usually beneficial (+5 coins if accepted)
     // - Robbers are risky (steal coins or resources if accepted)
@@ -1449,16 +1823,133 @@ class AIManager {
 
     // Update state
     broadcastRoomUpdate(room);
+=======
+    // Delay 5 seconds before deciding
+    setTimeout(() => {
+      // Ensure still pending and player exists
+      if (!room || !room.state[playerId]) return;
+      if (!room.pendingVisits || !room.pendingVisits[visitor.id]) return;
+
+      // 50/50 decision for any visitor type
+      const decision = Math.random() < 0.5 ? 'accept' : 'reject';
+      this.log(`AI ${playerId} will ${decision} a ${visitor.kind} from ${visitor.from} after thinking.`);
+
+      const receiver = room.state[playerId];
+      const sender = room.state[visitor.from];
+      if (!receiver || !sender) { delete room.pendingVisits[visitor.id]; return; }
+
+      const notifyWithImage = (pid, msg, type = 'trader') => {
+        let imagePath = '/media/trader.png';
+        if (type === 'robber') imagePath = '/media/robber.png';
+        else if (type === 'spy') imagePath = '/media/spy.png';
+        for (const [sid, pid2] of Object.entries(room.playersBySocket)) {
+          if (pid2 === pid) io.to(sid).emit("visitorOutcome", { message: msg, type, image: imagePath });
+        }
+      };
+
+      if (decision === 'accept') {
+        if (visitor.kind === 'trader') {
+          receiver.resources.coins = (receiver.resources.coins || 0) + 20;
+          sender.resources.coins = (sender.resources.coins || 0) + 20;
+          notifyWithImage(playerId, `Good trade practices! You welcomed ${visitor.from}'s trader and gained 20 Golden Coins.`, 'trader');
+          notifyWithImage(visitor.from, `${playerId} welcomed your trader! You both prosper. You gained 20 Golden Coins.`, 'trader');
+          addGameLog(room, `${playerId} accepted trader from ${visitor.from}. Both gained 20 coins.`, 'trade');
+        } else if (visitor.kind === 'spy') {
+          receiver.resources.coins = (receiver.resources.coins || 0) + 20;
+          const defense = Math.round(Math.max(0, Math.min(1, computeDefense(receiver))) * 100);
+          const resourceKeys = ['wood', 'rock', 'metal', 'food'];
+          const shuffled = resourceKeys.sort(() => Math.random() - 0.5);
+          const res1 = shuffled[0];
+          const res2 = shuffled[1];
+          const res1Amt = receiver.resources[res1] || 0;
+          const res2Amt = receiver.resources[res2] || 0;
+          notifyWithImage(playerId, `Good trade practices! You welcomed ${visitor.from}'s trader and gained 20 Golden Coins.`, 'trader');
+          notifyWithImage(visitor.from, `🕵️ Your spy successfully gathered intelligence on ${playerId}:\n\nDefense: ${defense}%\nResources: ${res1Amt} ${res1}, ${res2Amt} ${res2}`, 'spy');
+          addGameLog(room, `${playerId} accepted trader from ${visitor.from}.`, 'trade');
+        } else {
+          if ((receiver.resources.coins || 0) >= 10) {
+            receiver.resources.coins -= 10;
+            sender.resources.coins = (sender.resources.coins || 0) + 20;  // Get back 10 coins spent + 10 stolen = 20 total
+            const robberStory = ROBBER_LORE[Math.floor(Math.random() * ROBBER_LORE.length)];
+            notifyWithImage(playerId, `You were deceived! What appeared to be a trader was actually a robber in disguise!\n\n${robberStory}`, 'robber');
+            notifyWithImage(visitor.from, `Your robber successfully deceived ${playerId}! ${robberStory}\n\nYou gained 10 Golden Coins from the theft.`, 'robber');
+            addGameLog(room, `${playerId} was deceived by ${visitor.from}'s robber disguised as trader.`, 'military');
+          } else {
+            const keys = ['wood','rock','metal','food'];
+            const options = keys.filter(k => (receiver.resources[k] || 0) > 0);
+            if (options.length){
+              const stoleType = options[Math.floor(Math.random() * options.length)];
+              const stoleAmt = receiver.resources[stoleType] || 0;
+              receiver.resources[stoleType] = 0;
+              sender.resources[stoleType] = (sender.resources[stoleType] || 0) + stoleAmt;
+              sender.resources.coins = (sender.resources.coins || 0) + 5;
+              notifyWithImage(playerId, `You were deceived! A robber stole all your ${stoleType} (${stoleAmt}).`, 'robber');
+              notifyWithImage(visitor.from, `Your robber stole ${stoleAmt} ${stoleType} and gained +5 coins.`, 'robber');
+              addGameLog(room, `${playerId} admitted ${visitor.from}'s robber. Lost ${stoleAmt} ${stoleType}; ${visitor.from} gained it + 5 coins.`, 'military');
+            } else {
+              sender.resources.coins = (sender.resources.coins || 0) + 5;
+              notifyWithImage(playerId, `A disguised robber found nothing to steal.`, 'robber');
+              notifyWithImage(visitor.from, `Robber found nothing to steal but you gained +5 coins.`, 'robber');
+              addGameLog(room, `${playerId} admitted ${visitor.from}'s robber but had nothing to steal. ${visitor.from} gained 5 coins.`, 'military');
+            }
+          }
+        }
+      } else {
+        if ((visitor.disguisedAs || visitor.kind) === 'trader') {
+          sender.resources.coins = (sender.resources.coins || 0) + 20;
+          notifyWithImage(playerId, `You lost good business, ${visitor.from}! Your opponent will benefit. They will take 20 Golden Coins back to ${visitor.from}.`, 'trader');
+          notifyWithImage(visitor.from, `${playerId} rejected your trader. Your trader returns with 20 Golden Coins profit.`, 'trader');
+          addGameLog(room, `${playerId} rejected trader from ${visitor.from}. ${visitor.from} gained 20 coins.`, 'trade');
+        } else if (visitor.kind === 'spy') {
+          notifyWithImage(playerId, `Suspicious visitor turned away.`, 'spy');
+          notifyWithImage(visitor.from, `${playerId} rejected your spy. No intelligence gained.`, 'spy');
+          addGameLog(room, `${playerId} rejected ${visitor.from}'s spy.`, 'military');
+        } else {
+          notifyWithImage(playerId, `You turned away a suspicious visitor.`, 'robber');
+          notifyWithImage(visitor.from, `${playerId} rejected your robber.`, 'robber');
+          addGameLog(room, `${playerId} rejected ${visitor.from}'s robber.`, 'military');
+        }
+      }
+
+      delete room.pendingVisits[visitor.id];
+      broadcastRoomUpdate(room);
+
+      // If it's still this AI's turn after resolving the visitor, resume the AI turn
+      try {
+        if (this.room && this.room.active && this.room.turnOf === playerId) {
+          setTimeout(() => {
+            if (this.room && this.room.active && this.room.turnOf === playerId) {
+              this.playTurn(this.room, playerId);
+            }
+          }, 100);
+        }
+      } catch(e) {}
+    }, 5000);
+>>>>>>> 0080bf9 (Initial commit)
   }
 
   playTurn(room, playerId) {
     const player = this.room.state[playerId];
     if (!player || !player.isAi) return;
 
+<<<<<<< HEAD
     this.log(`AI ${playerId} is starting its turn in state: ${this.currentState}`);
     // Out-of-band diplomacy: maybe send a visitor at start of turn
     this.maybeSendVisitor(playerId);
     // Consider pending trades sent to AI
+=======
+    // Initialize per-age quotas and tracking
+    if (!player.aiPlan) player.aiPlan = { trainedSoldiers:{ Wood:0, Stone:0, Modern:0 }, wars:{ Wood:0, Stone:0, Modern:0 } };
+    const TRAIN_TARGET_SOLDIERS = { Wood:2, Stone:4, Modern:8 };
+    const WAR_MAX = { Wood:1, Stone:2, Modern:3 };
+    const FOOD_TARGET = { Wood:25, Stone:50, Modern:100 };
+
+    this.log(`AI ${playerId} is starting its turn in state: ${this.currentState}`);
+    // Diplomacy: maybe send a visitor and propose a simple resource swap
+    this.maybeSendVisitor(playerId);
+    this.maybeOfferEvenTrade(playerId);
+    // Consider pending trades sent to AI (uses 3:1 rule)
+>>>>>>> 0080bf9 (Initial commit)
     this.considerPendingTrades(playerId);
     if (Math.random() < 0.1) this.sendChatMessage(playerId);
 
@@ -1468,6 +1959,7 @@ class AIManager {
       safety += 1;
       const beforeSnap = this.snapshotPlayer(player);
 
+<<<<<<< HEAD
       // Priority: build towards 2 buildings in current age, then advance; spend AP only on gathering to reach next build
       const buildable = this.getBuildableBuildings(player);
       if (buildable.length > 0) {
@@ -1499,23 +1991,143 @@ class AIManager {
           // Fallback: balanced gather
           this.log(`AI ${playerId} is gathering resources.`);
           this.gatherResources(room, player, playerId);
+=======
+      // Try to advance age if eligible (no AP cost)
+      this.performAction(this.room, playerId, "advance", {});
+
+      // Ensure food safety: never let food drop below target for current age
+      const minFood = FOOD_TARGET[player.age] || 25;
+      if ((player.resources.food|0) < minFood) {
+        this.log(`AI ${playerId} is gathering food to maintain minimum (${minFood}).`);
+        this.performAction(this.room, playerId, "gather", { type: 'food' });
+      } else {
+        // Secondary: soldiers (train quotas) and limited wars per age
+        const canAct = (player.ap|0) > 0;
+        if (canAct && !(player.raid && player.raid.active)) {
+          const age = player.age;
+
+          // Attempt training until soldier-count target per age is met
+          const trainedSoFarSoldiers = player.aiPlan.trainedSoldiers[age]||0;
+          const neededSoldiers = TRAIN_TARGET_SOLDIERS[age]||0;
+          if (trainedSoFarSoldiers < neededSoldiers) {
+            const capNow = soldierCap(player);
+            const current = Math.max(0, player.soldiers|0);
+            const tConf = BASE.soldierTraining[age] || BASE.soldierTraining.Wood;
+            const batchSize = tConf.batchSize || 2;
+            const missing = Math.max(0, capNow - current);
+            const canAff = canAfford(player.resources, tConf.cost||{});
+            const willStayAboveMin = ((player.resources.food|0) - (tConf.cost?.food||0)) >= minFood;
+            if ((current < capNow) && (missing >= batchSize)) {
+              if (!canAff) {
+                // Raise coins if needed; otherwise gather food to enable training later
+                this.tryRaiseCoins(player, tConf.cost||{});
+              }
+              if (canAfford(player.resources, tConf.cost||{}) && willStayAboveMin) {
+                this.log(`AI ${playerId} is training soldiers (target soldiers).`);
+                this.performAction(this.room, playerId, "train", { batches: 1 });
+                player.aiPlan.trainedSoldiers[age] = (player.aiPlan.trainedSoldiers[age]||0) + batchSize;
+              }
+            } else if (missing < batchSize) {
+              // Not enough capacity for a batch — build a soldierCap structure in current age if affordable
+              const ageDefs = BUILDINGS[age] || {};
+              let pickName = null, pickCostSum = Infinity;
+              for (const [bName, bDef] of Object.entries(ageDefs)){
+                if (player.structures[bName]) continue;
+                if (!bDef?.effect?.soldierCap) continue;
+                const cost = bDef.cost || {};
+                if (!canAfford(player.resources, cost)) continue;
+                const sum = Object.values(cost).reduce((a,b)=>a+(b||0),0);
+                if (sum < pickCostSum){ pickCostSum = sum; pickName = bName; }
+              }
+              if (pickName){
+                this.log(`AI ${playerId} is building ${pickName} to increase army cap.`);
+                this.performAction(this.room, playerId, "build", { name: pickName });
+              }
+            }
+          } else {
+            // Training target met; consider war up to per-age maximum, regardless of success chance
+            const warsSoFar = player.aiPlan.wars[age]||0;
+            const warMax = WAR_MAX[age]||0;
+            if (warsSoFar < warMax) {
+              const available = Math.max(0, player.soldiers|0);
+              const minCommit = Math.max(3, BASE.raid.minCommit|0);
+              if (available >= minCommit) {
+                // Commit a reasonable portion of the army (up to 70%), at least minCommit
+                const chosen = Math.max(minCommit, Math.floor(available * 0.5));
+                this.log(`AI ${playerId} is launching a raid with ${chosen} soldiers (quota, ignoring success rate).`);
+                this.performAction(this.room, playerId, "raid", { commit: chosen });
+                player.aiPlan.wars[age] = warsSoFar + 1;
+              }
+            }
+          }
+        }
+
+        // Economy priorities: build towards age goals; else gather towards next target
+        const buildable = this.getBuildableBuildings(player);
+        if (buildable.length > 0) {
+          const building = buildable[0];
+          this.log(`AI ${playerId} is building ${building.name}.`);
+          this.performAction(this.room, playerId, "build", { name: building.name });
+        } else {
+          const target = this.pickTargetBuilding(player);
+          if (target){
+            const needed = this.mostNeededResourceFor(target.def.cost, player.resources);
+            if (needed === 'coins'){
+              const raised = this.tryRaiseCoins(player, target.def.cost);
+              if (!raised){
+                const resources = ["wood","rock","metal","food"];
+                const type = resources[Math.floor(Math.random()*resources.length)];
+                this.log(`AI ${playerId} is gathering ${type} (fallback).`);
+                this.performAction(this.room, playerId, "gather", { type });
+              }
+            } else {
+              this.log(`AI ${playerId} is gathering ${needed} for ${target.name}.`);
+              this.performAction(this.room, playerId, "gather", { type: needed });
+            }
+          } else {
+            this.log(`AI ${playerId} is gathering resources.`);
+            this.gatherResources(room, player, playerId);
+          }
+>>>>>>> 0080bf9 (Initial commit)
         }
       }
 
       // Refresh player ref (state mutates synchronously)
       const afterSnap = this.snapshotPlayer(player);
       this.logDelta(playerId, beforeSnap, afterSnap, 'action result');
+<<<<<<< HEAD
       // If no AP was spent and no free action changed state, attempt a gather to ensure progress
       if (this.room.turnOf !== playerId) break;
+=======
+      
+      // Check if turn changed (action may have auto-ended turn)
+      if (this.room.turnOf !== playerId) break;
+      
+      // If no AP was spent and no free action changed state, attempt a gather to ensure progress
+>>>>>>> 0080bf9 (Initial commit)
       if ((afterSnap.ap|0) === (beforeSnap.ap|0)) {
         // Force a gather to drain one Move
         this.gatherResources(room, player, playerId);
         const afterForce = this.snapshotPlayer(player);
         this.logDelta(playerId, afterSnap, afterForce, 'forced gather');
+<<<<<<< HEAD
       }
     }
     // If loop ended while still AI's turn, and AP is 0, the core handler will auto-end.
     // Log turn end condition for clarity.
+=======
+        
+        // Check again if turn changed after forced gather
+        if (this.room.turnOf !== playerId) break;
+        
+        // If forced gather also didn't consume AP, something is wrong - break to prevent infinite loop
+        if ((afterForce.ap|0) === (afterSnap.ap|0)) {
+          this.log(`AI ${playerId} stuck - forced gather didn't work, breaking loop`);
+          break;
+        }
+      }
+    }
+>>>>>>> 0080bf9 (Initial commit)
     if (this.room.turnOf === playerId) {
       const p = this.room.state[playerId];
       if ((p.ap|0) === 0) {
@@ -1534,6 +2146,7 @@ class AIManager {
 
   getBuildableBuildings(player) {
     const buildableBuildings = [];
+<<<<<<< HEAD
     for (const age of AGES) {
       if (AGES.indexOf(age) <= AGES.indexOf(player.age)) {
         for (const buildingName in BUILDINGS[age]) {
@@ -1543,12 +2156,21 @@ class AIManager {
               buildableBuildings.push({ name: buildingName, ...building });
             }
           }
+=======
+    const age = player.age;
+    for (const buildingName in (BUILDINGS[age] || {})) {
+      if (!player.structures[buildingName]) {
+        const building = BUILDINGS[age][buildingName];
+        if (canAfford(player.resources, building.cost)) {
+          buildableBuildings.push({ name: buildingName, ...building });
+>>>>>>> 0080bf9 (Initial commit)
         }
       }
     }
     return buildableBuildings;
   }
 
+<<<<<<< HEAD
   canAdvance(player) {
     const idx = AGES.indexOf(player.age);
     if (idx >= AGES.length - 1) return false;
@@ -1560,6 +2182,8 @@ class AIManager {
     return false;
   }
 
+=======
+>>>>>>> 0080bf9 (Initial commit)
   trade(player, playerId) {
     const resources = ["wood", "rock", "metal", "food"];
     const resourceToSell = resources[Math.floor(Math.random() * resources.length)];
@@ -1596,7 +2220,36 @@ class AIManager {
   }
 
   sendChatMessage(playerId) {
+<<<<<<< HEAD
     const message = this.chatMessages[Math.floor(Math.random() * this.chatMessages.length)];
+=======
+    const p = this.room.state[playerId];
+    const civ = p?.civ || 'Romans';
+    const CIV_AI_CHAT = {
+      Romans: [
+        "The Forum thrives on good trade. Make me an offer worthy of Rome.",
+        "Our engineers are busy. Stone and order will raise an empire.",
+        "Coins flow into the Treasury; perhaps a fair exchange benefits us both."
+      ],
+      Vikings: [
+        "Axes rest, for now. Trade well and we’ll drink to it.",
+        "Our longhouse grows. Got rock for my timber?",
+        "Storm’s calm today—good time to bargain."
+      ],
+      Mongols: [
+        "Swift deals, swift gains. Let’s swap metal for rock.",
+        "The steppe teaches speed. Answer quickly, friend.",
+        "Our forges burn hot—send stone and we both prosper."
+      ],
+      Slavs: [
+        "The forest provides; we honor fair trade.",
+        "Stone for wood? The village will remember your kindness.",
+        "We build steady—offer what you can spare."
+      ]
+    };
+    const pool = CIV_AI_CHAT[civ] || CIV_AI_CHAT.Romans;
+    const message = pool[Math.floor(Math.random() * pool.length)];
+>>>>>>> 0080bf9 (Initial commit)
     this.room.chat.push({ player: playerId, text: message, ts: Date.now() });
     const latest = this.room.chat.slice(-6).reverse();
     io.to(this.room.code).emit("chatUpdate", latest);
@@ -1722,9 +2375,15 @@ function createRoom(code, performAction){
   return room;
 }
 function socketsForPlayer(room, playerId){ return Object.entries(room.playersBySocket).filter(([sid,pid])=>pid===playerId).map(([sid])=>sid); }
+<<<<<<< HEAD
 function ensurePlayer(room, playerId, color){
   const isNewPlayer = !room.state[playerId];
   if (isNewPlayer) room.state[playerId]=initialPlayer(color);
+=======
+function ensurePlayer(room, playerId, color, isAi = false, civ = null){
+  const isNewPlayer = !room.state[playerId];
+  if (isNewPlayer) room.state[playerId]=initialPlayer(color, isAi, civ);
+>>>>>>> 0080bf9 (Initial commit)
   if(!room.order.includes(playerId)) {
     room.order.push(playerId);
     writeSessionLog(room, `PLAYER_JOINED: ${playerId} | Current order: [${room.order.join(', ')}]`);
@@ -1885,6 +2544,37 @@ function getRaidLore(civ, age, type){
   return icon + story;
 }
 
+<<<<<<< HEAD
+=======
+function getWarOutcomeLore(civ, successChance) {
+  // Normalize civ
+  const normalizedCiv = civ || 'Romans';
+  const civLore = WAR_OUTCOME_LORE[normalizedCiv];
+  
+  if (!civLore) return null;
+  
+  // Determine success bracket
+  let bracket = 'moderate';
+  if (successChance <= 0.15) {
+    bracket = 'veryUnlikely';
+  } else if (successChance <= 0.35) {
+    bracket = 'unlikely';
+  } else if (successChance <= 0.65) {
+    bracket = 'moderate';
+  } else if (successChance <= 0.80) {
+    bracket = 'likely';
+  } else {
+    bracket = 'veryLikely';
+  }
+  
+  const stories = civLore[bracket] || [];
+  if (stories.length === 0) return null;
+  
+  // Pick a random story from the bracket
+  return stories[Math.floor(Math.random() * stories.length)];
+}
+
+>>>>>>> 0080bf9 (Initial commit)
 function collapseStructures(p, count){
   const removed=[];
   const candidates = Object.keys(p.structures).filter(name=>{
@@ -2110,6 +2800,16 @@ if (roll <= successChance){
 
     notifyPlayer(room, pid, msg);
 
+<<<<<<< HEAD
+=======
+    // Determine image and add defeat story if failed
+    let displayImage = outcome === "success" ? "/media/Dispatched.png" : "/media/defeat.png";
+    let defeatStory = "";
+    if (outcome === "failure") {
+      defeatStory = DEFEAT_LORE[Math.floor(Math.random() * DEFEAT_LORE.length)];
+    }
+
+>>>>>>> 0080bf9 (Initial commit)
     // Broadcast a full-screen return notification to all players (result only)
     io.to(room.code).emit("raidReturn", {
       playerId: pid,
@@ -2120,7 +2820,12 @@ if (roll <= successChance){
       age: p.age,
       civ: p.civ,
       lore,
+<<<<<<< HEAD
       image: "/media/Dispatched.png"
+=======
+      defeatStory,
+      image: displayImage
+>>>>>>> 0080bf9 (Initial commit)
     });
 
     reports.push({ playerId: pid, outcome, committed, casualties, loot, lore });
@@ -2144,6 +2849,7 @@ function resolveSeasonEnd(room){
   const highestAgeIdx = Math.max(0, ...Object.values(room.state).map(p=>AGES.indexOf(p.age)));
   const attackReports = [];
 
+<<<<<<< HEAD
   // Raid system: 20% chance of ONE raid per season
   // If a raid already happened this season (natural or mercenary), no more raids
   const raidAlreadyHappenedThisSeason = room.raidTracking.lastRaidSeason === currentSeason;
@@ -2153,6 +2859,23 @@ function resolveSeasonEnd(room){
   } else {
     // 25% chance of raid
     const raidChance = 0.25;
+=======
+  // Raid system: Skip first season only, then 20% chance per season
+  // If a raid already happened this season (natural or mercenary), no more raids
+  const raidAlreadyHappenedThisSeason = room.raidTracking.lastRaidSeason === currentSeason;
+  
+  // Skip first season only (season 1), start checking from season 2
+  const seasonsElapsed = room.seasonsElapsed || 0;
+  const raidsDisabledFirstSeason = seasonsElapsed < 2; // Block only season 1 (when seasonsElapsed = 1)
+
+  if (raidAlreadyHappenedThisSeason) {
+    writeSessionLog(room, `RAID_SKIP: Year ${currentYear}, Season ${currentSeason}, Reason: Raid already occurred this season`);
+  } else if (raidsDisabledFirstSeason) {
+    writeSessionLog(room, `RAID_SKIP: Year ${currentYear}, Season ${currentSeason}, Reason: No raids during first season (season ${seasonsElapsed})`);
+  } else {
+    // 20% chance of raid starting from season 2
+    const raidChance = 0.20;
+>>>>>>> 0080bf9 (Initial commit)
     const raidRoll = Math.random();
     const willRaid = raidRoll < raidChance;
 
@@ -2402,8 +3125,19 @@ if (!room.firstTurnEver) {
     io.to(sid).emit("turnFlag",{ yourTurn: room.active && room.turnOf===pid });
   }
 
+<<<<<<< HEAD
   if (p.isAi) {
     room.aiManager.playTurn(room, playerId);
+=======
+if (p.isAi) {
+    const delay = 1000 + Math.floor(Math.random()*1000); // 1-2 seconds
+    setTimeout(() => {
+      // Ensure it's still this AI's turn and game is active
+      if (room.active && room.turnOf === playerId) {
+        room.aiManager.playTurn(room, playerId);
+      }
+    }, delay);
+>>>>>>> 0080bf9 (Initial commit)
   }
 }
 function nextTurn(room){
@@ -2426,6 +3160,55 @@ function nextTurn(room){
   p.bankedAp = 0;
   startOfTurn(room, next);
 }
+<<<<<<< HEAD
+=======
+// =================== Starving Army Mechanic ===================
+
+function applyStarvingMechanic(room, playerId) {
+  const p = room.state[playerId];
+  if (!p) return;
+
+  // Only apply if player has 0 food
+  if ((p.resources.food || 0) > 0) return;
+
+  // 50% chance
+  if (Math.random() > 0.5) return;
+
+  const currentSoldiers = Math.max(0, p.soldiers || 0);
+  if (currentSoldiers === 0) return; // No soldiers to lose
+
+  // Calculate casualty range based on age
+  let minCasualties, maxCasualties;
+  switch(p.age) {
+    case 'Wood': minCasualties = 1; maxCasualties = 3; break;
+    case 'Stone': minCasualties = 3; maxCasualties = 9; break;
+    case 'Modern': minCasualties = 9; maxCasualties = 18; break;
+    default: minCasualties = 1; maxCasualties = 3;
+  }
+
+  const casualtyRange = maxCasualties - minCasualties + 1;
+  const casualties = minCasualties + Math.floor(Math.random() * casualtyRange);
+  const actualCasualties = Math.min(casualties, currentSoldiers); // Don't lose more than available
+
+  p.soldiers = currentSoldiers - actualCasualties;
+
+  // Notify the player
+  for (const [sid, pid] of Object.entries(room.playersBySocket)) {
+    if (pid === playerId) {
+      io.to(sid).emit("visitorOutcome", {
+        message: `Your army is starving! Feed them or lose them. You lost ${actualCasualties} soldiers due to starvation.`,
+        type: 'starving',
+        image: '/media/starving.png'
+      });
+    }
+  }
+
+  // Log the event
+  addGameLog(room, `${playerId}'s army lost ${actualCasualties} soldiers due to starvation!`, "military");
+  writeSessionLog(room, `STARVATION: ${playerId} lost ${actualCasualties} soldiers (had ${currentSoldiers}, now ${p.soldiers})`);
+}
+
+>>>>>>> 0080bf9 (Initial commit)
 function endTurn(room, playerId, reasonToast){
   // Guard against double-ending the same turn
   if (room.turnOf !== playerId) {
@@ -2463,6 +3246,11 @@ if (saved>0){
     }
   }catch(e){}
   try{ trackWealth(room, p, playerId); }catch(e){}
+<<<<<<< HEAD
+=======
+  // Apply starving mechanic BEFORE advancing turn
+  applyStarvingMechanic(room, playerId);
+>>>>>>> 0080bf9 (Initial commit)
   room.statistics.totalTurns = (room.statistics.totalTurns||0) + 1;
   nextTurn(room);
 }
@@ -2492,6 +3280,11 @@ if (saved>0){
     writeSessionLog(room, `  → Banked ${actualSaved} AP (total banked: ${p.bankedAp})`);
   }
   try{ trackWealth(room, p, playerId); }catch(e){}
+<<<<<<< HEAD
+=======
+  // Apply starving mechanic BEFORE advancing turn
+  applyStarvingMechanic(room, playerId);
+>>>>>>> 0080bf9 (Initial commit)
   room.statistics.totalTurns = (room.statistics.totalTurns||0) + 1;
   nextTurn(room);
 }
@@ -2535,6 +3328,19 @@ const performAction = (code, room, playerId, action, payload) => {
     const p=room.state[playerId];
     let turnChanged = false; // guard to avoid double end-turns within one action
 
+<<<<<<< HEAD
+=======
+    // Block acting if there is a pending visitor for this player (cannot ignore visitor)
+    try{
+      const pending = room.pendingVisits || {};
+      const hasBlockingVisit = Object.values(pending).some(v => v && v.to === playerId);
+      if (hasBlockingVisit && action !== 'resolveVisit'){
+        for (const [sid,pid] of Object.entries(room.playersBySocket)) if (pid===playerId) io.to(sid).emit("toast",{ text:"Decide the visitor at your gate first." });
+        return;
+      }
+    }catch(e){}
+
+>>>>>>> 0080bf9 (Initial commit)
     const spendAp = (n) => { if(p.ap<n) { return false; } p.ap-=n; return true; };
 
     switch(action){
@@ -2605,6 +3411,10 @@ case "train": {
         }
     
         if(!canAfford(p.resources, def.cost)) return;
+<<<<<<< HEAD
+=======
+        if(!spendAp(1)) return; // Building costs 1 Move
+>>>>>>> 0080bf9 (Initial commit)
         payCost(p.resources, def.cost);
         p.structures[name]={ level:1 };
         if (def.effect?.soldiers) p.soldiers = Math.min(soldierCap(p), (p.soldiers||0) + def.effect.soldiers);
@@ -2655,6 +3465,16 @@ case "train": {
         addPersonalLog(room, playerId, `Went to war with ${commit} soldiers`, "military");
         if (p.stats) p.stats.raidsLaunched = (p.stats.raidsLaunched||0) + 1;
 
+<<<<<<< HEAD
+=======
+        // Generate war outcome lore message for the initiating player
+        const successChance = Math.min(0.90, Math.max(0.05, computeRaidPower(p, commit)));
+        const warLore = getWarOutcomeLore(p.civ, successChance);
+        if (warLore) {
+          notifyPlayer(room, playerId, `⚔️ War Forecast:\n\n${warLore}`);
+        }
+
+>>>>>>> 0080bf9 (Initial commit)
         // Do NOT broadcast any dispatch/raid initiated messages anymore.
         break;
       }
@@ -2669,6 +3489,7 @@ case "train": {
         if (info.level >= BASE.upgradeMax) return;
         if (!spendAp(1)) return;
 
+<<<<<<< HEAD
         // Upgrade probability: Level 1->2 = 100%, Level 2->3 = 50%, Level 3 = 25%
         const level = info.level;
         const successChance = level === 1 ? 1.0 : (level === 2 ? 0.50 : 0.25);
@@ -2685,6 +3506,14 @@ if (upgraded){
           socket.emit("toast", { text: `❌ ${name} upgrade failed (${pct}% chance)` });
           addPersonalLog(room, playerId, `Upgrade failed for ${name} (${pct}% chance)`, "building");
         }
+=======
+        // Always succeed: upgrade to next level (same AP cost)
+        info.level = Math.min(BASE.upgradeMax, info.level + 1);
+        socket.emit("toast", { text: `✅ ${name} upgraded to Level ${info.level}! (+1 yield)` });
+        addPersonalLog(room, playerId, `Upgraded ${name} to level ${info.level}`, "building");
+        if (p.stats) p.stats.buildingsUpgraded = (p.stats.buildingsUpgraded||0) + 1;
+        p.progress = computeProgress(p);
+>>>>>>> 0080bf9 (Initial commit)
         break;
       }
       case "trade": {
@@ -2792,7 +3621,10 @@ Available Commands:
 
     case '/kick': {
       // /kick <player>
+<<<<<<< HEAD
       if (room.host !== playerId) { socket.emit('toast', { text: 'Only host can kick.' }); break; }
+=======
+>>>>>>> 0080bf9 (Initial commit)
       if (args.length < 2) { socket.emit('toast', { text: 'Usage: /kick <player>' }); break; }
       const targetName = args.slice(1).join(' ');
       const targetId = Object.keys(room.state).find(id => id.toLowerCase() === targetName.toLowerCase());
@@ -2804,6 +3636,22 @@ Available Commands:
       break;
     }
 
+<<<<<<< HEAD
+=======
+    case '/close': {
+      // Close the current room (anyone can invoke)
+      const code = Array.from(ROOMS.entries()).find(([,r]) => r && r.playersBySocket && Object.values(r.playersBySocket).includes(playerId))?.[0];
+      if (!code) { socket.emit('toast', { text: 'No active room found to close.' }); break; }
+      const r = ROOMS.get(code);
+      if (r){
+        for (const [sid] of Object.entries(r.playersBySocket)) io.to(sid).emit('toast', { text: 'Room closed by command.' });
+        for (const [sid] of Object.entries(r.playersBySocket)) io.to(sid).emit('kicked');
+        ROOMS.delete(code);
+      }
+      break;
+    }
+
+>>>>>>> 0080bf9 (Initial commit)
     case '/restart': {
       if (room.host !== playerId) { socket.emit('toast', { text: 'Only host can restart.' }); break; }
       // Reuse restart logic
@@ -3065,7 +3913,11 @@ io.on("connection",(socket)=>{
     const list = room?.pendingVisits?.[playerId]||[];
     return Array.isArray(list) && list.length>0;
   };
+<<<<<<< HEAD
   socket.on("createRoom", ({ code, playerId, color, civ, addAiPlayer }) => {
+=======
+  socket.on("createRoom", ({ code, playerId, color, civ, presetAIs }) => {
+>>>>>>> 0080bf9 (Initial commit)
     code=(code||"").toUpperCase().slice(0,6)||Math.random().toString(36).slice(2,8).toUpperCase();
     const room=createRoom(code, performAction.bind(null, code));
     room.playersBySocket[socket.id]=playerId;
@@ -3075,6 +3927,7 @@ io.on("connection",(socket)=>{
     if (civ && CIVS[civ]) room.state[playerId].civ = civ;
     socket.join(code);
 
+<<<<<<< HEAD
     if (addAiPlayer) {
       const aiName = AI_NAMES.find((name) => !room.state[name]);
       if (aiName) {
@@ -3083,6 +3936,35 @@ io.on("connection",(socket)=>{
         room.state[aiName].ready = true;
       }
     }
+=======
+    // If preset AIs are provided, add them now (civ/color from client)
+    try{
+      const normalizeCiv = (name) => {
+        if (!name) return null;
+        const keys = Object.keys(CIVS||{});
+        const found = keys.find(k => k.toLowerCase() === String(name).trim().toLowerCase());
+        return found || null;
+      };
+      const normalizeColor = (name) => {
+        const allowed = ['blue','red','green','yellow','purple','orange','teal','pink','cyan','gray'];
+        const n = String(name||'').trim().toLowerCase();
+        return allowed.includes(n) ? n : 'gray';
+      };
+      if (Array.isArray(presetAIs)){
+        presetAIs.forEach(ai => {
+          const civPick = normalizeCiv(ai?.civ) || randomCiv();
+          const colorPick = normalizeColor(ai?.color);
+          const aiName = generateAiName(room, civPick);
+          ensurePlayer(room, aiName, colorPick, true, civPick);
+          room.state[aiName].color = colorPick;
+          room.state[aiName].isAi = true;
+          room.state[aiName].ready = true;
+          room.state[aiName].civ = civPick;
+          addGameLog(room, `AI added: ${aiName} — Civ: ${room.state[aiName].civ}, Color: ${room.state[aiName].color}`, 'command');
+        });
+      }
+    }catch(e){}
+>>>>>>> 0080bf9 (Initial commit)
 
     broadcastRoomUpdate(room);
   });
@@ -3127,6 +4009,19 @@ io.on("connection",(socket)=>{
     const p=room.state[playerId];
     let turnChanged = false; // guard to avoid double end-turns within one action
 
+<<<<<<< HEAD
+=======
+    // Block acting if there is a pending visitor for this player (cannot ignore visitor)
+    try{
+      const pending = room.pendingVisits || {};
+      const hasBlockingVisit = Object.values(pending).some(v => v && v.to === playerId);
+      if (hasBlockingVisit && action !== 'resolveVisit'){
+        for (const [sid,pid] of Object.entries(room.playersBySocket)) if (pid===playerId) io.to(sid).emit("toast",{ text:"Decide the visitor at your gate first." });
+        return;
+      }
+    }catch(e){}
+
+>>>>>>> 0080bf9 (Initial commit)
     const spendAp = (n) => { if(p.ap<n) { return false; } p.ap-=n; return true; };
 
     switch(action){
@@ -3200,6 +4095,10 @@ p.soldiers = Math.min(cap, current + gained);
         }
 
         if(!canAfford(p.resources, def.cost)) return;
+<<<<<<< HEAD
+=======
+        if(!spendAp(1)) return; // Building costs 1 Move
+>>>>>>> 0080bf9 (Initial commit)
         payCost(p.resources, def.cost);
         p.structures[name]={ level:1 };
         if (def.effect?.soldiers) p.soldiers = Math.min(soldierCap(p), (p.soldiers||0) + def.effect.soldiers);
@@ -3286,6 +4185,7 @@ p.soldiers = Math.min(cap, current + gained);
         if (info.level >= BASE.upgradeMax) return;
         if (!spendAp(1)) return;
 
+<<<<<<< HEAD
         // Upgrade probability: Level 1->2 = 100%, Level 2->3 = 50%, Level 3 = 25%
         const level = info.level;
         const successChance = level === 1 ? 1.0 : (level === 2 ? 0.50 : 0.25);
@@ -3300,6 +4200,13 @@ if (upgraded){
           const pct = Math.round(successChance*100);
           addPersonalLog(room, playerId, `Upgrade failed for ${name} (${pct}% chance)`, "building");
         }
+=======
+        // Always succeed upgrade to next level
+        info.level = Math.min(BASE.upgradeMax, info.level + 1);
+        addPersonalLog(room, playerId, `Upgraded ${name} to level ${info.level}`, "building");
+        if (p.stats) p.stats.buildingsUpgraded = (p.stats.buildingsUpgraded||0) + 1;
+        p.progress = computeProgress(p);
+>>>>>>> 0080bf9 (Initial commit)
         break;
       }
       case "trade": {
@@ -3527,9 +4434,18 @@ case "advance": {
     const disguisedAs = visit.disguisedAs || actualKind; // what receiver sees
 
     const notifyWithImage = (pid, msg, type = 'trader') => {
+<<<<<<< HEAD
       for (const [sid, pid2] of Object.entries(room.playersBySocket)) {
         if (pid2 === pid) {
           io.to(sid).emit("visitorOutcome", { message: msg, type, image: '/media/trader.png' });
+=======
+      let imagePath = '/media/trader.png';
+      if (type === 'robber') imagePath = '/media/robber.png';
+      else if (type === 'spy') imagePath = '/media/spy.png';
+      for (const [sid, pid2] of Object.entries(room.playersBySocket)) {
+        if (pid2 === pid) {
+          io.to(sid).emit("visitorOutcome", { message: msg, type, image: imagePath });
+>>>>>>> 0080bf9 (Initial commit)
         }
       }
     };
@@ -3560,12 +4476,21 @@ case "advance": {
       } else if (actualKind === 'robber') {
         // Robber: receiver gets 20 coins (thinks it's trader), sender steals 10 coins
         receiver.resources.coins -= 10; // Net +10 (got 20, lost 10)
+<<<<<<< HEAD
         sender.resources.coins = (sender.resources.coins || 0) + 30; // Net +20 (spent 10, gained 30)
 
         const lore = `${visit.from}'s envoy seemed trustworthy at first, sharing tales of distant markets and promising mutual prosperity. You welcomed them with open arms, only to discover too late that their honeyed words masked treacherous intent. While you were distracted by their charm, they made off with 10 Golden Coins from your coffers!`;
 
         notifyWithImage(playerId, `You were deceived! What appeared to be a trader was actually a robber in disguise!\n\n${lore}\n\nNet result: +10 coins (gained 20, lost 10)`, 'robber');
         notifyWithImage(visit.from, `Your robber successfully deceived ${playerId}! They welcomed your disguised robber as a trader, and you stole 10 coins. You gained 30 coins total (20 trade bonus + 10 stolen).`, 'robber');
+=======
+        sender.resources.coins = (sender.resources.coins || 0) + 20;  // Get back 10 coins spent + 10 stolen = 20 total
+
+        const robberStory = ROBBER_LORE[Math.floor(Math.random() * ROBBER_LORE.length)];
+
+        notifyWithImage(playerId, `You were deceived! What appeared to be a trader was actually a robber in disguise!\n\n${robberStory}`, 'robber');
+        notifyWithImage(visit.from, `Your robber successfully deceived ${playerId}! ${robberStory}\n\nYou gained 10 Golden Coins from the theft.`, 'robber');
+>>>>>>> 0080bf9 (Initial commit)
         addGameLog(room, `${playerId} was deceived by ${visit.from}'s robber disguised as trader.`, "military");
       }
     } else {
@@ -3696,6 +4621,7 @@ fromP.resources[offer.want.type]=(fromP.resources[offer.want.type]||0)+offer.wan
     }
   });
 
+<<<<<<< HEAD
   socket.on("addAiPlayer", ({ code }) => {
     const room = ROOMS.get(code);
     if (!room) return socket.emit("toast", { text: "Room not found." });
@@ -3707,6 +4633,37 @@ fromP.resources[offer.want.type]=(fromP.resources[offer.want.type]||0)+offer.wan
     ensurePlayer(room, aiName, "gray", true);
     room.state[aiName].isAi = true;
     room.state[aiName].ready = true;
+=======
+socket.on("addAiPlayer", ({ code, color, civ }) => {
+const room = ROOMS.get(code);
+    if (!room) return socket.emit("toast", { text: "Room not found." });
+    if (room.order.length >= 8) return socket.emit("toast", { text: "Room is full." });
+    const normalizeCiv = (name) => {
+      if (!name) return null;
+      const keys = Object.keys(CIVS||{});
+      const found = keys.find(k => k.toLowerCase() === String(name).trim().toLowerCase());
+      return found || null;
+    };
+    const normalizeColor = (name) => {
+      const allowed = ['blue','red','green','yellow','purple','orange','teal','pink','cyan','gray'];
+      const n = String(name||'').trim().toLowerCase();
+      return allowed.includes(n) ? n : 'gray';
+    };
+    const civPick = normalizeCiv(civ) || randomCiv();
+    const colorPick = normalizeColor(color);
+
+    const aiName = generateAiName(room, civPick);
+
+    ensurePlayer(room, aiName, colorPick, true, civPick);
+    // Explicitly set chosen attributes to avoid defaults sticking
+    room.state[aiName].color = colorPick;
+    room.state[aiName].isAi = true;
+    room.state[aiName].ready = true;
+    room.state[aiName].civ = civPick;
+    // Announce
+    addGameLog(room, `AI added: ${aiName} — Civ: ${room.state[aiName].civ}, Color: ${room.state[aiName].color}`, 'command');
+    broadcastRoomUpdate(room);
+>>>>>>> 0080bf9 (Initial commit)
 
     startIfReady(room);
     broadcastRoomUpdate(room);
@@ -3748,7 +4705,10 @@ fromP.resources[offer.want.type]=(fromP.resources[offer.want.type]||0)+offer.wan
   // Host kicks a player
   socket.on("kickPlayer", ({ code, by, target }) => {
     const room = ROOMS.get(code); if (!room) return;
+<<<<<<< HEAD
     if (room.host !== by) return socket.emit("toast", { text: "Only host can kick." });
+=======
+>>>>>>> 0080bf9 (Initial commit)
     if (!room.state[target]) return socket.emit("toast", { text: "Player not found." });
     // Notify kicked player's sockets
     for (const sid of socketsForPlayer(room, target)) io.to(sid).emit('kicked');
@@ -3769,9 +4729,16 @@ fromP.resources[offer.want.type]=(fromP.resources[offer.want.type]||0)+offer.wan
       const old = prev[pid] || {};
       const color = old.color || 'blue';
       const civ = old.civ || 'Romans';
+<<<<<<< HEAD
       room.state[pid] = initialPlayer(color);
       if (civ && CIVS[civ]) room.state[pid].civ = civ;
       room.state[pid].ready = false;
+=======
+      room.state[pid] = initialPlayer(color, !!old.isAi, civ);
+      // preserve AI and auto-ready them
+      room.state[pid].isAi = !!old.isAi;
+      room.state[pid].ready = !!old.isAi;
+>>>>>>> 0080bf9 (Initial commit)
     });
     room.active = false;
     room.turnOf = null;

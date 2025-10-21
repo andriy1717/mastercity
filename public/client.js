@@ -508,14 +508,22 @@ function gatherLoreSegments(uniqCivs){
 let SFX_ON = true; // SFX on by default
 let MUSIC_ON = true; // Music plays by default
 
+<<<<<<< HEAD
 // Music volume control (capped)
 const MUSIC_VOLUME_LEVELS = [0.0, 0.1, 0.2];
 let musicVolumeIdx = 2;
 function desiredMusicVolume(){ return MUSIC_VOLUME_LEVELS[musicVolumeIdx] || 0.2; }
+=======
+// Music volume control (capped) - always 20%
+const MUSIC_VOLUME_LEVELS = [0.2];
+let musicVolumeIdx = 0;
+function desiredMusicVolume(){ return 0.2; }
+>>>>>>> 0080bf9 (Initial commit)
 
 // Music and SFX toggle buttons
 function updateMusicIcon() {
   const btn = document.getElementById('musicToggle');
+<<<<<<< HEAD
   if (btn) btn.textContent = MUSIC_ON ? '🎵' : '🔇';
 }
 function updateMusicVolumeIcon(){
@@ -527,11 +535,24 @@ function updateMusicVolumeIcon(){
 function updateSfxIcon() {
   const btn = document.getElementById('sfxToggle');
   if (btn) btn.textContent = SFX_ON ? '🔔' : '🔕';
+=======
+  if (btn) btn.innerHTML = MUSIC_ON ? '🎵 <span class="controlLabel">Music</span>' : '🔇 <span class="controlLabel">Muted</span>';
+}
+function updateMusicVolumeIcon(){
+  // Music volume button removed - always plays at 20%
+}
+function updateSfxIcon() {
+  const btn = document.getElementById('sfxToggle');
+  if (btn) btn.innerHTML = SFX_ON ? '🔔 <span class="controlLabel">SFX</span>' : '🔕 <span class="controlLabel">SFX Off</span>';
+>>>>>>> 0080bf9 (Initial commit)
 }
 
 document.addEventListener('DOMContentLoaded', () => {
   const musicBtn = document.getElementById('musicToggle');
+<<<<<<< HEAD
   const musicVolBtn = document.getElementById('musicVolume');
+=======
+>>>>>>> 0080bf9 (Initial commit)
   const sfxBtn = document.getElementById('sfxToggle');
 
   if (musicBtn) {
@@ -549,6 +570,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+<<<<<<< HEAD
   if (musicVolBtn) {
     musicVolBtn.addEventListener('click', () => {
       musicVolumeIdx = (musicVolumeIdx + 1) % MUSIC_VOLUME_LEVELS.length;
@@ -561,6 +583,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+=======
+>>>>>>> 0080bf9 (Initial commit)
   if (sfxBtn) {
     sfxBtn.addEventListener('click', () => {
       SFX_ON = !SFX_ON;
@@ -570,10 +594,31 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+<<<<<<< HEAD
   // Set initial icons
   updateMusicIcon();
   updateMusicVolumeIcon();
   updateSfxIcon();
+=======
+  // Warn before unloading/closing the page unless explicitly exiting
+  try{
+    window.addEventListener('beforeunload', (e) => {
+      if (SUPPRESS_LEAVE_PROMPT) return;
+      e.preventDefault();
+      e.returnValue = '';
+    });
+  }catch(e){}
+
+  // Set initial icons
+  updateMusicIcon();
+  updateSfxIcon();
+  
+  // Start lobby music immediately
+  if (MUSIC_ON) {
+    ensureMusic('Wood');
+    playAgeTrack('Wood');
+  }
+>>>>>>> 0080bf9 (Initial commit)
 });
 
 // ===== Toast =====
@@ -715,6 +760,7 @@ socket.on('raidReturn', (evt)=>{ showWarResult(evt); });
 
 // ===== Music per age =====
 const MUSIC = { Wood:["wood1.mp3","wood2.mp3"], Stone:["stone1.mp3","stone2.mp3"], Modern:["modern1.mp3","modern2.mp3","modern3.mp3"] };
+<<<<<<< HEAD
 let musicEl=null, lastAge=null, musicCapInterval=null;
 const MUSIC_VOLUME_CAP = 0.2;
 
@@ -739,10 +785,15 @@ function bindMusicCapListeners(){
     }, 1000);
   }
 }
+=======
+let musicEl=null, lastAge=null, audioCtxMusic=null, gainNodeMusic=null, sourceNodeMusic=null;
+const MUSIC_VOLUME = 0.15; // 15% volume
+>>>>>>> 0080bf9 (Initial commit)
 
 function ensureMusic(age) {
   if (!MUSIC_ON) return;
   if (!musicEl) {
+<<<<<<< HEAD
     musicEl = new Audio();
     musicEl.loop = false;
     // Cap music volume at 20%
@@ -753,19 +804,147 @@ function ensureMusic(age) {
   enforceMusicVolumeCap();
   if (age && age !== lastAge) { lastAge = age; playAgeTrack(age); }
 }
+=======
+    // Create audio element
+    musicEl = new Audio();
+    musicEl.loop = false;
+    musicEl.volume = MUSIC_VOLUME; // Set HTML5 volume too
+    musicEl.addEventListener("ended", () => playAgeTrack(lastAge));
+    
+    // Create Web Audio API context and gain node
+    try {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      audioCtxMusic = new AudioContext();
+      
+      // Create source from audio element
+      sourceNodeMusic = audioCtxMusic.createMediaElementSource(musicEl);
+      
+      // Create gain node and set to 20%
+      gainNodeMusic = audioCtxMusic.createGain();
+      gainNodeMusic.gain.value = MUSIC_VOLUME;
+      
+      // Connect: source -> gain -> destination
+      sourceNodeMusic.connect(gainNodeMusic);
+      gainNodeMusic.connect(audioCtxMusic.destination);
+      
+      console.log('🎵 Web Audio API initialized with gain:', gainNodeMusic.gain.value);
+    } catch(e) {
+      console.error('Failed to initialize Web Audio API:', e);
+      // Fallback to regular volume control
+      musicEl.volume = MUSIC_VOLUME;
+    }
+  }
+  if (age && age !== lastAge) { lastAge = age; playAgeTrack(age); }
+}
+
+>>>>>>> 0080bf9 (Initial commit)
 function playAgeTrack(age) {
   if (!MUSIC_ON) return;
   const list = MUSIC[age] || [];
   if (!list.length) return;
   const pick = list[Math.floor(Math.random() * list.length)];
   musicEl.src = `/music/${pick}`;
+<<<<<<< HEAD
   // Enforce max 20% volume on every play
   musicEl.volume = Math.min(MUSIC_VOLUME_CAP, desiredMusicVolume());
   musicEl.play().then(enforceMusicVolumeCap).catch(() => {});
+=======
+  
+  // Set HTML5 volume directly (fallback)
+  musicEl.volume = MUSIC_VOLUME;
+  
+  // Resume audio context if needed (required for some browsers)
+  if (audioCtxMusic && audioCtxMusic.state === 'suspended') {
+    audioCtxMusic.resume();
+  }
+  
+  // Ensure gain is at 5%
+  if (gainNodeMusic) {
+    gainNodeMusic.gain.value = MUSIC_VOLUME;
+    console.log('🎵 Playing with Web Audio API gain:', gainNodeMusic.gain.value);
+  } else {
+    console.warn('⚠️ Web Audio API not available, using HTML5 volume:', musicEl.volume);
+  }
+  
+  musicEl.play().then(() => {
+    musicEl.volume = MUSIC_VOLUME;
+    console.log('🎵 After play - HTML5 volume:', musicEl.volume);
+  }).catch(() => {});
+>>>>>>> 0080bf9 (Initial commit)
 }
 
 // ===== Helpers =====
 
+<<<<<<< HEAD
+=======
+// Play vs AI setup (pre-room)
+let PENDING_AI = [];
+let aiSetupPending = false;
+
+function openAiSetupModal(){
+  PENDING_AI = [];
+  const modal = document.getElementById('aiSetupModal');
+  if (!modal) { toast('Setup UI missing.'); return; }
+  renderAiList();
+  modal.classList.remove('hidden');
+}
+
+function closeAiSetupModal(){
+  const modal = document.getElementById('aiSetupModal');
+  if (modal) modal.classList.add('hidden');
+}
+
+function renderAiList(){
+  const list = document.getElementById('aiList');
+  if (!list) return;
+  if (!PENDING_AI.length){
+    list.innerHTML = '<div class="muted">No AI added yet.</div>';
+    return;
+  }
+  list.innerHTML = PENDING_AI.map((it,idx)=>{
+    return `<div class="aiRow" style="display:flex; justify-content:space-between; align-items:center; padding:6px; border:1px solid rgba(255,255,255,0.15); border-radius:6px; margin-bottom:6px;">
+      <div><strong>${it.civ}</strong> — <span>${it.color}</span></div>
+      <button class="secondary" data-remove-ai="${idx}">Remove</button>
+    </div>`;
+  }).join('');
+}
+
+document.addEventListener('DOMContentLoaded', ()=>{
+  const addBtn = document.getElementById('aiAddBtn');
+  const startBtn = document.getElementById('aiStartBtn');
+  const cancelBtn = document.getElementById('aiCancelBtn');
+  const modal = document.getElementById('aiSetupModal');
+  // Scope selects to the modal to avoid picking sidebar defaults with duplicate IDs
+  const colorSel = modal ? modal.querySelector('#aiColor') : null;
+  const civSel = modal ? modal.querySelector('#aiCiv') : null;
+
+  if (addBtn) addBtn.addEventListener('click', ()=>{
+    const color = colorSel?.value || 'gray';
+    const civ = civSel?.value || 'Romans';
+    PENDING_AI.push({ color, civ });
+    renderAiList();
+  });
+  if (cancelBtn) cancelBtn.addEventListener('click', ()=>{ closeAiSetupModal(); });
+  if (startBtn) startBtn.addEventListener('click', ()=>{
+    aiSetupPending = true;
+    closeAiSetupModal();
+    // Now create room; AI additions will be sent after first roomUpdate where we are host
+    joinOrCreate('create', true);
+  });
+  // Remove handlers via delegation
+  document.addEventListener('click', (ev)=>{
+    const btn = ev.target.closest && ev.target.closest('button[data-remove-ai]');
+    if (btn){
+      const idx = parseInt(btn.getAttribute('data-remove-ai'), 10);
+      if (!isNaN(idx) && idx>=0 && idx<PENDING_AI.length){
+        PENDING_AI.splice(idx,1);
+        renderAiList();
+      }
+    }
+  });
+});
+
+>>>>>>> 0080bf9 (Initial commit)
 function setThemeByAge(age){
   const b=document.body;
   b.classList.remove("theme-wood","theme-stone","theme-modern");
@@ -786,7 +965,23 @@ const BUILD_ICONS = { Hut:"🛖", Sawmill:"🪓", Field:"🌾", Palisade:"🛡�
                       Factory:"🏭", Greenhouse:"🏡", Bank:"🏦", PowerPlant:"⚡", Monument:"🗽" };
 const COST_ICON = { wood:"🪵", rock:"🪨", metal:"⚙️", food:"🍞", coins:"💰" };
 
+<<<<<<< HEAD
 function chips(cost){ return Object.entries(cost).map(([k,v])=>`<span class="chip">${COST_ICON[k]||""} ${v}</span>`).join(""); }
+=======
+function chips(cost, me, enableHighlight = true){
+  try{
+    const res = me?.resources || {};
+    return Object.entries(cost).map(([k,v])=>{
+      const have = Math.max(0, res[k]|0);
+      const ok = enableHighlight && (have >= (v|0));
+      const cls = ok ? 'chip ok' : 'chip';
+      return `<span class="${cls}" data-res="${k}">${COST_ICON[k]||""} ${v}</span>`;
+    }).join("");
+  }catch(e){
+    return Object.entries(cost).map(([k,v])=>`<span class="chip">${COST_ICON[k]||""} ${v}</span>`).join("");
+  }
+}
+>>>>>>> 0080bf9 (Initial commit)
 
 function apFloat(delta){
   const apEl = $("#ap"); if(!apEl) return;
@@ -855,7 +1050,11 @@ function buildCardHTML(name, def, me){
       <div class="meta">
         <div class="title">${title}</div>
         <div class="desc">${desc}</div>
+<<<<<<< HEAD
         <div class="cost">${chips(def.cost)}</div>
+=======
+        <div class=\"cost\">${chips(def.cost, me, !owned)}</div>
+>>>>>>> 0080bf9 (Initial commit)
         <div class="actions">${buttons}</div>
       </div>
     </div>
@@ -962,6 +1161,187 @@ function warChanceLabel(p){
   if (p >= 0.15) return 'Unlikely';
   return 'Very unlikely';
 }
+<<<<<<< HEAD
+=======
+
+// Persist war-risk lore per player and success chance so it doesn't change every action
+// Structure: { [playerId]: { lastChanceKey: string|null, lastBracket: string|null, indexByBracket: { [bracket]: number } } }
+let WAR_LORE_STATE = {};
+
+function getWarOutcomeLore(civ, successChance, playerId) {
+  // War outcome lore messages based on civ and success chance
+  const civLore = {
+    Romans: {
+      veryUnlikely: [
+        "Roman scouts report overwhelming enemy forces ahead. The wise leader considers retreat...",
+        "Your legions face an uncertain fate. The omens are poor for victory this day.",
+        "Intelligence suggests a formidable foe awaits. Even Rome's greatest generals would pause."
+      ],
+      unlikely: [
+        "The enemy prepares strong defenses. Your campaign will require careful planning.",
+        "Reports suggest worthy adversaries. Victory is possible, but far from certain.",
+        "The path to triumph is treacherous. Prepare yourself for a difficult struggle."
+      ],
+      moderate: [
+        "Your forces are well-prepared, yet the outcome remains uncertain. This will be a true test.",
+        "An evenly matched contest awaits. Victory depends on courage and cunning.",
+        "The battle ahead will be fierce and costly. But fortune may smile upon the bold."
+      ],
+      likely: [
+        "Your legions march with confidence! The enemy appears overmatched.",
+        "Roman discipline and numbers favor your cause. Victory seems within reach.",
+        "The odds turn in your favor. Strike now while momentum is on your side!"
+      ],
+      veryLikely: [
+        "Your army is vastly superior! The enemy has no chance against your might.",
+        "Destiny beckons! Your victory is nearly assured. March forth with pride!",
+        "The enemy trembles before your power. This will be a swift and glorious victory!"
+      ]
+    },
+    Vikings: {
+      veryUnlikely: [
+        "The skalds warn that this foe is like a stone—immovable and dreadful.",
+        "Your warriors sense danger ahead. Even Odin's favor may not save you this day.",
+        "Ancient spirits whisper warnings. The enemy's strength is legendary."
+      ],
+      unlikely: [
+        "The enemy prepares their defenses with skill. Your raid faces great peril.",
+        "Your scouts report a formidable foe. Caution is the wise path, friend.",
+        "The runes suggest hardship ahead. This conquest will not come easily."
+      ],
+      moderate: [
+        "The gods seem indifferent. Courage and steel will decide this battle!",
+        "Your warriors hunger for glory, yet the enemy is no mere rabble.",
+        "The outcome hangs in the balance. Only the boldest will claim victory."
+      ],
+      likely: [
+        "Your raiders grow fierce and ready! The enemy falters before you.",
+        "The gods smile upon your cause! Your army thirsts for enemy blood and gold.",
+        "Fortune turns in your favor! Strike now and seize what is rightfully yours!"
+      ],
+      veryLikely: [
+        "Your warriors are like a storm at sea—unstoppable and terrible!",
+        "Victory is written in the stars! The enemy's doom is sealed!",
+        "The fates decree your triumph! March forth to claim eternal glory!"
+      ]
+    },
+    Mongols: {
+      veryUnlikely: [
+        "Your scouts bring dire news: the enemy is as numerous as grass on the steppe.",
+        "The enemy's defenses are like mountains—solid and impenetrable.",
+        "The winds carry whispers of defeat. Even the great khans would hesitate."
+      ],
+      unlikely: [
+        "The enemy demonstrates cunning and strength. Your path to victory is uncertain.",
+        "Your riders report prepared defenses. This will be a hard ride, friend.",
+        "The steppe spirits speak of struggle. Caution is warranted before you charge."
+      ],
+      moderate: [
+        "Your horses stamp with eagerness, yet the enemy is no coward's quarry.",
+        "The battle will be swift or slow—only time will tell. Strike with courage!",
+        "The outcome rests on speed and strength. Your cavalry has both!"
+      ],
+      likely: [
+        "Your riders circle with confidence! The enemy cannot match your mobility.",
+        "The steppe trembles beneath your hooves! The enemy is already broken.",
+        "Your horde is mighty and swift! Victory is within your grasp!"
+      ],
+      veryLikely: [
+        "Your cavalry is like a typhoon—swift, terrible, and unstoppable!",
+        "The enemy's fate is sealed! Your riders will crush them utterly!",
+        "The khan himself would envy your army! March forth to glorious conquest!"
+      ]
+    },
+    Slavs: {
+      veryUnlikely: [
+        "The forest spirits warn of great danger ahead. Even their ancient power may not save you.",
+        "Your people sense a mighty foe approaching. The gods seem distant and cold.",
+        "Dark omens surround this path. Wise warriors choose to fight another day."
+      ],
+      unlikely: [
+        "The enemy fortifies themselves well. This conquest will demand much sacrifice.",
+        "Your people report a formidable adversary. Caution and wisdom suggest waiting.",
+        "The frozen earth speaks of hardship ahead. Prepare for a bitter struggle."
+      ],
+      moderate: [
+        "Your people gather their strength. The enemy is worthy, but not invincible.",
+        "This will be a battle of endurance. Slavic stubbornness may yet prevail!",
+        "The spirits are neutral. Victory will belong to the bravest heart."
+      ],
+      likely: [
+        "Your warriors stand tall and ready! The enemy crumbles before your might.",
+        "The forest itself seems to aid you! Your people are unstoppable!",
+        "Your strength is beyond question! The enemy's defeat is nearly assured!"
+      ],
+      veryLikely: [
+        "Your people are like the winter itself—harsh, enduring, and unbreakable!",
+        "The gods favor your cause! Your victory will be swift and total!",
+        "Destiny demands this conquest! March forth to eternal triumph!"
+      ]
+    }
+  };
+
+  // Determine bracket
+  let bracket = 'moderate';
+  if (successChance <= 0.15) {
+    bracket = 'veryUnlikely';
+  } else if (successChance <= 0.35) {
+    bracket = 'unlikely';
+  } else if (successChance <= 0.65) {
+    bracket = 'moderate';
+  } else if (successChance <= 0.80) {
+    bracket = 'likely';
+  } else {
+    bracket = 'veryLikely';
+  }
+
+  const civLoreMessages = civLore[civ] || civLore.Romans;
+  const messages = civLoreMessages[bracket] || civLoreMessages.moderate;
+
+  // Stabilize by player and success percentage so it doesn't change every render
+  const pid = playerId || ME || 'anonymous';
+  const chanceKey = (successChance * 100).toFixed(2); // percent with 2 decimals
+  let state = WAR_LORE_STATE[pid];
+  if (!state) {
+    state = { lastChanceKey: null, lastBracket: null, indexByBracket: {} };
+    WAR_LORE_STATE[pid] = state;
+  }
+
+  // Initialize index for this bracket if missing with a random start
+  if (typeof state.indexByBracket[bracket] !== 'number') {
+    state.indexByBracket[bracket] = Math.floor(Math.random() * messages.length);
+  }
+
+  // On first encounter, don't advance; just show the initialized random message
+  if (state.lastChanceKey === null) {
+    state.lastChanceKey = chanceKey;
+    state.lastBracket = bracket;
+    const idx0 = state.indexByBracket[bracket] % messages.length;
+    return messages[idx0];
+  }
+
+  // If success percentage changed, update displayed message deterministically
+  if (state.lastChanceKey !== chanceKey) {
+    if (state.lastBracket === bracket) {
+      // Same bracket: rotate to next message in this bracket
+      const next = (state.indexByBracket[bracket] + 1) % messages.length;
+      state.indexByBracket[bracket] = next;
+    } else {
+      // Different bracket: if we've seen it before, advance; otherwise initialize to a random start
+      if (typeof state.indexByBracket[bracket] === 'number') {
+        state.indexByBracket[bracket] = (state.indexByBracket[bracket] + 1) % messages.length;
+      } else {
+        state.indexByBracket[bracket] = Math.floor(Math.random() * messages.length);
+      }
+    }
+  }
+
+  state.lastChanceKey = chanceKey;
+  state.lastBracket = bracket;
+  const idx = state.indexByBracket[bracket] % messages.length;
+  return messages[idx];
+}
+>>>>>>> 0080bf9 (Initial commit)
 function updateUI(){
   if(!ROOM||!ME) return;
   const me=PLAYERS[ME]; if(!me) return;
@@ -1133,7 +1513,11 @@ function updateUI(){
       return `<div class=\"p-item ${turn?'turn':''}\" style=\"--pc:${pc}\">\n        <div class=\"pnameRow\"><span class=\"dot\"></span><span class=\"civIcon\">${civIcon}</span><span class=\"name\">${pid}</span>${movesInline}${kickBtn}</div>\n        <div class=\"villRow\">${ageDisplay}${militaryInfo}</div>\n        <div class=\"progress mini\"><div class=\"fill\" style=\"width:${pct}%\"></div></div>\n      </div>`;
     }).join('');
   }
+<<<<<<< HEAD
   // Visitor open button label (do not disable; show toast on click instead)
+=======
+  // Visitor open button label
+>>>>>>> 0080bf9 (Initial commit)
   { const btn=document.getElementById('openVisitBtn'); if (btn){ btn.textContent = VISIT_PENDING? 'Visitor pending…' : '🐪 Send a Visitor'; } }
 
   // Show visitor notification in inbox area (non-interactive, modal handles interaction)
@@ -1192,9 +1576,21 @@ function updateUI(){
   });
   ['gather-wood','gather-rock','gather-metal','gather-food'].forEach(a=>{
     const b = document.querySelector(`[data-action="${a}"]`);
+<<<<<<< HEAD
     if (b) b.disabled = !canAct;
   });
   { const tb = document.getElementById('openTradeBtn'); if (tb) tb.disabled = !canAct; }
+=======
+    if (b) {
+      b.disabled = !canAct;
+      b.classList.toggle('not-your-turn', !canAct);
+      const tile = b.closest('.resTile');
+      if (tile) tile.classList.toggle('not-your-turn', !canAct);
+    }
+  });
+  { const tb = document.getElementById('openTradeBtn'); if (tb) { tb.disabled = !canAct; tb.classList.toggle('not-your-turn', !canAct); const tile = tb.closest('.resTile'); if (tile) tile.classList.toggle('not-your-turn', !canAct); } }
+  { const vb = document.getElementById('openVisitBtn'); if (vb) { vb.disabled = !canAct; vb.classList.toggle('not-your-turn', !canAct); } }
+>>>>>>> 0080bf9 (Initial commit)
   const trainBtn = document.getElementById('trainBtn');
   if (trainBtn){
     const age = me?.age || 'Wood';
@@ -1234,8 +1630,13 @@ function updateUI(){
         riskEl.textContent = `Need at least ${RAID_MIN_COMMIT} soldiers to go to war.`;
       } else {
         const chance = estimateWarChance(me, soldierCount);
+<<<<<<< HEAD
         const label = warChanceLabel(chance);
         riskEl.textContent = `War success chance: ${label} (${Math.round(chance*100)}%)`;
+=======
+        const lore = getWarOutcomeLore(me.civ, chance, ME);
+        riskEl.innerHTML = `<em style="font-style: italic; opacity: 0.9;">${lore}</em>`;
+>>>>>>> 0080bf9 (Initial commit)
       }
     }
   }
@@ -1328,7 +1729,11 @@ let addAiPlayer = false;
 
 $("#playVsAiBtn").addEventListener("click",()=>{
   addAiPlayer = true;
+<<<<<<< HEAD
   joinOrCreate("create", true);
+=======
+  openAiSetupModal();
+>>>>>>> 0080bf9 (Initial commit)
 });
 
 function joinOrCreate(kind, playVsAi = false){
@@ -1344,9 +1749,20 @@ function joinOrCreate(kind, playVsAi = false){
   // IMPORTANT: Reset the lore flag when joining/creating
   LORE_SHOWN = false;
   console.log('🔄 Resetting LORE_SHOWN to false');
+<<<<<<< HEAD
 
   if(kind==="create") {
     socket.emit("createRoom",{ code, playerId:name, color, civ, addAiPlayer });
+=======
+  // Reset war lore cache so war-risk text starts fresh in new rooms
+  WAR_LORE_STATE = {};
+  console.log('🔄 Resetting WAR_LORE_STATE');
+
+  if(kind==="create") {
+    // For Play vs AI, send presetAIs to server to add before first room update
+    const payload = addAiPlayer ? { code, playerId:name, color, civ, presetAIs: (Array.isArray(PENDING_AI)?PENDING_AI:[]) } : { code, playerId:name, color, civ };
+    socket.emit("createRoom", payload);
+>>>>>>> 0080bf9 (Initial commit)
   } else {
     socket.emit("joinRoom",{ code, playerId:name, color, civ });
   }
@@ -1408,6 +1824,17 @@ document.addEventListener("click",(ev)=>{
     const me = PLAYERS[ME];
     if (!me) return;
     const name=btn.dataset.name;
+<<<<<<< HEAD
+=======
+    // Bubbly click animation (from button.txt)
+    try{
+      btn.classList.remove('animate');
+      // force reflow to restart animation
+      void btn.offsetWidth;
+      btn.classList.add('animate');
+      setTimeout(()=>btn.classList.remove('animate'),700);
+    }catch(e){}
+>>>>>>> 0080bf9 (Initial commit)
     // Check if player can afford the building
     const age=me.age; const defs=BUILDINGS[age]||{};
     const buildingDef = defs[name];
@@ -1426,12 +1853,26 @@ document.addEventListener("click",(ev)=>{
         return;
       }
     }
+<<<<<<< HEAD
     if (!performActionWithDelay(name ? `Building ${name}` : "Building", ()=>{ emitAction("build",{ name }); sfxNoise(0.06,0.05); })) return;
+=======
+    if (!performActionWithDelay(name ? `Building ${name}` : "Building", ()=>{ emitAction("build",{ name }); apFloat(-1); sfxNoise(0.06,0.05); })) return;
+>>>>>>> 0080bf9 (Initial commit)
   }
   else if(a==="upgrade"){
     const me = PLAYERS[ME];
     if (!me) return;
     const name=btn.dataset.name;
+<<<<<<< HEAD
+=======
+    // Bubbly click animation for upgrade
+    try{
+      btn.classList.remove('animate');
+      void btn.offsetWidth;
+      btn.classList.add('animate');
+      setTimeout(()=>btn.classList.remove('animate'),700);
+    }catch(e){}
+>>>>>>> 0080bf9 (Initial commit)
     // Check if player can afford the upgrade (costs 1 AP, but also check resources if needed)
     // For now, upgrades typically just cost 1 move, but we could add resource validation here too
     if (!performActionWithDelay(name ? `Upgrading ${name}` : "Upgrading", ()=>{ emitAction("upgrade",{ name }); apFloat(-1); sfxNoise(0.06,0.05); })) return;
@@ -1858,6 +2299,10 @@ document.addEventListener('click', (e) => {
 $("#createBtn").addEventListener("click",()=>joinOrCreate("create"));
 $("#joinBtn").addEventListener("click",()=>joinOrCreate("join"));
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 0080bf9 (Initial commit)
 // Mobile affix for End Turn button
 (function setupEndTurnAffix(){
   let inited = false;
@@ -2137,6 +2582,11 @@ socket.on("roomUpdate", ({ room, players, buildings, ages, prices, visitPending,
     }
   }
 
+<<<<<<< HEAD
+=======
+  // Clear pending list once room starts streaming updates
+  try{ if (aiSetupPending) { PENDING_AI = []; aiSetupPending = false; } }catch(e){}
+>>>>>>> 0080bf9 (Initial commit)
   updateUI();
 });
 
